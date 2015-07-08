@@ -109,12 +109,24 @@
 
 \subsection{Theory}
 
+In this text we will simulate an oxygen ion, \(O^+\) and an electron, \(e\) in the dipole field of the earth. We will use Euler's method to get the discretization of the position and work in Cartesian coordinates. From the simulation we will plot the trajectory the particles will follow, and also examine how the kinetic energy of the the particles evolve as they move along the magnetic field lines.
+
+An approximation of Earth's dipole magnetic field is
+\begin{align}
+      \va{B}(\va{r}) &= \frac{\mu_0}{4\pi}\frac{3\va{r}\left( \va{m} \cdot \va{r}\right)}{r^5} - \frac{\va{m}}{r^3}
+\end{align}
+where \( \va{r} \), \(\mu_0\) and \(\va{m}\) is the position, vacuum permeability and magnetic moment respectively.
      
 
 \subsection{Results}
       
 
 \appendix
+\section{Comments regarding the exercise}
+      \begin{itemize}
+            \item I assume you mean the perpendicular and parallel \textit{kinetic} energy in exercise 2.
+            \item Could it be better to plot it first, and afterwards find the energy. I think it is quite natural to plot it while working on it.
+      \end{itemize}
 
 
 \section{Code}

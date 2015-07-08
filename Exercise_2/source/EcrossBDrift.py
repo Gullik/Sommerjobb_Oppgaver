@@ -12,8 +12,8 @@ m_i = 16*1.674E-26 	#kg
 B0 =  50000E-9		#Tesla
 
 
-# particle = "electron"
-particle = "ion"
+particle = "electron"
+# particle = "ion"
 
 case = "ExB"
 # case = "VaryV"
@@ -35,7 +35,7 @@ if particle == "ion":
 	q = e
 
 
-gyrations = 6
+gyrations = 3
 
 steps = int( np.abs(m/(q*B0)) * 2*np.pi  * gyrations /h)	#Since the gyration has a frequency qB/m, it's period is m/(qB)
 
@@ -142,28 +142,39 @@ if case == "ExB":
 	
 
 	# #Setting axes and labels
-	axArray[1].set_xlabel("x [$10^{-5}$m]")
-	axArray[0].set_xlabel("x [$10^{-5}$m]")
-	axArray[0].set_ylabel("y [$10^{-3}$m]")
+	axArray[1].set_xlabel("x [$10^3$ m ]")
+	axArray[0].set_xlabel("x [$10^3$ m]")
+	axArray[0].set_ylabel("y [$10^3$ m]")
+
+
+
+
+	
+	# axArray[0].set_aspect('equal')
+
+	yticks = axArray[0].get_yticks()
+	print yticks
+	ystart, yend = axArray[0].get_ylim()
+	for ax in axArray.flat:
+		ax.xaxis.set_ticks(yticks +  round(np.abs(ystart - yend),3)/2.)
+
+	pl.tight_layout()
 
 
 	locs,labels = pl.xticks()
-	pl.xticks(locs, map(lambda x: "%.0f" % x, locs*1.E5))
+	pl.xticks(locs, map(lambda x: "%.1f" % x, locs*1.E3))
 	locs,labels = pl.yticks()
 	pl.yticks(locs, map(lambda y: "%.1f" % y, locs*1.E3))
-	# axArray[0].set_aspect('equal', 'datalim')
 
-	# f.savefig("ExB" + particle + ".eps")
-	# pl.show()
+	f.savefig("ExB" + particle + ".eps")
+	pl.show()
 
 
 
 	#Calculating the numerical ExB drift, I will just do it after an integer number of gyrations so the position of the particle in the gyration is not important
-	# tEnd = np.abs(m/(q*B0)) * 2*np.pi  * gyrations / h	#The period times number of wanted gyrations
 	tEnd = steps * h
 	tStart = 0
 
-	print tEnd
 
 	driftx = (x[steps-1] - x[0]) / tEnd 	#This should be the movement after a certain number of gyrations
 	drifty = (y[steps-1] - y[0]) / tEnd 
@@ -178,7 +189,7 @@ if case == "ExB":
 if case == "VaryV":
 
 	#Setting up subplots
-	f, axArray = pl.subplots(2,2 ,sharex = True, sharey = True)
+	f, axArray = pl.subplots(2,2 , sharex = True, sharey = True)
 	pl.suptitle('Gyration of an ' + str(particle))
 
 
@@ -190,7 +201,7 @@ if case == "VaryV":
 		Y = 0
 		velocityMagnitude = 500
 
-		angle = n*np.pi/4.
+		angle = n*np.pi/2.
 
 		VX = np.cos(angle) * velocityMagnitude
 		VY = np.sin(angle) * velocityMagnitude 
@@ -240,21 +251,69 @@ if case == "VaryV":
 		elif n == 3:	
 			graphRow = 1
 			graphColumn = 1
-		axArray[graphRow, graphColumn].plot(x,y)
-		axArray[graphRow, graphColumn].set_title("$v_x(0) =$" + str( round(vx[0],0) ) + ', $v_y(0) =$ ' + str( round(vy[0],0) ))
-		axArray[graphRow, graphColumn].set_xlabel("x [$10^{-3}$ m]")
+		ax = axArray[graphRow, graphColumn]
+		ax.plot(x,y)
 
+		ax.grid()
 
-	# Setting the axes correct
-	axArray[0,0].set_ylabel("y [$10^{-3}$ m]")
+		# place a text box in upper left in axes coords
+		props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+		ax.text(0.05, 0.95, "$v_x(0) =$" + str( round(vx[0],-1) ) + '\n' +  '$v_y(0) =$ ' + str( round(vy[0],-1) ), transform=ax.transAxes, fontsize=14,
+        		verticalalignment='top', bbox=props)
 
-	locs,labels = pl.xticks()
-	pl.xticks(locs, map(lambda x: "%.0f" % x, locs*1E5))
-	locs,labels = pl.yticks()
-	pl.yticks(locs, map(lambda y: "%.0f" % y, locs*1E5))
+		# axArray[graphRow, graphColumn].set_xlabel("x [$10^{-3}$ m]")
+
 	axArray[0,0].set_aspect('equal', 'datalim')
 
-	f.savefig("ExBVaryingV" + particle + ".eps")
+	# Setting the axes correct
+	# For the electron
+	if particle == 'electron':
+		axArray[0,0].set_ylabel("y [$10^{-3}$ m]")
+		axArray[1,0].set_ylabel("x [$10^{-3}$ m]")
+		axArray[1,1].set_xlabel("x [$10^{-3}$ m]")
+		axArray[1,0].set_xlabel("x [$10^{-3}$ m]")
+
+		yticks = axArray[0,0].get_yticks()
+		ystart, yend = axArray[0,0].get_ylim()
+		for ax in axArray.flat:
+			ax.xaxis.set_ticks(yticks - round(ystart ,-3 )/2. )
+			# ax.set_xticklabels(ax.xaxis.get_majorticklabels(), rotation=90)
+
+
+			# axArray[0,0].xaxis.set_ticks(yticks - round(ystart ,-3 )/2. )
+
+		locs,labels = pl.xticks()
+		
+		pl.xticks(locs, map(lambda x: "%.1f" % x, locs*1.E3))
+		locs,labels = pl.yticks()
+		pl.yticks(locs, map(lambda y: "%.1f" % y, locs*1.E3))
+		pl.tight_layout()
+
+	#For the oxygen ion 
+	if particle == 'ion':
+		axArray[0,0].set_ylabel("y [$10^2$m]")
+		axArray[1,0].set_ylabel("x [$10^2$m]")
+		axArray[1,1].set_xlabel("x [$10^2$m]")
+		axArray[1,0].set_xlabel("x [$10^2$m]")
+
+
+		yticks = axArray[0,0].get_yticks()
+		ystart, yend = axArray[0,0].get_ylim()
+		for ax in axArray.flat:
+			ax.xaxis.set_ticks((yticks - round(ystart ,-3 )/2.) - 3*(yticks[1]- yticks[0]) )
+			# ax.set_xticklabels(ax.xaxis.get_majorticklabels(), rotation=45)
+
+
+		locs,labels = pl.xticks()
+		
+		pl.xticks(locs, map(lambda x: "%.1f" % x, locs*1.E-2))
+		locs,labels = pl.yticks()
+		pl.yticks(locs, map(lambda y: "%.1f" % y, locs*1.E-2))
+
+		pl.tight_layout()
+
 	pl.show()
+
+	f.savefig("ExBVaryingV" + particle + ".eps")
 
 	

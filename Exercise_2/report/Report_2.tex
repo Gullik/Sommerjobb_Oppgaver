@@ -187,9 +187,9 @@
       The complete solution for the velocity is then, if we only take the case where \( v_z = E_z = 0 \) for simplicity
 
       \begin{align}
-            v_x (t) &= \omega_{0} \cos(\frac{qB_0}{m}t + \theta) + \frac{E_y}{B_0}
+            v_x (t) &= \omega_\perp \cos(\frac{qB_0}{m}t + \theta) + \frac{E_y}{B_0}      \label{eq:vx}
             \\
-            v_y (t) &= -\omega_{0} \sin(\frac{qB_0}{m}t + \theta) - \frac{E_x}{B_0}
+            v_y (t) &= -\omega_\perp \sin(\frac{qB_0}{m}t + \theta) - \frac{E_x}{B_0}     \label{eq:vy}
       \end{align}
 
       Then by integrating we obtain the position of the particle
@@ -215,47 +215,72 @@
             \label{fig:ExBDrift}
       \end{figure}
 
-      In \cref{fig:ExBDrift} we can see the trajectories to an electron and an oxygen ion in a static magnetic field and a static electric field, a new feature introduced to the trajectories compared to the earlier examined case with no electric field is a constant drift of the guiding center. We see that the direction of the drift is independent of the charge of the particle 
+      In \cref{fig:ExBDrift} we can see the trajectories to an electron and an oxygen ion in a static magnetic field and a static electric field, a new feature introduced to the trajectories compared to the earlier examined case with no electric field is a constant drift of the guiding center. We see that the direction of the drift is independent of the charge of the particle and is given perpendicular to the electric and magnetic field. In \cref{tab:drift} the drift velocity observed in the simulation is compared with the theoretical drift velocity given by \(\vb{v}_D = -\frac{E_x}{B_0}\vu{j}\).
 
       \begin{table}
             \centering
             \begin{tabular}{| c | c | c |}
                   \hline
-                                          & Numerical   & Theoretical 
+                                          & Numerical $v_D$  [$10^3 \si{\meter\per\second}$]   & Theoretical $v_D$ [$10^3 \si{\meter\per\second}$]   
                   \\ \hline
-                  Theoretical $\rho_c$    &  $5.686 \times 10^{-05} \si{\meter}$   &    $1.672  \si{\meter}$ 
+                  e                       &  $1.00$   &    $1.00$ 
                   \\ \hline
-                  Measured $\rho_c$       &  $5.687 \times 10^{-05} \si{\meter}$  &     $1.672 \si{\meter}$ 
+                  O$^+$                   &  $1.00$  &     $1.00$ 
+                  \\ \hline
             \end{tabular}
-            \caption{The gyration radii and frequencies for an electron and an oxygen ion. For the electron a timestep of \( 10^{-16} \si{s} \) and \(10^7\) steps were used in the simulation, while for the oxygen ion \( 5\times 10^{-8} \si{\second } \) long timesteps and \(10^7\) steps were used. The kinetic energy for the runs had a standard deviation of less than \(\order{10^{-25}}\)}
-            \label{tab:results}
+            \caption{The magnitude drift in experienced for an electron and an oxygen ion in a static magnetic and electric field. For the electron a timestep of \( 10^{-10} \si{s} \), while for the oxygen ion \( 5\times 10^{-5} \si{\second } \) long timesteps were used.}
+            \label{tab:drift}
       \end{table}
 
+      \subsubsection{Varying direction of initial velocity}
+      The radius of a particles gyration is dependent on the initial conditions, as can be seen in \cref{fig:VaryVElectron} and \cref{fig:VaryVion}. If we take examine \cref{eq:vx} and \cref{eq:vy} at \(t=0\) we get 
+      \begin{align}
+            v_x (0) &= \omega_\perp \cos(\theta) + \frac{E_y}{B_0}      
+            \\
+            v_y (0) &= -\omega_\perp \sin(\theta) - \frac{E_x}{B_0}     
+            \intertext{In our simulation we set the initial magnitude of the velocity to be \( v_0 = \sqrt{v_x^2 + v_y^2} = 500 \si{\meter\per\second}\), and setting \(E_y = 0\)}
+            \omega_\perp^2 &= \left( v_x \right)^2 + \left( v_y + \frac{E_x}{B_0}   \right)^2 \label{eq:omega_perp}
+            % \\
+            % v_0^2 &= \omega_\perp^2 + 2\omega_\perp \sin(\theta) \frac{E_x}{B_0} + \left(\frac{E_x}{B_0} \right)^2
+      \end{align}
+
+      Since the gyration radius \(\rho_c = \omega_\perp / \omega_c \) the gyration radius is at a minimum when initial velocity is aligned with the E-cross-B drift, and at a maximum when it is aligned the opposite way. This can also be solved exactly.
+
+      \begin{figure}
+            \includegraphics[width = \linewidth]{../source/ExBVaryingVelectron}
+            \caption{The trajectories for an electron moving in homogenous and static electric and magnetic fields. The magnitude of the initial velocities is \(500 \si{\meter\per\second}\) but the direction is rotated \(\pi/2\) for each plot.}
+            \label{fig:VaryVElectron}
+      \end{figure}
+
+      \begin{figure}
+            \includegraphics[width = \linewidth]{../source/ExBVaryingVion}
+            \caption{The trajectories for an ion moving in homogenous and static electric and magnetic fields. The magnitude of the initial velocities is \(500 \si{\meter\per\second}\) but the direction is rotated \(\pi/2\) for each plot.}
+            \label{fig:VaryVion}
+      \end{figure}
 
 \appendix
 
 \section{Comments regarding the exercise}
       \begin{itemize}
-            \item I think the initial conditions could be changed a little, since
-                  \begin{align}
-                        v_x(0) &= 500 \cos\left(  0 \right) + \frac{E_y}{B_0}
-                        \\
-                        v_y(0) &= -  500 \sin\left( 0  \right) -\frac{E_x}{B_0}
-                  \end{align}
-                  So the initial conditions should take into account the Electric field as well. With the electric and magnetic field we are using the initial velocity should be \(\va{v}(0) = (500,-100,0) \si{\meter\per\second}\)
-
-                  \textit{Edit:} I realized now that you wanted them to see that changing the how much of the \(500 \si{\meter\per\second}\) is in the x or y direction changes what phase of the gyration the particle is in, and that seemed quite sensible.
-            \item The kinetic energy is not conserved in this case, see \cref{fig:kineticEnergy}, the particle has a greater velocity when the gyration velocity is moving in the same direction as the drift velocity and a smaller when it is moving in a different direction. The gyro averaged kinetic energy (averaged over the gyration period) will be conserved though.
+            \item I first mistook the units of the electric field to be a typo and be \(\si{V/m}\) and the extra \(m\) to just be a typo. I realized later that it was millivolt. I think that was just on me.
+            \item I had some comments about how the inital velocity should be \(\va{v}(0) = (\omega_\perp, -E_x/B_0, 0 ) =(500,-100,0) \si{\meter\per\second}\), but that was because I started to wonder why a change in the electric field changed the gyration radius. (Couldn't resist playing around) After I did part three I realized that was the entire point of what they the exercise was supposed to show. 
+            \item \textit{Edit:} I see this is fixed in the second edition. \newline
+            The kinetic energy is not conserved in this case, see \cref{fig:kineticEnergy}, the particle has a greater velocity when the gyration velocity is moving in the same direction as the drift velocity and a smaller when it is moving in a different direction. The gyro averaged kinetic energy (averaged over the gyration period) will be conserved though.
                   \begin{figure}
                   \centering
                         \includegraphics[width = 0.5\linewidth] {../source/kineticEnergy}
                         \caption{The Kinetic Energy of an electron moving in a static magnetic and electric field}
                         \label{fig:kineticEnergy}
                   \end{figure}
+            \item I ended up wasting way to much time to get equal aspects along with transforming the axes on the subplots. That was due to me not being that familiar with the more advanced plotting systems in pylab and it still probably looks like a mess.
+            \item I also shouldn't have bothered to do a complete derivation of the E-cross-B drift and the analytic solutions to \(\va{v}\) and \( \va{r} \), 
       \end{itemize}
 
+\newpage
 \section{Code}
       \label{sec:code}
+      \lstinputlisting{../source/EcrossBDrift.py}
+
       
 
 \end{document}
