@@ -19,7 +19,7 @@ particle = "electron"
 # #Choose if for ion or electron
 if particle == "electron":
 	# #electron settings
-	h = 1.E-5		#stepsize
+	h = 1.		#stepsize
 	m = m_e	
 	q = e
 
@@ -29,7 +29,7 @@ if particle == "ion":
 	m = m_i
 	q = -2*e
 
-steps = int(1E2)
+steps = int(1E6)
 
 #Defining the vectors which contains the positions and velocities during the simulation
 r = np.zeros((steps,3))	#x, y and z direction
@@ -69,7 +69,7 @@ for i in range(0,steps -1):
 
 	#Let us first calculate the steps since last move
 	B = magneticField(r[i,:])
-	print B
+	# print B
 	dv = C1 * np.cross(v[i,:],B)
 	dr = h*v[i,:]
 

@@ -1,13 +1,15 @@
 # Fdb version 3
-["biber Report_1"] 1435909898 "Report_1.bcf" "Report_1.bbl" "Report_1" 1435916247
-  "Report_1.bcf" 1435910037 90338 95ec96ce82361a63ad30e2392addc113 ""
+["biber Report_1"] 1435909898 "Report_1.bcf" "Report_1.bbl" "Report_1" 1436264096
+  "Report_1.bcf" 1436264096 90338 95ec96ce82361a63ad30e2392addc113 ""
   (generated)
-  "Report_1.blg"
   "Report_1.bbl"
-["pdflatex"] 1435910036 "Report_1.tex" "Report_1.pdf" "Report_1" 1435916247
-  "../source/Single_Particle_Motion.py" 1435909727 3039 9e789135ff0968ba9b15510fb34825d1 ""
-  "../source/electronGyration-eps-converted-to.pdf" 1435909897 33505 ef317ec213d30a6063f5ed48e412d3d7 ""
-  "../source/electronGyration.eps" 1435909694 64477 d4a4825e1bda265f5f0c16a20a811e91 ""
+  "Report_1.blg"
+["pdflatex"] 1436264095 "Report_1.tex" "Report_1.pdf" "Report_1" 1436264096
+  "../source/Single_Particle_Motion.py" 1436264049 3116 2d6ef2bf557ffc01b665ed1a6fe64da7 ""
+  "../source/electronGyration-eps-converted-to.pdf" 1436263459 31297 2579ee614b7297c2b52fb0a4419324f7 ""
+  "../source/electronGyration.eps" 1436263363 60024 5ab660c4ab3a1c0d4485045bbdead182 ""
+  "../source/ionGyration-eps-converted-to.pdf" 1436264096 42001 45f1d6d8861d6c8030258a26cd9e2515 ""
+  "../source/ionGyration.eps" 1436264066 87384 d56064ffb931a4a038b1bbf537e6a799 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -179,13 +181,14 @@
   "/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty" 1304191498 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/share/texmf/tex/latex/xcolor/x11nam.def" 1339578534 9040 c0c860499be99a076792194b1d6525a1 ""
   "/usr/share/texmf/tex/latex/xcolor/xcolor.sty" 1339578534 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
-  "Report_1.aux" 1435910037 4484 0949f83c452c723c46d4cd5abfc18440 ""
+  "Report_1.aux" 1436264096 4375 0a3e6255e1bb1ab5d2c1cf3c3532c948 ""
   "Report_1.bbl" 1435909898 466 9b63bd41c34afae085b93d05707d5cc3 "biber Report_1"
-  "Report_1.out" 1435910037 260 023cdd52f011ddd1ca3b2c4b2819757a ""
-  "Report_1.tex" 1435910036 7694 e76fcad1a5df84bdb65e6f13122d662d ""
+  "Report_1.out" 1436264096 260 023cdd52f011ddd1ca3b2c4b2819757a ""
+  "Report_1.tex" 1436263846 8353 659c3a7e22df49eef90c45840a119f93 ""
   (generated)
-  "Report_1.log"
-  "Report_1.out"
   "Report_1.pdf"
-  "../source/electronGyration-eps-converted-to.pdf"
+  "Report_1.out"
   "Report_1.aux"
+  "Report_1.log"
+  "../source/electronGyration-eps-converted-to.pdf"
+  "../source/ionGyration-eps-converted-to.pdf"

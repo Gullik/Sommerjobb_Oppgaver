@@ -211,8 +211,26 @@
       \begin{figure}
             \includegraphics[width = 0.5\linewidth]{../source/ExBelectron}
             \includegraphics[width = 0.5\linewidth]{../source/ExBion}
-            \caption{These plots show the trajectories of an electron and an ion in a static magnetic field, \(\va{B}_0 = (0,0,50000) \si{\nano\tesla}\), and a static electric field \( \va{E} = (50,0,0)  \si{\milli\volt\per\meter}\). The stepsize used for the electron simulation were \(10^{-16} \si{\second}\) and for the oxygen ion \(10^{-9} \si{\second}\)}
+            \caption{These plots show the trajectories of an electron and an ion in a static magnetic field, \(\va{B}_0 = (0,0,50000) \si{\nano\tesla}\), and a static electric field \( \va{E} = (50,0,0)  \si{\milli\volt\per\meter}\). The stepsize used for the electron simulation were \(10^{-10} \si{\second}\) and for the oxygen ion \(10^{-6} \si{\second}\)}
+            \label{fig:ExBDrift}
       \end{figure}
+
+      In \cref{fig:ExBDrift} we can see the trajectories to an electron and an oxygen ion in a static magnetic field and a static electric field, a new feature introduced to the trajectories compared to the earlier examined case with no electric field is a constant drift of the guiding center. We see that the direction of the drift is independent of the charge of the particle 
+
+      \begin{table}
+            \centering
+            \begin{tabular}{| c | c | c |}
+                  \hline
+                                          & Numerical   & Theoretical 
+                  \\ \hline
+                  Theoretical $\rho_c$    &  $5.686 \times 10^{-05} \si{\meter}$   &    $1.672  \si{\meter}$ 
+                  \\ \hline
+                  Measured $\rho_c$       &  $5.687 \times 10^{-05} \si{\meter}$  &     $1.672 \si{\meter}$ 
+            \end{tabular}
+            \caption{The gyration radii and frequencies for an electron and an oxygen ion. For the electron a timestep of \( 10^{-16} \si{s} \) and \(10^7\) steps were used in the simulation, while for the oxygen ion \( 5\times 10^{-8} \si{\second } \) long timesteps and \(10^7\) steps were used. The kinetic energy for the runs had a standard deviation of less than \(\order{10^{-25}}\)}
+            \label{tab:results}
+      \end{table}
+
 
 \appendix
 

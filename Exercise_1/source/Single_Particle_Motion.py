@@ -6,22 +6,22 @@ import scipy.stats as stats
 
 
 #Declaration of several variables, all the units are in SI
-e = -1.602E-19
-m_e = 9.109E-34	
-m_i = 2.66e-26 
-B0 = 50000 * 10E-9	#Should then be in proper Tesla
+e =  1.602E-19		#C
+m_e = 9.109E-31		#kg
+m_i = 16*1.674E-27 	#kg
+B0 =  50000E-9		#Tesla
 
 
 # #Choose if for ion or electron
 # #electron settings
-# h = 1.E-16
+# h = 1.E-12
 # m = m_e
-# q = e
+# q = -e
 
 #Ion settings
-h = 1.E-9
+h = 5.*1.E-8
 m = m_i
-q = 2*e
+q = e
 
 steps = int(1E7)
 
@@ -55,17 +55,22 @@ for i in range(0,steps -1):
 
 
 #Calculating the kinetic energy to see that it stays decently constant
-kineticEnergy = m*(vx*vx + vy*vy)
+kineticEnergy = m*(vx*vx + vy*vy)/2.
 print "relative change E_K = " + str((np.max(kineticEnergy) - np.min(kineticEnergy))/np.mean(kineticEnergy)) 
 print "std(E_K) = " + str(stats.tstd(kineticEnergy))
 
 pl.figure()
 pl.plot(x,y)
-pl.title('Gyration of an electron')
+# pl.title('Gyration of an electron')
+pl.title('Gyration of an oxygen ion')
 pl.xlabel("x [m]")
 pl.ylabel("y [m]")
+pl.axes().set_aspect('equal', 'datalim')
+
 # pl.savefig("electronGyration.eps")
 pl.savefig("ionGyration.eps")
+
+
 
 
 # pl.figure()
@@ -102,7 +107,6 @@ print rotations
 # pl.plot(time, angles)		#This wasn't a really good plot for anything
 
 pl.show()
-
 
 
 print 'The center is located at '  + str(center)	#Just to make sure that enough gyrations is done for the mean method of finding the center is valid

@@ -139,8 +139,14 @@
 \subsection{Results}
       \subsubsection{Gyration plots}
             \begin{figure}
-                  \includegraphics[width = \linewidth]{../source/electronGyration}
-                  \caption{Gyration of an electron}
+                  \begin{subfigure}[b]{0.45\textwidth}
+                        \includegraphics[width = \textwidth]{../source/electronGyration}
+                        \caption{Gyration of an electron gyrating in an anti-clockwise direction}
+                  \end{subfigure}
+                  \begin{subfigure}[b]{0.45\textwidth}
+                        \includegraphics[width = \linewidth]{../source/ionGyration}
+                        \caption{Gyration of an oxygen ion gyrating in a clockwise direction}
+                  \end{subfigure}
             \end{figure}
 
       \subsubsection{Gyration radius and frequency}
@@ -151,7 +157,7 @@
                   \rho_c      &= \frac{v_\perp}{\omega_c} = \frac{mv_\perp}{qB}
             \end{align}
 
-            The electron has a mass of \(m = 9.109 \times 10^{-34} \si{kg}\) and a charge of q \( = 1.602\times 10^{-19} \si{\coulomb} \), which is moving in the magnetic field with strength B\(_0\) \( = 5.000 \times 10^ {-5} \si{\tesla}\) and the oxygen ion,  O\(^{2-}\), has \(m = 2.66 \times 10^{-26} \si{kg}\) and a charge of q \( = 2*1.602\times 10^{-19} \si{\coulomb} \). The calculated and measured gyration frequencies and radii is written in \cref{tab:results}.
+            The electron has a mass of \(m = 9.109 \times 10^{-31} \si{kg}\) and a charge of q \( = 1.602\times 10^{-19} \si{\coulomb} \), which is moving in the magnetic field with strength B\(_0\) \( = 5.000 \times 10^ {-5} \si{\tesla}\) and the oxygen ion,  O\(^{2-}\), has \(m = 16 \times 1.674 \times 10^{-27} \si{kg}\) and a charge of q \( = 1.602\times 10^{-19} \si{\coulomb} \). The calculated and measured gyration frequencies and radii is written in \cref{tab:results}.
 
 
 
@@ -160,18 +166,18 @@
                   \centering
                   \begin{tabular}{| c |c | c |}
                         \hline
-                                                & e   & O\(^{2-}\)
+                                                & e   & O$^+$
                         \\ \hline
-                        Theoretical $\rho_c$    &  $5.686 \times 10^{-09} \si{\meter}$   &    $8.370 \times 10 ^{-2} \si{\meter}$ 
+                        Theoretical $\rho_c$    &  $5.686 \times 10^{-05} \si{\meter}$   &    $1.672  \si{\meter}$ 
                         \\ \hline
-                        Measured $\rho_c$       &  $5.686 \times 10^{-09} \si{\meter}$  &     $8.378 \times 10 ^{-2} \si{\meter}$ 
+                        Measured $\rho_c$       &  $5.687 \times 10^{-05} \si{\meter}$  &     $1.672 \si{\meter}$ 
                         \\ \hline
-                        Theoretical \(\omega_c\)&  $8.794 \times 10^{10} \si{\per\second} $  & $ 6.023 \times 10 ^{3}\si{\per\second} $
+                        Theoretical \(\omega_c\)&  $8.794 \times 10^{6} \si{ \radian\per\second} $  & $ 2.991 \times 10 ^{2}\si{ \radian\per\second} $
                         \\ \hline
-                        Measured \(\omega_c\)   &  $ 8.793\times 10^{10} \si{\per\second}$  &  $ 6.023 \times 10 ^{3} \si{\per\second}$
+                        Measured \(\omega_c\)   &  $ 8.793\times 10^{6} \si{ \radian\per\second}$  &  $ 2.991 \times 10 ^{2} \si{ \radian\per\second}$
                         \\ \hline
                   \end{tabular}
-                  \caption{The gyration radii and frequencies for an electron and an oxygen ion. For the electron a timestep of \( 10^{-16} \si{s} \) and \(10^7\) steps were used in the simulation, while for the oxygen ion \(  10^{-9} \si{\second } \) long timesteps and \(10^7\) steps were used. The kinetic energy for the runs had a standard deviation of less than \(\order{10^{-25}}\)}
+                  \caption{The gyration radii and frequencies for an electron and an oxygen ion. For the electron a timestep of \( 10^{-16} \si{s} \) and \(10^7\) steps were used in the simulation, while for the oxygen ion \( 5\times 10^{-8} \si{\second } \) long timesteps and \(10^7\) steps were used. The kinetic energy for the runs had a standard deviation of less than \(\order{10^{-25}}\)}
                   \label{tab:results}
             \end{table}
 
@@ -181,7 +187,8 @@
       \begin{itemize}
             \item It would be nice to specify which oxygen ion is meant (I assumed it was O\(^{2-}\)), but it should affect much results anyway
             \item Change the wording regarding conservation of kinetic energy to mostly conserved, since it doesn't conserve perfectly using an Euler method due to overestimation. The timesteps it started to have good kinetic energy conservation at was \(10^{-16}\) and \( 10^{-9} \) for the electron and ion respectively if you want to include it.
-            \item Overflow problems can occur when the timesteps is to big due to the \(  h\frac{qB_0}{m}  \) getting to big
+            \item Overflow problems can occur when the timesteps is to big due to the \(  h\frac{qB_0}{m}  \) getting to big. An alternative could be to rewrite the equation of motion to be a unitless equation 
+            \( \vb{R} = \frac{\vb{r}-\vb{r}_c}{|\rho_c|}... \), but that adds a complication and makes order of scale intuition abit harder to understand.
             \item Maybe it would be good to remind the students that the gyration frequency is per radian and not per rotation. That could probably reduce some confusion.
             \item The exercise took about $6-7$ hours including writing a report as well.
       \end{itemize}
