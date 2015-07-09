@@ -116,9 +116,37 @@ An approximation of Earth's dipole magnetic field is
       \va{B}(\va{r}) &= \frac{\mu_0}{4\pi}\frac{3\va{r}\left( \va{m} \cdot \va{r}\right)}{r^5} - \frac{\va{m}}{r^3}
 \end{align}
 where \( \va{r} \), \(\mu_0\) and \(\va{m}\) is the position, vacuum permeability and magnetic moment respectively.
-     
+
+The equation of motion for a charged particle is
+
+\begin{align}
+      \pdv{\va{v}}{t} &= \frac{q}{m}\left( \va{v} \cross \va{B}(\va{r}) \right)
+      \intertext{with}
+      \pdv{\va{r}}{t} &= \va{v}
+\end{align}
+
+Using Euler's method to dicretize it we arrive at the following two equations
+
+\begin{align}
+      \va{v}(t+h) &= \va{v}(t) + h\frac{q}{b} \left( \va{v}(t) \cross \va{B}(\va{r}(t)) \right)
+      \\
+      \va{r}(t+h) &= \va{r}(t) + h \va{v}(t)
+\end{align}
+
+Then we use the same algorithm as in the earlier exercises to move forward in time
+
+ \begin{enumerate}
+            \item Declare variables necessary variables.
+            \item Set initial conditions
+            \item For-loop over timesteps. 
+                  \begin{itemize}
+                        \item Update \( \va{v}(t+h) \) and \( \va{r}( t+h ) \).
+                  \end{itemize}
+            \item Plot and analyze results
+\end{enumerate}     
 
 \subsection{Results}
+
       
 
 \appendix
@@ -126,6 +154,12 @@ where \( \va{r} \), \(\mu_0\) and \(\va{m}\) is the position, vacuum permeabilit
       \begin{itemize}
             \item I assume you mean the perpendicular and parallel \textit{kinetic} energy in exercise 2.
             \item Could it be better to plot it first, and afterwards find the energy. I think it is quite natural to plot it while working on it.
+            \item I suppose we are supposed to find that the total kinetic energy is conserved (in a static magnetic field, \(\pdv{\va{B}}{t} = 0\) ), and grad-B drift should be visible (and the Alfven approximations, that the magnetic field variations is small compared to gyration frequency and radius, below hold
+            \[ \left|\frac{1}{\omega_c} \pdv{\ln{B}}{t}\right| << 1 \] 
+            \[ \left| \frac{(\rho_c \cdot \nabla)\va{B}}{B} \right| << 1 \] 
+            \item A curvature drift should be there as well?
+            \item I had hoped to see the magnetic mirror effect as well
+            \item The movement along the x-axis is so small compared to the magnitude of the coordinate so it got rounded away, had to shift the coordinate system \(5R_e\) to keep it
       \end{itemize}
 
 

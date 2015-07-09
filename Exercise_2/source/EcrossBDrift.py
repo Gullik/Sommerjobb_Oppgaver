@@ -2,6 +2,7 @@ import numpy as np
 import scipy as sp
 import pylab as pl
 import scipy.stats as stats
+from time import time
 
 
 
@@ -10,6 +11,8 @@ e =  1.602E-19		#C
 m_e = 9.109E-31		#kg
 m_i = 16*1.674E-26 	#kg
 B0 =  50000E-9		#Tesla
+E_x = 50 * 10**-3		#mV/m
+E_y = 0
 
 
 particle = "electron"
@@ -18,13 +21,12 @@ particle = "electron"
 case = "ExB"
 # case = "VaryV"
 
-E_x = 50 * 10**-3		#mV/m
-E_y = 0
+
 
 # #Choose if for ion or electron
 if particle == "electron":
 	# #electron settings
-	h = 1.E-10		#stepsize
+	h = 1.E-11		#stepsize
 	m = m_e	
 	q = -e
 
@@ -35,7 +37,7 @@ if particle == "ion":
 	q = e
 
 
-gyrations = 3
+gyrations = 30
 
 steps = int( np.abs(m/(q*B0)) * 2*np.pi  * gyrations /h)	#Since the gyration has a frequency qB/m, it's period is m/(qB)
 
@@ -58,7 +60,7 @@ if case == "ExB":
 	#We need some extra vectors for this one
 	kineticEnergy = np.zeros(steps)
 	angles = np.zeros(steps)
-	time = np.linspace(0,steps*h, steps) #Only used for plotting the kinetic energy
+	timeVector = np.linspace(0,steps*h, steps) #Only used for plotting the kinetic energy
 
 	#Setting initial conditions
 	X = 0
@@ -82,6 +84,8 @@ if case == "ExB":
 	C1 = h*q/m
 	C2 = h*(q*B0/m)
 
+	startTime = time()	#Calculiting how long time the for loop takes
+	
 	for i in range(0,steps -1):
 		#Rewrote it so it doesn't go searching through the vectors so often, faster
 
@@ -98,20 +102,23 @@ if case == "ExB":
 		VY = VY + dVY
 
 		#Storing datapoints
-		vx[i + 1] = VX
+		vx[i + 1] =  VX
 		vy[i + 1] = VY
-		x[i + 1] = X
+		x[i + 1] =  X
 		y[i + 1] = Y
 		if i % int(0.25*steps) == 0:
 			print str( float(i) / float(steps) * 100)  + '%'
 
+	endTime = time()
+
+	print 'Time spent to calculate positions: ' + str(endTime - startTime)
 
 	#Calculating the kinetic energy to see that it stays decently constant
 	kineticEnergy = m*(vx*vx + vy*vy)/2.
 	print "relative change E_K = " + str((np.max(kineticEnergy) - np.min(kineticEnergy))/np.mean(kineticEnergy)) 
 	print "std(E_K) = " + str(stats.tstd(kineticEnergy))
 	pl.figure()
-	pl.plot (time, kineticEnergy)
+	pl.plot (timeVector, kineticEnergy)
 	pl.xlabel('s')
 	pl.ylabel('J')
 	pl.title('Kinetic Energy')
@@ -166,7 +173,7 @@ if case == "ExB":
 	locs,labels = pl.yticks()
 	pl.yticks(locs, map(lambda y: "%.1f" % y, locs*1.E3))
 
-	f.savefig("ExB" + particle + ".eps")
+	# f.savefig("ExB" + particle + ".eps")
 	pl.show()
 
 
