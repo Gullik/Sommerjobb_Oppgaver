@@ -56,7 +56,7 @@ V = 0.		#m/s velocity in y direction
 W = 0.		#m/S velocity in z direction
 
 xShift = 5.*Re 			#Shift in the x-axis to avoid rounding away the results
-vzShift = 3.E16			#Shift in the velocity axis to avoid rounding away the results
+vzShift = 3.E2			#Shift in the velocity axis to avoid rounding away the results
 
 r[0,:] = [X,Y,Z]	
 v[0,:] = [U,V,W]
@@ -90,6 +90,8 @@ for i in range(0,steps -1):
 	dv = C1 * np.cross(V ,B)
 	dr = h*(V + [0,0,vzShift])
 
+	print dr[2]/vzShift
+
 	v[i + 1,:] = V + dv
 	r[i + 1,:] = R + dr
 
@@ -105,7 +107,7 @@ print 'Time used: ' + str(end - start)
 
 
 fig = pl.figure()
-ax = fig.add_subplot(111, projection='2d')
+ax = fig.add_subplot(111, projection='3d')
 
 ax.plot(r[:,0],r[:,1], r[:,2])
 ax.set_xlabel('x')
