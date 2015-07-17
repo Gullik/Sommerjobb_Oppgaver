@@ -143,7 +143,28 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
                         \item Update \( \va{v}(t+h) \) and \( \va{r}( t+h ) \).
                   \end{itemize}
             \item Plot and analyze results
-\end{enumerate}     
+\end{enumerate}
+
+\subsubsection{Rounding Errors}
+      In this exercise we need to consider a few rounding errors, due to distances and velocities at a very different value being important for the physics involved.
+      \begin{itemize}
+            \item The magnetic field is dependent on the total distance from the center of the Earth, which the particle is located, which is of the order \(\order{4}\)
+            \item The particle's gyration radius is of the order \(\order{-13}\)
+            \item Depending on the timestep chosen the particle's change in position will be even lower than the gyration radius, on the order \(\order{-17}\)
+            \item Using float 64 numbers the small change in particle position will be rounded away, when the two numbers are added together.
+            \item This problem is solved by shifting the coordinate system so it is centered around the particle gyration, and instead adding the extra distance into the calculation of the magnetic field
+      \end{itemize}
+
+      For the treatment of the velocity we cannot as easily just shift the coordinate system, since the movement along the z-axis is important for the curvature of the magnetic field.
+      \begin{itemize}
+            \item The order of \(dv_z\) is \( \order{-26} \)
+            \item The order of \(v_z\) is \( \order{3} \)
+      \end{itemize}
+
+      To solve this we need one solution for the velocity and one solution for the influence the velocity has on the position, for the velocity a shift of the velocity coordinate system is enough.
+      
+
+
 
 \subsection{Results}
 

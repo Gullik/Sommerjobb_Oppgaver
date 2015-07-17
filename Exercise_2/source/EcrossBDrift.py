@@ -160,7 +160,6 @@ if case == "ExB":
 	# axArray[0].set_aspect('equal')
 
 	yticks = axArray[0].get_yticks()
-	print yticks
 	ystart, yend = axArray[0].get_ylim()
 	for ax in axArray.flat:
 		ax.xaxis.set_ticks(yticks +  round(np.abs(ystart - yend),3)/2.)
@@ -267,8 +266,6 @@ if case == "VaryV":
 		props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 		ax.text(0.05, 0.95, "$v_x(0) =$" + str( round(vx[0],-1) ) + '\n' +  '$v_y(0) =$ ' + str( round(vy[0],-1) ), transform=ax.transAxes, fontsize=14,
         		verticalalignment='top', bbox=props)
-
-		# axArray[graphRow, graphColumn].set_xlabel("x [$10^{-3}$ m]")
 
 	axArray[0,0].set_aspect('equal', 'datalim')
 

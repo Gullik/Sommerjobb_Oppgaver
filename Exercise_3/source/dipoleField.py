@@ -56,13 +56,16 @@ V = 0.		#m/s velocity in y direction
 W = 0.		#m/S velocity in z direction
 
 xShift = 5.*Re 			#Shift in the x-axis to avoid rounding away the results
-vzShift = 3.E2			#Shift in the velocity axis to avoid rounding away the results
+
+vzShift = np.zeros(3)			#Shift in the velocity axis to avoid rounding away the results
+vzShift[2] = 300
 
 r[0,:] = [X,Y,Z]	
 v[0,:] = [U,V,W]
 R = np.zeros((1,3))	#R and V is used in the for loop to avoid going into the vectors more than necessary
 V = np.zeros((1,3))
 r2 = np.zeros(3)	#Used to compensate for the shifted axis in the magnetic field
+total_dr_z = np.zeros(steps)	#Since the movement due to the changing of the magnetic field line density is small compared to the large 300m/s value it starts with, it must be kept seperate to not be rounded away
 MagField = np.zeros((steps,3)) #Storing the field values
 
 
@@ -81,6 +84,9 @@ def magneticField(r):
 
 	return (C2*r2*(r2[2]*dipoleMoment)/distance**5) - dipoleVector/(distance**3)
 
+# B = magneticField(r[:,0])
+# print m*np.sqrt(300*300)/(q*np.sqrt(B[0]*B[0] + B[1]*B[1] + B[2]*B[2]))
+
 start = time()
 for i in range(0,steps -1):
 	R = r[i,:]
@@ -88,12 +94,16 @@ for i in range(0,steps -1):
 
 	B = magneticField(R)
 	dv = C1 * np.cross(V ,B)
-	dr = h*(V + [0,0,vzShift])
+	dr = h*(V + vzShift) 		
 
-	print dr[2]/vzShift
+	#Need a method to store the extra movement rounded way
+	total_dr_z[i + 1] = total_dr_z[i] + h*V[2]
+	# print total_dr_z[i]
+	# print dv
+
 
 	v[i + 1,:] = V + dv
-	r[i + 1,:] = R + dr
+	r[i + 1,:] = R + dr 		#Adding the extra 300 m/s
 
 	#The magnetic field is also stored since we need it later when calculating the paralell and perpendilar velocity
 	MagField[i,:] = B
@@ -132,8 +142,6 @@ axArray[2].set_ylabel('$v_z$')
 #Calculate the perpendicular and parallel velocity
 #Normalize the magnetic field so we can calculate v_para = v . b
 
-
-
 MagField[steps-1,:] = magneticField(r[steps-1,:])	#Adding last entry, wasn't done in the for-loop
 norm = np.linalg.norm(MagField, axis = -1)
 MagField/=norm[:,None]
@@ -155,6 +163,9 @@ axArray.plot(time,v_para)
 
 # print v_magn
 # print v_para
+
+pl.figure()
+pl.plot(time,total_dr_z)
 
 
 
