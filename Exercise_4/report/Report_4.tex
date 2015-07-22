@@ -218,6 +218,16 @@
         \item The frequencies I found were very low, compared to the proposed \(0.01\) start. Do I have a serious order of magnitude error somewhere? The displacement numbers also seemed quite high compared to the domain of the wave.
         \item The units on the boundary displacement velocities, \([\si{\meter\per\second}]\) doesn't make sense. It's x-derivative should be in length \([\pdv{\nu}{x}] = [\frac{L/T}{L}] = [T^{-1}]\), \(100\) also sounds abit high when we are covering a distance in the kilometer scale
         \item Good values: Spatial resolution \(10^6\) and frequency on the order \(10^{-13}\)
+        \item Scale of the Alfvèn velocity still seems to be iffy at the edges, causing overflow problems.
+          \begin{align}
+            v_A^2 &= \frac{B_0^2}{\mu_0\rho} = \frac{\left(400\times 10^{-9} x^{-3}\right)^2}{4\pi10^{-7}\times 50 x^2} 
+            \\
+            v_A^2 &\sim 10^{-9} x^{-8}
+            \intertext{Siden x mesteparten av tiden er over 10 km,  \( x \sim 10^4\si{\meter}\)}
+            v_A^2  &\sim 10^{-9} (10^{4})^{-8} = 10^{-41}
+            \intertext{Som gir en typisk bølgehastighet \(C(x)\) av ordenen}
+            C(x) &= \frac{\omega^2}{v_A^2} \sim  \omega^2 10^{41}
+          \end{align} 
       \end{itemize}
 
 

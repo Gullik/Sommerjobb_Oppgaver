@@ -9,11 +9,11 @@ from time import time
 pl.close('all')
 
 #Define variables
-Re = 6.371E3			#m	Earths radius
+Re = 6.371E6			#m	Earths radius
 mu_0 = 4.*np.pi*1.E-7	#N/A^2
-resolution = int(1E6)	#Spatial resolution
+resolution = int(1E7)	#Spatial resolution
 step = (5*Re - (-5*Re))/resolution
-omega = 1.E-3		#Hz	Frequency
+omega = 1.E-25		#Hz	Frequency
 magConstant = 400.E-9	#T
 densityConstant = 50. 	#m^-3
 
@@ -25,22 +25,25 @@ b  = np.zeros(resolution)	   #Magnetic field
 rho= np.zeros(resolution)	   #Mass density
 vaSquared= np.zeros(resolution)	   #Alfven velocity
 
+# trimNumber = 1.E10
 
 #Precalculating the magnetic field and density on the spatial nodes used
 rho = densityConstant*x*x
 b   = magConstant*x**-3				#Could this also be in per cm?
-# for i in range(0,resolution - 1):	#Need to trim it to avoid problems at b = 400x**-3 => inf
-# 	if np.abs(b[i]) > 1E-15:
-# 		b[i] = np.sign(b[i]) * 1E-15
+# for i in range(0,resolution):	#Need to trim it to avoid problems at b = 400x**-3 => inf
+# 	if np.abs(b[i]) > trimNumber:
+# 		b[i] = np.sign(b[i]) * trimNumber
 
-trimNumber = 1.E10
 vaSquared 	= b*b/(mu_0*np.abs( rho ))
-for i in range(0,resolution):	#Need to trim it to avoid problems at 1/x**3 = inf
-	if vaSquared[i] > trimNumber:
-		vaSquared[i] = trimNumber
+# for i in range(0,resolution):	#Need to trim it to avoid problems at 1/x**3 = inf
+# 	if vaSquared[i] > trimNumber:
+# 		vaSquared[i] = trimNumber
 
 
-print vaSquared
+
+
+# print (magConstant**2)/(mu_0*densityConstant)
+
 
 for n in range(0,1):
 
@@ -55,18 +58,29 @@ for n in range(0,1):
 	nu[0] = NU
 
 
+	C1 = step * omega*omega / vaSquared   #Precalculating
+	# for i in range(0,resolution):	#Need to trim it to avoid problems at 1/x**3 = inf
+	# 	if C1[i] > trimNumber:
+	# 		C1[i] = trimNumber
+
+	# pl.figure()
+	# # pl.plot(x,np.abs(rho))
+	# pl.plot(x,b*b)
+	# pl.plot(x,vaSquared)
 
 
-	omega2 = omega*omega   #Precalculating
+
+
 
 
 	#Trial for solving the boundary problem
 	for i in range(0,resolution - 1):
 		#Change since last step
-		DNU = step * (-XI * omega2 / vaSquared[i])
+		DNU = -XI *C1[i]
 		DXI = step * NU
 
-		
+		# if i > 10:
+		# 	break
 
 		# print DNU
 		#New position and velocity
@@ -74,16 +88,13 @@ for n in range(0,1):
 		NU += DNU
 
 
-		
-
-
 		# print NU
 		#Storing positions
 		xi[i + 1] = XI
 		nu[i + 1] = NU
 
-		# if i % int(0.1*resolution) == 0:
-		# 	print str( float(i) / float(resolution) * 100)  + '%'
+		if i % int(0.1*resolution) == 0:
+			print str( float(i) / float(resolution) * 100)  + '%'
 
 
 	# if np.abs(xi[i]- 0) < 1000  and  np.abs(nu[i]) - 100 < 5: 
@@ -103,19 +114,18 @@ for n in range(0,1):
 	ax[0].set_ylabel(' $\\xi$ [m]')
 	ax[1].set_ylabel(' $\\nu$ [m/m] ')
 
-
-
-
 	# place a text box in upper left in axes coords
 	props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-	ax[0].text(0.75, 0.95, "$\omega =$" + str( round(omega, 15) )  , transform=ax[0].transAxes, fontsize=14, verticalalignment='top', bbox=props)
-	pl.savefig('wave' + str(int(round(omega*10E16, 1))) + 'eps')
+	ax[0].text(0.75, 0.95, "$\omega =$" + str( omega )  , transform=ax[0].transAxes, fontsize=14, verticalalignment='top', bbox=props)
+	pl.savefig('wave' + str(int(round(omega*10E25, 1))) + 'eps')
 
 	
 
-	pl.figure()
-	pl.plot(x,vaSquared)
+
 
 	omega *= 10
+
+# pl.figure()
+# pl.plot(x,1./vaSquared)
 
 pl.show()

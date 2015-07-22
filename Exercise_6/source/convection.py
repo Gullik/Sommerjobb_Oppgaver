@@ -7,8 +7,8 @@ from potential_grid import electrostatic_potential
 
 def main():
 	#Needed variables
-	Re = 6.371E3		#m
-	B = np.array([0,0,1]) * 45000.E-9	#tesla
+	Re = 6.371E6		#m
+	B  = 45000.E-9		#tesla  #Directed in z-direction
 
 	#Making some needed arrays
 	potential = electrostatic_potential()
@@ -17,18 +17,10 @@ def main():
 	gradient_theta 	= np.zeros(potential.shape)
 	gradient_phi	= np.zeros(potential.shape)
 
-	v_theta = np.zeros(potential.shape)
-	v_phi = np.zeros(potential.shape)
-
-
-
 	#Arrays with the angles, converted to radians for convenience
 	theta = np.arange(1,31)
 	phi = np.arange(0,360)
-	overSin = np.zeros(30)		#To be used in the 1/(rsin(theta)) in the gradient operator for spherical coordinates
-
-	# print theta
-	# print phi
+	# overSin = np.zeros(30)		#To be used in the 1/(r sin(theta)) in the gradient operator for spherical coordinates
 
 	theta = np.deg2rad(theta)
 	phi = np.deg2rad(phi)
@@ -39,7 +31,6 @@ def main():
 	rho = Re
 	dTheta = rho
 	dPhi = rho*sinTheta
-
 
 	#Calculate the gradient for the potential using a centered difference with two gridpoints as the step
 	#	The index shifting needed to calculate Phi(i + 1, j) is done for the entire array at the same time 
@@ -52,18 +43,41 @@ def main():
 	gradient_theta[1:-1,:] = (potential[2: , :] - potential[:-2 , :])/(rho*2.*dTheta)
 	gradient_phi[:,1:-1] = (potential[:,2:] - potential[ :, :-2]    )/(rho*2.*dPhi[:,np.newaxis]*sinTheta[:,np.newaxis])
 
-	# plot_potential_and_electric_field(potential, gradient_theta, gradient_phi)
+	plot_potential_and_electric_field(potential, gradient_theta, gradient_phi)
 
-	#Now we want to calculate the cross products, converting to cartesian coordinates first
-	E_x = rho*np.sin(gradient_theta)*np.cos(gradient_phi)
-	E_y = rho*np.sin(gradient_theta)*np.sin(gradient_phi)
+	print gradient_theta[2,0]
 
-	v_x = E_y*B[2]
-	v_y = -E_x*B[2]
+	#Since the electric field is -grad(potential), we use the negative gradient below
+	v_theta = cross_with_B(-gradient_theta, theta, phi, B)
+	v_phi = cross_with_B(-gradient_phi, theta, phi, B)
 
-	plot_drift(v_x,v_y)
+	#Stopping here for now
+	plot_drift(v_theta,v_phi)
+
 
 	pl.show()
+
+def cross_with_B(matrix, theta, phi, B):
+	#Now we want to calculate the cross products, converting to cartesian coordinates first
+	sinTheta = np.sin(theta)
+	cosTheta = np.cos(theta)
+	sinPhi = np.sin(phi)
+	cosPhi = np.cos(phi)
+
+	E_x = matrix * sinTheta[:,np.newaxis] * cosPhi[np.newaxis,:]
+	E_y = matrix * sinTheta[:,np.newaxis] * sinPhi[np.newaxis,:]
+	E_z = matrix * cosTheta[:,np.newaxis]
+
+	#Do the cross product
+	v_x = E_y*B
+	v_y = -E_x*B
+	v_z = 0
+
+	#Then we return the new velocity magnitude
+	return np.sqrt(v_x*v_x + v_y*v_y)
+
+
+
 
 def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
 		#Plotting time...
@@ -97,7 +111,6 @@ def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
 	gradient_theta_norm = np.zeros(gradient_theta.shape)
 	gradient_theta_norm[1:-1,1:-1] = gradient_theta[1:-1,1:-1]/magnitude[1:-1,1:-1]
 
-
 	pl.figure()
 	x = np.arange(0,potential.shape[1])
 	y = 60 + np.arange(0,potential.shape[0])
@@ -105,7 +118,7 @@ def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
 
 	skipArrows = 10
 	eArrows = pl.contourf(X,Y, magnitude)
-	pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], -gradient_phi_norm[:,::skipArrows], -gradient_theta_norm[:,::skipArrows], angles = 'xy', scale = 40)
+	pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], -gradient_phi_norm[:,::skipArrows], -gradient_theta_norm[:,::skipArrows], angles = 'uv', scale = 30)
 
 	cbar = pl.colorbar(eArrows)
 
@@ -116,6 +129,29 @@ def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
 	pl.ylabel('Latitude  [ $ ^\circ$]')
 
 	pl.savefig('eArrows.eps')
+
+	return
+
+def plot_drift(v_theta, v_phi):
+
+	pl.figure()
+	x = np.arange(0,v_theta.shape[1])
+	y = 60 + np.arange(0,v_theta.shape[0])
+	X, Y = np.meshgrid(x,y)
+
+	skipArrows = 10
+	pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], v_theta[:,::skipArrows], v_phi[:,::skipArrows], angles = 'uv')#, scale = 30)
+
+	# print v_theta
+
+	#Labels
+	pl.title('Drift the higher latitudes')
+	pl.xlabel('Longitude [ $ ^\circ$]')
+	pl.ylabel('Latitude  [ $ ^\circ$]')
+
+	pl.savefig('vArrows.eps')
+
+	return
 
 
 if __name__ == '__main__':

@@ -81,10 +81,8 @@ def electrostatic_potential():
 
 
 		for l in range(N + 1):
-			for m in range(l, N + 1):
+			for m in range(l + 1):
 				total_sum += (A[l,m]*np.cos(m*phi) + B[l,m]*np.sin(m*phi))* legendre[latitude_index, l, m]
-				# print total_sum
-				
 
 		return total_sum
 
@@ -112,17 +110,12 @@ def plot_grid(grid, name):
 	pl.xlabel('Longitude $ [ ^\circ] $')
 	pl.ylabel('Latitude  $ [ ^\circ] $')
 
-	# ticks = cbar.ax.get_yticks()
-	# nTicks = ticks.shape[0]
+	#Hardcoded the labels
 	cbar_labels = np.arange(-24 , 32 + 1, 24-16)
 
 	cbar.ax.set_yticklabels(cbar_labels)
 	cbar.set_label(' $\Phi$  [kV]')#, rotation = 0)
 	pl.savefig(name)
-
-	# print legendre[:,5,5]
-	# pl.figure()
-	# pl.plot(legendre[0,:,:])
 
 	pl.show()
 

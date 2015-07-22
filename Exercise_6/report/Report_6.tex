@@ -261,7 +261,7 @@
       \begin{matrix}
         r &=& \sqrt{x^2 + y^2 + z^2}
         \\
-        \theta&=&   \arccos{\frac{x}{r}}
+        \theta&=&   \arccos{\frac{z}{r}}
         \\
         \phi &=& \arctan{\frac{y}{x}}
       \end{matrix}  
@@ -295,9 +295,10 @@
       \end{subfigure}
       \begin{subfigure}{0.40\textwidth}
         \includegraphics[width = \textwidth]{../source/eArrows}
-        \subcaption{The figure shows the direction of the electric field, given by \(\va{E} = -\nabla\Phi\), in the higher latitudes and the magnitude, with the arrows showing direction and  the color representing magnitude. (Should probably use a dB scale for the strength)\\}
+        \subcaption{The figure shows the direction of the electric field, given by \(\va{E} = -\nabla\Phi\), in the higher latitudes and the magnitude, with the arrows showing direction and  the color representing magnitude. (Should probably use a dB scale for the strength)}
       \end{subfigure}
     \end{figure}
+
 
 
 
@@ -305,8 +306,8 @@
 \section{Comments regarding the exercise}
     \begin{itemize}
       \item A vertical magnetic field is meant along the z-axis? Could be compared to Earth's surface as well.
-      \item What should be done with the edges of \(\nabla \Phi\)? Now I am using \( \pdv{\Phi_{0,j}}{\theta} = \frac{ \Phi_{0+1, j} - \Phi_{i, j} }{\Delta \theta}\) and similar methods at the edges.
-
+      \item What should be done with the edges of \(\nabla \Phi\)? Now I am ignoring them, but something like \( \pdv{\Phi_{0,j}}{\theta} = \frac{ \Phi_{0+1, j} - \Phi_{i, j} }{\Delta \theta}\) or similar methods could be implemented.
+      \item Should we use \(r = Re\), that would be on the surface?
     \end{itemize}
 
 
@@ -314,6 +315,5 @@
   \label{sec:code}
   \lstinputlisting{../source/convection.py}
 
-      convenience 
 
 \end{document}

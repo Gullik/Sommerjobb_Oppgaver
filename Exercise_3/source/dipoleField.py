@@ -12,13 +12,13 @@ m_e = 9.109E-31		#kg
 m_i = 16*1.674E-26  #kg
 Re = 6.371E3		#m
 mu = 4.*np.pi*1.E-7	#N/A^2
-dipoleMoment = 7.94 *1.E22		#A m^2	Dipole moment  	Note, this is directed along the z-axis
+dipoleMoment = -7.94 *1.E22		#A m^2	Dipole moment  	Note, this is directed along the z-axis
 dipoleVector = np.zeros(3)
 dipoleVector[2] = dipoleMoment
 
 
-# particle = "electron"
-particle = "ion"
+particle = "electron"
+# particle = "ion"
 
 # #Choose if for ion or electron
 if particle == "electron":
@@ -68,9 +68,9 @@ r2 = np.zeros(3)	#Used to compensate for the shifted axis in the magnetic field
 total_dr_z = np.zeros(steps)	#Since the movement due to the changing of the magnetic field line density is small compared to the large 300m/s value it starts with, it must be kept seperate to not be rounded away
 MagField = np.zeros((steps,3)) #Storing the field values
 
-
 C1 = h*(q/m)			#Constant needed in the calculation of the new velocity
 C2 = 3.*mu/(4.*np.pi)	#Constant used in the magnetic field calculation
+
 
 
 def magneticField(r):
@@ -83,6 +83,9 @@ def magneticField(r):
 	distance = np.sqrt(r2[0]*r2[0] + r2[1]*r2[1] + r2[2]*r2[2])
 
 	return (C2*r2*(r2[2]*dipoleMoment)/distance**5) - dipoleVector/(distance**3)
+
+
+print m/(q*magneticField(r[0,:]))*2.*np.pi
 
 # B = magneticField(r[:,0])
 # print m*np.sqrt(300*300)/(q*np.sqrt(B[0]*B[0] + B[1]*B[1] + B[2]*B[2]))
