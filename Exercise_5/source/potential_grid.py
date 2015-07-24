@@ -3,7 +3,7 @@ import scipy as sp
 import pylab as pl
 import scipy.stats as stats
 
-def electrostatic_potential():
+def electrostatic_potential(coeffPath):
 	#First we need to set up a grid over the high latitudes
 	lamb_start = 60
 	lamb_end = 90
@@ -21,10 +21,10 @@ def electrostatic_potential():
 	#	l 	m	coeff
 	#	#	#	#####
 	# The first column gives the l_number (degree), the second the m number (order) and the third is the actual coefficient
-	coeff_type = np.genfromtxt('heppner_coeffs.txt', dtype = str, skiprows = 1,  usecols = (0))
-	l_number = np.genfromtxt('heppner_coeffs.txt', dtype = int, skiprows = 1,  usecols = (1))
-	m_number = np.genfromtxt('heppner_coeffs.txt', dtype = int, skiprows = 1,  usecols = (2))
-	coefficients = np.genfromtxt('heppner_coeffs.txt', skiprows = 1,  usecols = (3))
+	coeff_type = np.genfromtxt(coeffPath, dtype = str, skiprows = 1,  usecols = (0))
+	l_number = np.genfromtxt(coeffPath, dtype = int, skiprows = 1,  usecols = (1))
+	m_number = np.genfromtxt(coeffPath, dtype = int, skiprows = 1,  usecols = (2))
+	coefficients = np.genfromtxt(coeffPath, skiprows = 1,  usecols = (3))
 
 	nCoeff = coefficients.shape[0]
 
@@ -121,5 +121,6 @@ def plot_grid(grid, name):
 
 if __name__ == "__main__":
 	figname = 'potential.eps'
-	grid = electrostatic_potential()
+	coeffPath = 'heppner_coeffs.txt'
+	grid = electrostatic_potential(coeffPath)
 	plot_grid( grid ,figname )

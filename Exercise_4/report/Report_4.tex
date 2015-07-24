@@ -194,17 +194,36 @@
     \end{enumerate}
 
 \subsection{Results}
+  Is there something wrong with the magnetic field, it is basically \(0\) everywhere, except at the center where it goes to infinity. I included \cref{eq:va2} to show how that causes 
+  \begin{figure}
+    \centering
+    \begin{subfigure}{0.45\linewidth}
+      \includegraphics[width = \textwidth]{../source/rho}
+    \end{subfigure}
+    \begin{subfigure}{0.45\linewidth}
+      \includegraphics[width = \textwidth]{../source/b2}
+    \end{subfigure}
+     \begin{subfigure}{0.45\linewidth}
+      \includegraphics[width = \textwidth]{../source/va2}
+    \end{subfigure}
+    \begin{subfigure}{0.45\linewidth}
+      \includegraphics[width = \textwidth]{../source/C1}
+    \end{subfigure}
+    \caption{The figures show the physical characteristics that govern the wave-equation. \(\rho = 50\times x^{2}\), \(B = 400\times x^{-3} \times 10^{-9}\si{tesla}\), \(v_a^2 = \frac{B^2}{\rho \mu_0}\) and \(C_1 = h \frac{\omega^2}{v_a^2}\).}
+  \label{eq:va2}
+  \end{figure}
 
   \begin{figure}
-    \includegraphics[width = 0.45\linewidth] {../source/wave19950}
-    \includegraphics[width = 0.45\linewidth] {../source/wave27650}
-    \caption{The first two harmonic waves, of plasma displacement, in a spatially varying magnetic field. The figure on the left has a frequency of \(\omega_1 =1.99\times 10^{-13} \si{\per \second}\), while the figure on the right has the frequency \(\omega_2 =2.77\times 10^{-13} \si{\per \second}\).}
+    \includegraphics[width = 0.45\linewidth] {../source/wave172852}
+    \includegraphics[width = 0.45\linewidth] {../source/wave196722}
+    \caption{The first two harmonic waves, of plasma displacement, in a spatially varying magnetic field. The frequencies used are still much to low.}
     \label{fig:waves}
   \end{figure}
 
-  We ran the simulation integrating over \(10^6\) spatial steps in the simulations, figures showing the displacement and the displacement velocity of the first two harmonics is shown in \cref{fig:waves}. The first two harmonics were found at the frequencies \( \omega_1 = 1.995 \times 10^{-13} \si{\per \second} \) and \( \omega_2 = 2.765\times 10^{-13} \si{\per \second} \) and it should be noted that the second harmonic is not a integer multiple of the first harmonic, which is also true for the higher harmonics. This is because wave speed is varying over the domain.
+  We ran the simulation integrating over \(10^6\) spatial steps in the simulations, figures showing the displacement and the displacement velocity of the first two harmonics is shown in \cref{fig:waves}.
+   % The first two harmonics were found at the frequencies \( \omega_1 = 1.995 \times 10^{-13} \si{\per \second} \) and \( \omega_2 = 2.765\times 10^{-13} \si{\per \second} \) and it should be noted that the second harmonic is not a integer multiple of the first harmonic, which is also true for the higher harmonics. This is because wave speed is varying over the domain.
 
-  The frequencies tried out had a resolution of \(\Delta\omega = 10^{-16}\), and there are some systematic uncertainties in the integration method that could cause uncertainties in the frequency values.
+  % The frequencies tried out had a resolution of \(\Delta\omega = 10^{-16}\), and there are some systematic uncertainties in the integration method that could cause uncertainties in the frequency values.
     
       
 
@@ -212,12 +231,11 @@
 \section{Comments regarding the exercise}
       \begin{itemize}
         \item Isn't it a harmonic frequency when  \(\nu(-5R_e) = 100 \si{\meter\per\second}\) and \(\nu(5R_e) = -100 \si{\meter\per\second}\) as well?
-        \item At \(x = 0\) the magnetic field and mass density approaches \(\infty\), that could cause some trouble with the numerical method. I just truncated it to a high value around \(x=0\).
+        \item At \(x = 0\) the magnetic field and mass density approaches \(\infty\), that could cause some trouble with the numerical method. I just trimmed it to a high value around \(x=0\).
           Numpy handles it by giving it by giving a really high number of the spatial mesh has a point at \(x=0\), so it works, but I think trimming it is safer if we don't want any overflow instances.
-        \item I liked the find by trial and error approach. Fun way to approach a kinda hard problem.
-        \item The frequencies I found were very low, compared to the proposed \(0.01\) start. Do I have a serious order of magnitude error somewhere? The displacement numbers also seemed quite high compared to the domain of the wave.
+        \item I liked the find by trial and error approach. Fun way to approach the problem.
+        \item The frequencies found were still low, see plots of magnetic field in Results part.
         \item The units on the boundary displacement velocities, \([\si{\meter\per\second}]\) doesn't make sense. It's x-derivative should be in length \([\pdv{\nu}{x}] = [\frac{L/T}{L}] = [T^{-1}]\), \(100\) also sounds abit high when we are covering a distance in the kilometer scale
-        \item Good values: Spatial resolution \(10^6\) and frequency on the order \(10^{-13}\)
         \item Scale of the Alfvèn velocity still seems to be iffy at the edges, causing overflow problems.
           \begin{align}
             v_A^2 &= \frac{B_0^2}{\mu_0\rho} = \frac{\left(400\times 10^{-9} x^{-3}\right)^2}{4\pi10^{-7}\times 50 x^2} 
@@ -227,7 +245,32 @@
             v_A^2  &\sim 10^{-9} (10^{4})^{-8} = 10^{-41}
             \intertext{Som gir en typisk bølgehastighet \(C(x)\) av ordenen}
             C(x) &= \frac{\omega^2}{v_A^2} \sim  \omega^2 10^{41}
-          \end{align} 
+          \end{align}
+        \item The relavent code for used for the the constants used is pasted here
+            \begin{lstlisting}
+            #Define variables
+            Re = 6.371E6      #m  Earths radius
+            mu_0 = 4.*np.pi*1.E-7 #N/A^2
+            resolution = int(1E6) #Spatial resolution
+            step = (5*Re - (-5*Re))/resolution
+            omega = 1.E-41      #Hz Frequency
+            magConstant = 400.E-9 #T
+            densityConstant = 50.   #m^-3
+
+
+            x = np.arange(-5*Re,5*Re, step)
+
+            nu = np.zeros(resolution)      #Displacement velocity in y direction
+            xi = np.zeros(resolution)    #Displacement
+            b  = np.zeros(resolution)    #Magnetic field
+            rho= np.zeros(resolution)    #Mass density
+            vaSquared= np.zeros(resolution)    #Alfven velocity
+
+            #Magnetic field, density and alfven velocity
+            rho = densityConstant*x*x
+            b   = magConstant*x**-3       #Could this also be in per cm?
+            vaSquared   = b*b/(mu_0*np.abs( rho ))
+            \end{lstlisting}
       \end{itemize}
 
 

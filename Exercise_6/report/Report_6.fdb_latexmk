@@ -1,15 +1,17 @@
 # Fdb version 3
-["biber Report_6"] 1436885518 "Report_6.bcf" "Report_6.bbl" "Report_6" 1437484826
-  "Report_6.bcf" 1437484826 90338 95ec96ce82361a63ad30e2392addc113 ""
+["biber Report_6"] 1436885518 "Report_6.bcf" "Report_6.bbl" "Report_6" 1437735476
+  "Report_6.bcf" 1437735475 90338 95ec96ce82361a63ad30e2392addc113 ""
   (generated)
   "Report_6.blg"
   "Report_6.bbl"
-["pdflatex"] 1437484824 "Report_6.tex" "Report_6.pdf" "Report_6" 1437484826
-  "../source/convection.py" 1437484824 4616 7f252f509a37c84eadb158c12285ff92 ""
-  "../source/eArrows-eps-converted-to.pdf" 1437484825 96324 2364d560e26662e936c646257ebcbc9c ""
-  "../source/eArrows.eps" 1437483822 436426 edcd63a5e21c259aa7a548e19a700720 ""
+["pdflatex"] 1437735474 "Report_6.tex" "Report_6.pdf" "Report_6" 1437735476
+  "../source/convection.py" 1437735449 5168 67792a47dfd7d6c4c6cc7d7676089981 ""
+  "../source/eArrows-eps-converted-to.pdf" 1437734704 123173 0e8d973fde0ab6be422c6675764652f2 ""
+  "../source/eArrows.eps" 1437734604 517404 d53a82a24a6a48b869cf1f66c89eca00 ""
   "../source/potential-eps-converted-to.pdf" 1436970259 33222 89ca2ec4bcdf832eaeed9a4d05a787a9 ""
   "../source/potential.eps" 1436965661 95891 17eaa751f435ef48ccf95f36551d4a32 ""
+  "../source/vArrows-eps-converted-to.pdf" 1437734704 71577 c9c354ace8b4f539cbb61e41086be32c ""
+  "../source/vArrows.eps" 1437734604 336766 ff960262897a205ec4ff9c06ff42d7ab ""
   "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -187,14 +189,15 @@
   "/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty" 1304191498 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/share/texmf/tex/latex/xcolor/x11nam.def" 1339578534 9040 c0c860499be99a076792194b1d6525a1 ""
   "/usr/share/texmf/tex/latex/xcolor/xcolor.sty" 1339578534 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
-  "Report_6.aux" 1437484826 2244 9ce3a534647e28b74c3ad1569efb6ba4 ""
+  "Report_6.aux" 1437735475 2984 a4c53cbf37ca32c7eb362c73f26a4ad1 ""
   "Report_6.bbl" 1436885519 466 9b63bd41c34afae085b93d05707d5cc3 "biber Report_6"
-  "Report_6.out" 1437484826 253 690ddc7f82f72c26d2a1bf5039cc0602 ""
-  "Report_6.tex" 1437484824 12031 c148867b21bc28ebc014bda6b1ac1916 ""
+  "Report_6.out" 1437735475 253 690ddc7f82f72c26d2a1bf5039cc0602 ""
+  "Report_6.tex" 1437735473 12610 3d24ccd02112405fcca85f376e373204 ""
   (generated)
-  "Report_6.pdf"
   "../source/eArrows-eps-converted-to.pdf"
-  "Report_6.out"
-  "../source/potential-eps-converted-to.pdf"
-  "Report_6.log"
   "Report_6.aux"
+  "Report_6.log"
+  "Report_6.out"
+  "../source/vArrows-eps-converted-to.pdf"
+  "../source/potential-eps-converted-to.pdf"
+  "Report_6.pdf"

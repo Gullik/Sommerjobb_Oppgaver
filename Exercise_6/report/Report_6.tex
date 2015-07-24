@@ -188,26 +188,9 @@
       \label{fig:spherical}
   \end{wrapfigure}
 
-    To simplify the problem we assume a constant magnetic field along the z-axis, \(\va{B} = (0,0,45000) \si{\nano\tesla}\). Since we are dealing with the a sphere it is useful to work in spherical coordinates, so let us express the magnetic field and the potential gradient in spherical coordinates, where \(\vu{r}\), \(\vu{\theta}\) and \(\phi\) is the radius, inclination and angle in the x-y plane, see \cref{fig:spherical}
+    As an approximation of the magnetic field on the higher latitudes we will use a radially directed magnetic field of constant magnitude, \(\va{B}(\rho, \theta, \phi) = (45000,0,0) \si{\nano\tesla}\). The potential \(\phi\) is already in a form of spherical coordinates, but it the inclination it uses is from the x-y plane, so we need to subtract \(90^circ\) to agree with the coordinates system. 
 
-    \begin{align}
-      \va{B} &= 
-      \begin{pmatrix}
-        0 \\ 0 \\ B_z
-      \end{pmatrix}_{cartesian}
-            =
-      \begin{pmatrix}
-        B_z 
-        \\
-        0
-        \\
-        0
-      \end{pmatrix}_{spherical}
-    \end{align} 
-
-    \textbf{NB!!! Realized that the \(B\) must be in spherical coordinates, else it would give a drift in the radial direction as well}
-
-    \noindent The potential \(\phi\) is already in a form of spherical coordinates, but it the inclination it uses is from the x-y plane, so we need to subtract \(90^circ\) to agree with the chosen coordinates system. The gradient of the potential, with a constant \(r = R_e = 6371.3 \si{\kilo \meter}\), becomes the following
+    The gradient of the potential, with a constant \(r = R_e = 6371.3 \si{\kilo \meter}\), is
 
     \begin{align}
       \nabla \Phi(\theta,\phi) &= 
@@ -241,7 +224,7 @@
       \qquad{} \text{; where }  \delta \theta = r\dd{\theta} \text{ and } \delta \phi = r \sin{\theta} \dd \phi 
     \end{align}
 
-    We also need an algorithm to do the cross products between \(\va{E}\) and \(\va{B_0}\).
+    We also need an algorithm to do the cross products between \(\va{E}\) and \(\va{B_0}\). We will convert both \(\va{B}\) and \( \nabla \Phi \) to cartesian coordinates, calculate the cross product, and then convert them back to spherical coordinates. 
 
     \begin{align}
       \va{E} \cross \va{B_0} &= 
@@ -250,13 +233,11 @@
         \\
         E_x & E_y & E_z
         \\
-        0 & 0 & B_0
+        B_x & B_y & B_z
       \end{vmatrix}
-      = E_yB_0\vu{i} - E_x B_0 \vu{j}
     \end{align}
 
-    We also need to convert the spherical coordinates the electric field is described in to cartesian coordinates, and this can be done by the following.
-
+    The conversions between spherical and cartesian coordinates is done by the following relations.
     \begin{align}
       \begin{matrix}
         r &=& \sqrt{x^2 + y^2 + z^2}
@@ -287,19 +268,27 @@
     \end{itemize}
 
 \subsection{Results}
+  The electric field was calculated from the negative gradient of the potential field, the potential field and the electric field is shown in \cref{fig:pot_Electric}. We can see two poles in the potential and the electric field direction is is the direction from the strong potential to the low potential. It is stronger on the higher latitudes due to each longitudinal degree covering a smaller physical distance.
+
     \begin{figure}
       \centering
-        \begin{subfigure}{0.40\textwidth}
+        \begin{subfigure}{0.75\textwidth}
         \includegraphics[width = \textwidth]{../source/potential}
         \subcaption{The figure shows the electrostatic potential in the higher latitudes, and the color indicates the magnitude of the potential compared to a reference value, with red being a high potential and blue being a low potential. One negative pole is located at \(150 \si{\degree}\) longitude and one positive at \(300 \si{\degree}\).}
       \end{subfigure}
-      \begin{subfigure}{0.40\textwidth}
+      \hfill
+      \begin{subfigure}{0.75\textwidth}
         \includegraphics[width = \textwidth]{../source/eArrows}
-        \subcaption{The figure shows the direction of the electric field, given by \(\va{E} = -\nabla\Phi\), in the higher latitudes and the magnitude, with the arrows showing direction and  the color representing magnitude. (Should probably use a dB scale for the strength)}
+         \subcaption{The figure shows the direction of the electric field, given by \(\va{E} = -\nabla\Phi\), in the higher latitudes and the magnitude, with the arrows showing direction and  the color representing magnitude. (Should probably use a dB scale for the strength)}
       \end{subfigure}
+      \label{fig:pot_Electric}
     \end{figure}
 
-
+    \begin{figure}
+      \centering
+      \includegraphics[width = \textwidth]{../source/vArrows}
+      \caption{This shows the velocities direction and magnitude of the plasma caused by the E-cross-B drift. The scale of the drift is of an order \(1 \si{\meter\second}\)}
+    \end{figure}
 
 
 \appendix
@@ -308,6 +297,8 @@
       \item A vertical magnetic field is meant along the z-axis? Could be compared to Earth's surface as well.
       \item What should be done with the edges of \(\nabla \Phi\)? Now I am ignoring them, but something like \( \pdv{\Phi_{0,j}}{\theta} = \frac{ \Phi_{0+1, j} - \Phi_{i, j} }{\Delta \theta}\) or similar methods could be implemented.
       \item Should we use \(r = Re\), that would be on the surface?
+      \item If the mangetic field was meant to be vertical compared to the surface, is there an easier way to do the cross product? Than converting to cartesian, do the cross product and then converting back to spherical coordinates.
+      \item Using the z-axis magnetic field there is also some drift in the radial direction, should that be there?
     \end{itemize}
 
 

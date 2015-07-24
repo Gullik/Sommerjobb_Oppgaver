@@ -113,7 +113,7 @@ In this text we will simulate an oxygen ion, \(O^+\) and an electron, \(e\) in t
 
 An approximation of Earth's dipole magnetic field is
 \begin{align}
-      \va{B}(\va{r}) &= \frac{\mu_0}{4\pi}\frac{3\va{r}\left( \va{m} \cdot \va{r}\right)}{r^5} - \frac{\va{m}}{r^3}
+      \va{B}(\va{r}) &= \frac{\mu_0}{4\pi}\left(\frac{3\va{r}\left( \va{m} \cdot \va{r}\right)}{r^5} - \frac{\va{m}}{r^3}\right)
 \end{align}
 where \( \va{r} \), \(\mu_0\) and \(\va{m}\) is the position, vacuum permeability and magnetic moment respectively.
 
@@ -145,51 +145,107 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
             \item Plot and analyze results
 \end{enumerate}
 
-\subsubsection{Rounding Errors}
-      In this exercise we need to consider a few rounding errors, due to distances and velocities at a very different value being important for the physics involved.
-      \begin{itemize}
-            \item The magnetic field is dependent on the total distance from the center of the Earth, which the particle is located, which is of the order \(\order{4}\)
-            \item The particle's gyration radius is of the order \(\order{-13}\)
-            \item Depending on the timestep chosen the particle's change in position will be even lower than the gyration radius, on the order \(\order{-17}\)
-            \item Using float 64 numbers the small change in particle position will be rounded away, when the two numbers are added together.
-            \item This problem is solved by shifting the coordinate system so it is centered around the particle gyration, and instead adding the extra distance into the calculation of the magnetic field
-      \end{itemize}
-
-      For the treatment of the velocity we cannot as easily just shift the coordinate system, since the movement along the z-axis is important for the curvature of the magnetic field.
-      \begin{itemize}
-            \item The order of \(dv_z\) is \( \order{-26} \)
-            \item The order of \(v_z\) is \( \order{3} \)
-      \end{itemize}
-
-      To solve this we need one solution for the velocity and one solution for the influence the velocity has on the position, for the velocity a shift of the velocity coordinate system is enough.
-      
-
-      \begin{align}
-        T = \frac{2\pi}{\omega} = \frac{2\pi m}{q |B(\va{r}_0)|} \sim \frac{10^{-24}\si{\kilogram}}{10^{-19}\si{\coulomb}\times 10^9 \si{\tesla}} \sim 10^{-14} \si{s}  
-      \end{align}
-
-
-
 \subsection{Results}
+    
+    \begin{figure} 
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/energyEuler_simple8-3}
+      \end{subfigure}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/energyVerlet_simple8-3}
+      \end{subfigure}
+      \caption{The parallel, perpendicular and total energy (not multiplied with \(m/2\)) for oxygen ions in a simplified magnetic field, \(\va{B} = (0,0,0.25) nT \) z-axis running for \(10^7\) steps with \(10^{-6}\) s timesteps. Figure a) is done with Euler's method and Figure b) is done with Velocity Verlet}
+      \label{fig:energy_simpleB}
+    \end{figure}
+    The energy results didn't really pan out well, in the \cref{fig:energy_simpleB} the perpendicular, parallel and total energy is shown for \(10^8\) steps with a timestep of \(10^{-3}\)s which should cover \(1000\) seconds, for both Euler's method and Velocity Verlet. The magnetic field is a simplified magnetic field with similar to the initial field given in the earths dipole problem \(\va{B} = (0,0,0.25) \si{\nano\tesla}\). Unfortunately there is a significant energy drift with both the methods and decreasing the timestep further makes it hard to get a long enough timeseries to look at the interesting characteristiscs happening as the particle moves in the dipole.  The Velocity Verlet has a significantly lower energy drift, but we thought it would be a symplectic integrator and conserve the energy. (Is it not symplectic when the acceleration is dependent on the velocity as well?) The energy drift is increasing with time, which would cause it to be even bigger with a longer time series.
+    \\ \\
 
-      
+    
+
+
+    We ran a simulation with a timestep of \(10^{-3}\) s for \(10^9\) steps, (\(100000 s\)), and the energy and trajectory is shown in \cref{fig:v_0_prop} for the Verlet method. As can be seen in the total energy increasing exponentially, and the trajectory deforming, the timestep is to big to accurate capture the gyrating motion. Using the Euler method it blew up completely.
+    \begin{figure}[ht]
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_9_3_Verletenergy}
+      \end{subfigure}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_9_3_Verlet3Dplot}
+      \end{subfigure}
+      \caption{The energy and trajectory for an oxygen ion for with a \(\Delta t = 10^-3\), starting at \(\va{v}_0 = (300, 0, 300) \si{ms^{-1} }\).}
+      \label{fig:v_0_prop}
+    \end{figure}
+
+    By increasing the initial velocities to \(\va{v}_0 = (300000, 0, 300000) \si{\meter \per \second}\) instead of \(\va{v}_0 = (300, 0, 300) \si{\meter \per \second}\) the time needed for the effects of the dipole to show itself were shorter so we could decrease the timestep to \(10^{-5} \si{s}\) and the energy drift of the system were small enough to mostly ignore. The \cref{fig:high_vel} show an oxygen ions position, trajectory and energy during \(10^8\times 10^{-5} = 10000 \) seconds. In both the trajectory and the plot of the z-position we can clearly see that the particle is bouncing back and forth between then poles. There is also a drift in the eastward direction that can be seen most easily in the plot of the trajectory, but can also be seen as the x-coordinate is gradually decreasing and the y-coordinate is increasing.     When the parallel energy is increasing, the perpendicular energy is decreasing keeping the total energy roughly constant.
+
+
+    \begin{figure}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Eulerxyz}
+      \end{subfigure}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verletxyz}
+      \end{subfigure}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Eulerenergy}
+      \end{subfigure}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verletenergy}
+      \end{subfigure} 
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Euler3Dplot}
+      \end{subfigure}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verlet3Dplot}
+      \end{subfigure}
+    \caption{This shows the positions, the energy and the trajectory of an oxygen ion trapped in earths magnetic dipole. Th figures on the left uses the Verlet Euler method, and the right figures uses the Velocity Verlet method. \(\Delta t = 10^{-5}\) and \(\va{v}_0 = (300000, 0 , 300000) m/s \).}
+    \label{fig:high_vel}
+    \end{figure}
+
+
+    \subsubsection{Gyro period}
+    Since the magnetic field is cylindrical symmetric, so let us use that and measure that as fast movements of the angle between the \(x-\) and \(y-\) coordinates. The gyration period will also change as it is dependent on \(|\va{B}|\), so the average is measured. For the run in \cref{fig:high_vel} with a high velocity an average gyration period of \( 33 \si{\second}\) was measured.
+
+    (I didn't see any easy, robust methods to measure the gyration period)
+
+
+    \subsubsection{Bounce period}
+    The particle will start by moving north compared with earth following the magnetic field lines, then as the magnetic field line density increases the parallel velocity will decrease. A static magnetic field does no work on a particle so the perpendicular velocity must increase. Since it will bounce between the north and south pole, the easiest method to measure it is to note how long time it takes between each time the particle crosses equator, \(z = 0\).
+
+    The measurements in \cref{fig:high_vel} give a rough estimate of the bounce period of \( 250 \si{\second}\)
+
+    \subsubsection{Drift period}
+    The drift period is the time a particle trapped in earths magnetic dipole field takes to drift around earth. Since we know the \(x-\) and \(y-\)coordinates we can calculate the longitude of the particles position as \( \phi = \arctan{x/y} \). Then we can roughly say that \(\Delta \phi = \arctan(\Delta x / \Delta y) \).
+
+    The measured drift period was measured in \cref{fig:high_vel} to be \(3500 \si{\second}\).
+
 
 \appendix
 \section{Comments regarding the exercise}
       \begin{itemize}
-            \item Parenthesis in Eq. 1 on the sheet
-            \item I assume you mean the perpendicular and parallel \textit{kinetic} energy in exercise 2.
+            \item Parenthesis in Eq. 1 on the sheet is missing.
+            \item I assume you mean the perpendicular and parallel \textit{kinetic} energy in part 2.
             \item Could it be better to plot it first, and afterwards find the energy. I think it is quite natural to plot it while working on it.
-            \item I suppose we are supposed to find that the total kinetic energy is conserved (in a static magnetic field, \(\pdv{\va{B}}{t} = 0\) ), and grad-B drift should be visible (and the Alfven approximations, that the magnetic field variations is small compared to gyration frequency and radius, below hold
-            \[ \left|\frac{1}{\omega_c} \pdv{\ln{B}}{t}\right| << 1 \] 
-            \[ \left| \frac{(\rho_c \cdot \nabla)\va{B}}{B} \right| << 1 \] 
-            \item A curvature drift should be there as well?
-            \item I had hoped to see the magnetic mirror effect as well
-            \item The movement along the x-axis is so small compared to the magnitude of the coordinate so it got rounded away, had to shift the coordinate system \(5R_e\) to keep it
+            \item I suppose we are supposed to find that the total kinetic energy is conserved (in a static magnetic field, \(\pdv{\va{B}}{t} = 0\)). Since we have to calculate so many gyrations the error caused by the Euler's method stacks up. Would it an idea to ask them to implement some almost as simple algorithm, such as as Velocity Verlet which should conserve energy better? 
+            \begin{align*}
+              v_i(t+\frac{h}{2}) &\approx v_i(t)  + \frac{h}{2}\frac{F_i(t)}{m} + \order{h^2} 
+              \\
+              x_i(t+h) &\approx x_i(t) + hv_i(t+ \frac{h} {2} ) + \order{h ^ 3}
+              \\
+              v_i(t+h) &\approx v_i(t+\frac{h}{2})  +  \frac{h}{2}\frac{F_i(t+ \frac{h}{2})}{m} + \order{h^2} 
+            \end{align*}
+            \item The stepsize per gyration needed for the Euler method was very high, to keep it somewhat well behaved after the many gyrations. With enough gyrations to mirror back and forth it needed to many steps to be contained in numpy arrays due to memory. Not recording every position fixes it though.
+            \item I also implemented Velocity Verlet, and the improvement in the energy conservation is shown in the results. There was still some energy drift. Not as much an improvement as I thought there would be.
+            \item I increased the velocity the particles moved in up from \(300\) to \(300 000 \si{\meter\per\second}\). Then it was much easier to get a reasonable timestep.
+            \item The electron has a much faster gyration period, initial period \( \tau = \frac{m}{q|\va{B}( 5R_e, 0, 0 )|} 2\pi \sim 10^{-4}\) so then it is hard to get the particle to move enough for the magnetic field to change significantly while still keeping a small enough timestep to capture enough details on the fast gyrations.
+            \item I have trouble getting much more than \(10^9 \Delta t\) in python in a reasonable time frame, on a decent laptop.
+            \item Had some trouble due to some wrong numbers giving a very small \(dv\) and \(dr\) causing it to get machine-rounded away, with the right set up that problem disappeared. (my fault)
       \end{itemize}
 
 
 \section{Code}
+  \label{sec:code}
+  \lstinputlisting{../source/dipoleField_rewritten.py}
+
       
 
 \end{document}

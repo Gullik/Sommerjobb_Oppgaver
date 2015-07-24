@@ -27,3 +27,4 @@ outfiles/
 *.bcf
 *.xml
 *.latexmk
+*.txt

@@ -19,7 +19,7 @@ B0 =  50000E-9		#Tesla
 # q = -e
 
 #Ion settings
-h = 5.*1.E-8
+h = 1.*1.E-7
 m = m_i
 q = e
 
@@ -30,6 +30,8 @@ x = np.zeros(steps)
 y = np.zeros(steps)
 vx = np.zeros(steps)
 vy = np.zeros(steps)
+vx_half = np.zeros(steps)
+vy_half = np.zeros(steps)
 kineticEnergy = np.zeros(steps)
 angles = np.zeros(steps)
 time = np.linspace(0,steps*h, steps) #Only used for plotting the kinetic energy
@@ -46,10 +48,20 @@ C1 = h*B0*q/m
 # print C1
 
 for i in range(0,steps -1):
-	vx[i + 1] = vx[i] + C1*vy[i]
-	vy[i + 1] = vy[i] - C1*vx[i]
-	x[i + 1] = x[i] + h*vx[i]
-	y[i + 1] = y[i] + h*vy[i]
+	# x[i + 1] = x[i] + h*vx[i]
+	# y[i + 1] = y[i] + h*vy[i]
+	# vx[i + 1] = vx[i] + C1*vy[i]
+	# vy[i + 1] = vy[i] - C1*vx[i]
+
+	vx_half[i +1] = vx[i] + C1/2*vy[i]
+	vy_half[i + 1] = vy[i] - C1/2*vx[i]
+
+	x[i + 1] = x[i] + h*vx_half[i]
+	y[i + 1] = y[i] + h*vy_half[i]
+	vx[i + 1] = vx_half[i] + C1/2*vy_half[i]
+	vy[i + 1] = vy_half[i] - C1/2*vx_half[i]
+
+
 	if i % int(0.25*steps) == 0:
 		print str( float(i) / float(steps) * 100)  + '%'
 
@@ -66,6 +78,10 @@ pl.title('Gyration of an oxygen ion')
 pl.xlabel("x [m]")
 pl.ylabel("y [m]")
 pl.axes().set_aspect('equal', 'datalim')
+
+pl.figure()
+time = np.arange(kineticEnergy.shape[0])
+pl.plot(time,kineticEnergy)
 
 # pl.savefig("electronGyration.eps")
 pl.savefig("ionGyration.eps")

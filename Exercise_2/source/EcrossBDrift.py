@@ -37,11 +37,11 @@ if particle == "ion":
 	q = e
 
 
-gyrations = 30
+gyrations = 1
 
 steps = int( np.abs(m/(q*B0)) * 2*np.pi  * gyrations /h)	#Since the gyration has a frequency qB/m, it's period is m/(qB)
 
-# print steps * h
+print steps
 
 
 #Defining the vectors which contains the positions and velocities during the simulation

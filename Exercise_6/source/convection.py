@@ -2,6 +2,10 @@ import numpy as np
 import scipy as sp
 import pylab as pl
 import scipy.stats as stats
+import os
+import sys
+
+sys.path.append(os.path.abspath('/home/gullik/Documents/Plasma Sommerjobb/Sommerjobb_Oppgaver/Exercise_5/source'))
 
 from potential_grid import electrostatic_potential
 
@@ -10,8 +14,10 @@ def main():
 	Re = 6.371E6		#m
 	B  = 45000.E-9		#tesla  #Directed in z-direction
 
+	coeffPath = '../../Exercise_5/source/heppner_coeffs.txt'
+
 	#Making some needed arrays
-	potential = electrostatic_potential()
+	potential = electrostatic_potential(coeffPath)
 
 	#Need 2 grids for the gradient, since it has a 2D direction at each point
 	gradient_theta 	= np.zeros(potential.shape)
@@ -29,8 +35,8 @@ def main():
 	#Need to calculate the differential lengths, need to find out how large a grid step is in meters.
 	#For ease we are sticking with 1 grid-node per degree 1 degree
 	rho = Re
-	dTheta = rho
-	dPhi = rho*sinTheta
+	dTheta = 1.
+	dPhi = 1.
 
 	#Calculate the gradient for the potential using a centered difference with two gridpoints as the step
 	#	The index shifting needed to calculate Phi(i + 1, j) is done for the entire array at the same time 
@@ -41,15 +47,13 @@ def main():
 	# Could be done easier and more foolproof by for-loops, but would be slower
 
 	gradient_theta[1:-1,:] = (potential[2: , :] - potential[:-2 , :])/(rho*2.*dTheta)
-	gradient_phi[:,1:-1] = (potential[:,2:] - potential[ :, :-2]    )/(rho*2.*dPhi[:,np.newaxis]*sinTheta[:,np.newaxis])
+	gradient_phi[:,1:-1] = (potential[:,2:] - potential[ :, :-2]    )/(rho * sinTheta[:,np.newaxis] * 2. *dPhi)
 
 	plot_potential_and_electric_field(potential, gradient_theta, gradient_phi)
 
-	print gradient_theta[2,0]
-
 	#Since the electric field is -grad(potential), we use the negative gradient below
-	v_theta = cross_with_B(-gradient_theta, theta, phi, B)
-	v_phi = cross_with_B(-gradient_phi, theta, phi, B)
+	v_theta = cross_with_B(-gradient_theta, theta, phi, B)/(B*B)
+	v_phi = cross_with_B(-gradient_phi, theta, phi, B)/(B*B)
 
 	#Stopping here for now
 	plot_drift(v_theta,v_phi)
@@ -58,24 +62,38 @@ def main():
 	pl.show()
 
 def cross_with_B(matrix, theta, phi, B):
+	# This takes an latitude and longitude array, along with the latitude and longitude angles as input. 
+	# In addition to the magnitude of a radially directed B-field
+	# Then it converts them to cartesian coordinates and returns the cross product 
+
 	#Now we want to calculate the cross products, converting to cartesian coordinates first
 	sinTheta = np.sin(theta)
 	cosTheta = np.cos(theta)
 	sinPhi = np.sin(phi)
 	cosPhi = np.cos(phi)
 
-	E_x = matrix * sinTheta[:,np.newaxis] * cosPhi[np.newaxis,:]
-	E_y = matrix * sinTheta[:,np.newaxis] * sinPhi[np.newaxis,:]
-	E_z = matrix * cosTheta[:,np.newaxis]
+	Ex = matrix * sinTheta[:,np.newaxis] * cosPhi[np.newaxis,:]
+	Ey = matrix * sinTheta[:,np.newaxis] * sinPhi[np.newaxis,:]
+	Ez = matrix * cosTheta[:,np.newaxis]
+
+	Bx = B * sinTheta[:,np.newaxis] * cosPhi[np.newaxis,:]
+	By = B * sinTheta[:,np.newaxis] * sinPhi[np.newaxis,:]
+	Bz = B * cosTheta[:,np.newaxis]
+
+	# print np.rad2deg( np.arcsin(sinTheta) )
+
+	print (Ey * Bx)[20,20]
+	print (Ex * By)[20, 20]
 
 	#Do the cross product
-	v_x = E_y*B
-	v_y = -E_x*B
-	v_z = 0
+	v_x = Ey*Bx #- Ez*By
+	v_y = Ez*Bx - Ex*Bz
+	v_z = Ex*By - Ey*Bx
+
+	print 'Max: ' + str(np.max(v_x))
 
 	#Then we return the new velocity magnitude
-	return np.sqrt(v_x*v_x + v_y*v_y)
-
+	return np.sqrt(v_x*v_x + v_y*v_y + v_z*v_z)
 
 
 
@@ -140,9 +158,9 @@ def plot_drift(v_theta, v_phi):
 	X, Y = np.meshgrid(x,y)
 
 	skipArrows = 10
-	pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], v_theta[:,::skipArrows], v_phi[:,::skipArrows], angles = 'uv')#, scale = 30)
-
-	# print v_theta
+	
+	Q = pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], v_theta[:,::skipArrows], v_phi[:,::skipArrows], angles = 'uv', scale = 100)
+	pl.quiverkey(Q, 1,1.05, 10, '$10$ m/s')
 
 	#Labels
 	pl.title('Drift the higher latitudes')
