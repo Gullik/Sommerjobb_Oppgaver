@@ -5,14 +5,14 @@ import scipy.stats as stats
 import os
 import sys
 
-sys.path.append(os.path.abspath('/home/gullik/Documents/Plasma Sommerjobb/Sommerjobb_Oppgaver/Exercise_5/source'))
+sys.path.append('../../Exercise_5/source')
 
 from potential_grid import electrostatic_potential
 
-def main():
+def convection():
 	#Needed variables
 	Re = 6.371E6		#m
-	B  = 45000.E-9		#tesla  #Directed in z-direction
+	B  = 45000.E-9		#tesla  #radially directed
 
 	coeffPath = '../../Exercise_5/source/heppner_coeffs.txt'
 
@@ -26,9 +26,8 @@ def main():
 	#Arrays with the angles, converted to radians for convenience
 	theta = np.arange(1,31)
 	phi = np.arange(0,360)
-	# overSin = np.zeros(30)		#To be used in the 1/(r sin(theta)) in the gradient operator for spherical coordinates
 
-	theta = np.deg2rad(theta)
+	theta = np.deg2rad(31 - theta)		#[60,...90] -> [30,...,0] #Used spherical coordinates
 	phi = np.deg2rad(phi)
 	sinTheta = np.sin(theta)
 
@@ -40,64 +39,46 @@ def main():
 
 	#Calculate the gradient for the potential using a centered difference with two gridpoints as the step
 	#	The index shifting needed to calculate Phi(i + 1, j) is done for the entire array at the same time 
-	# 	[1:-1] 	the inner nodes representing 	Phi(i,j)
-	#	[:-2]	nodes 1 node to the left		Phi(i - 1, j)
-	#	[2:]	nodes 1 node to the right		Phi(i + 1, j)
+	# 	[1:-1 ,:] 	the inner nodes representing 	Phi(i,j)
+	#	[ :-2 ,:]	nodes 1 node to the left		Phi(i - 1, j)
+	#	[2:	  ,:]	nodes 1 node to the right		Phi(i + 1, j)
 	#	And the exact same for the longitude indexes
-	# Could be done easier and more foolproof by for-loops, but would be slower
+	E_theta = np.zeros(potential.shape)
+	E_phi = np.zeros(potential.shape)
 
-	gradient_theta[1:-1,:] = (potential[2: , :] - potential[:-2 , :])/(rho*2.*dTheta)
-	gradient_phi[:,1:-1] = (potential[:,2:] - potential[ :, :-2]    )/(rho * sinTheta[:,np.newaxis] * 2. *dPhi)
+	E_theta[1:-1,:] = - ( potential[2: , :] - potential[:-2 , :] )/(rho*2.*dTheta)
+	E_phi  [:, 1:-1]  = - (potential[:,2:] - potential[ :, :-2]    )/(rho * sinTheta[:,np.newaxis] * 2. *dPhi)
 
-	plot_potential_and_electric_field(potential, gradient_theta, gradient_phi)
+	# plot_potential_and_electric_field(potential, E_theta, E_phi)
 
 	#Since the electric field is -grad(potential), we use the negative gradient below
-	v_theta = cross_with_B(-gradient_theta, theta, phi, B)/(B*B)
-	v_phi = cross_with_B(-gradient_phi, theta, phi, B)/(B*B)
+	v_theta, v_phi = cross_with_B(E_theta, E_phi, theta, phi, B)
+	v_theta /=(B*B)
+	v_phi /= (B*B)
 
 	#Stopping here for now
-	plot_drift(v_theta,v_phi)
+	# plot_drift(v_theta,v_phi)
 
 
-	pl.show()
+	return v_theta, v_phi
 
-def cross_with_B(matrix, theta, phi, B):
+def cross_with_B(E_theta, E_phi, theta, phi, B):
 	# This takes an latitude and longitude array, along with the latitude and longitude angles as input. 
 	# In addition to the magnitude of a radially directed B-field
-	# Then it converts them to cartesian coordinates and returns the cross product 
+	# Then it return the cross product as one array of magnitude directed in theta's direction and one in phi's.
 
-	#Now we want to calculate the cross products, converting to cartesian coordinates first
-	sinTheta = np.sin(theta)
-	cosTheta = np.cos(theta)
-	sinPhi = np.sin(phi)
-	cosPhi = np.cos(phi)
+	#It can be shown the cross(theta, rho) = - phi evaluated at a point
+	#Likewise cross(phi,rho) = theta
 
-	Ex = matrix * sinTheta[:,np.newaxis] * cosPhi[np.newaxis,:]
-	Ey = matrix * sinTheta[:,np.newaxis] * sinPhi[np.newaxis,:]
-	Ez = matrix * cosTheta[:,np.newaxis]
+	v_theta = -E_phi*B
+	v_phi 	= E_theta*B 
 
-	Bx = B * sinTheta[:,np.newaxis] * cosPhi[np.newaxis,:]
-	By = B * sinTheta[:,np.newaxis] * sinPhi[np.newaxis,:]
-	Bz = B * cosTheta[:,np.newaxis]
-
-	# print np.rad2deg( np.arcsin(sinTheta) )
-
-	print (Ey * Bx)[20,20]
-	print (Ex * By)[20, 20]
-
-	#Do the cross product
-	v_x = Ey*Bx #- Ez*By
-	v_y = Ez*Bx - Ex*Bz
-	v_z = Ex*By - Ey*Bx
-
-	print 'Max: ' + str(np.max(v_x))
-
-	#Then we return the new velocity magnitude
-	return np.sqrt(v_x*v_x + v_y*v_y + v_z*v_z)
+	return v_theta, v_phi
 
 
 
-def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
+
+def plot_potential_and_electric_field(potential, E_theta, E_phi):
 		#Plotting time...
 	#Electrostatic potential
 	#Variables for plotting purposes
@@ -123,11 +104,11 @@ def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
 
 	#Quiver plot of the electric field E = -grad(Phi), to show the direction in weak areas, all the arrows should have the same length and the magnitude should be given by the color below
 	#Getting the magnitude and normalizing
-	magnitude = np.sqrt((gradient_theta*gradient_theta) + (gradient_phi*gradient_phi))
-	gradient_phi_norm = np.zeros(gradient_phi.shape)
-	gradient_phi_norm[1:-1,1:-1] = gradient_phi[1:-1,1:-1]/magnitude[1:-1,1:-1]
-	gradient_theta_norm = np.zeros(gradient_theta.shape)
-	gradient_theta_norm[1:-1,1:-1] = gradient_theta[1:-1,1:-1]/magnitude[1:-1,1:-1]
+	magnitude = np.sqrt((E_theta*E_theta) + (E_phi*E_phi))
+	E_phi_norm = np.zeros(E_phi.shape)
+	E_phi_norm[1:-1,1:-1] = E_phi[1:-1,1:-1]/magnitude[1:-1,1:-1]
+	E_theta_norm = np.zeros(E_theta.shape)
+	E_theta_norm[1:-1,1:-1] = E_theta[1:-1,1:-1]/magnitude[1:-1,1:-1]
 
 	pl.figure()
 	x = np.arange(0,potential.shape[1])
@@ -136,7 +117,9 @@ def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
 
 	skipArrows = 10
 	eArrows = pl.contourf(X,Y, magnitude)
-	pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], -gradient_phi_norm[:,::skipArrows], -gradient_theta_norm[:,::skipArrows], angles = 'uv', scale = 30)
+	pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], E_phi_norm[:,::skipArrows], E_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
+
+	# print X[:,:]
 
 	cbar = pl.colorbar(eArrows)
 
@@ -148,19 +131,28 @@ def plot_potential_and_electric_field(potential, gradient_theta, gradient_phi):
 
 	pl.savefig('eArrows.eps')
 
-	return
+	return 
 
 def plot_drift(v_theta, v_phi):
 
-	pl.figure()
+	# pl.figure()
 	x = np.arange(0,v_theta.shape[1])
 	y = 60 + np.arange(0,v_theta.shape[0])
 	X, Y = np.meshgrid(x,y)
 
 	skipArrows = 10
 	
-	Q = pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], v_theta[:,::skipArrows], v_phi[:,::skipArrows], angles = 'uv', scale = 100)
-	pl.quiverkey(Q, 1,1.05, 10, '$10$ m/s')
+	#Let's normalize the plot as well
+	pl.figure()
+
+	magnitude = np.sqrt((v_theta*v_theta) + (v_phi*v_phi))
+	v_phi_norm = v_phi[1:-1,1:-1]/magnitude[1:-1,1:-1]
+	v_theta_norm = v_theta[1:-1,1:-1]/magnitude[1:-1,1:-1]
+
+	eArrows = pl.contourf(X,Y, magnitude)
+	Q = pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], v_phi_norm[:,::skipArrows], v_theta_norm[:,::skipArrows], angles= 'uv',  scale = 40)
+	cbar = pl.colorbar(eArrows)
+	cbar.set_label('$m/s$')
 
 	#Labels
 	pl.title('Drift the higher latitudes')
@@ -169,9 +161,14 @@ def plot_drift(v_theta, v_phi):
 
 	pl.savefig('vArrows.eps')
 
+
+
 	return
 
 
 if __name__ == '__main__':
-    main()
+
+    v_theta, v_phi = convection()
+    plot_drift(v_theta,v_phi)
+    pl.show()
 
