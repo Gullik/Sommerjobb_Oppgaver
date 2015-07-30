@@ -12,13 +12,10 @@
 \usepackage{verbatim}
 \usepackage{listings}
 \usepackage{graphicx}
-\usepackage{a4wide}
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[dvips]{epsfig}
 \usepackage[T1]{fontenc}
-% \usepackage{cite} % [2,3,4] --> [2--4]
 \usepackage{shadow}
 \usepackage{hyperref}
 \usepackage{physics}
@@ -27,6 +24,8 @@
 \usepackage{tikz}
 \usepackage{tikz-3dplot}
 \usepackage{wrapfig}
+
+\usepackage[l2tabu]{nag} %NAgs when using bad practices
 
 
 \usepackage{subcaption}
@@ -57,11 +56,6 @@
             dashed=false]{biblatex}
 
 \addbibresource{bibliography.bib}
-% \addbibresource{top.bib}
-
-% \bibliography{bibliography}
-% \bibliography{top}
-
 
 \usepackage[capitalize]{cleveref}
 
@@ -97,7 +91,7 @@
 
 
 
-\title{ Exercise 6 \\ Sommerjobb Numeriske Plasmaoppgaver }
+\title{ Exercise 8 \\ Sommerjobb Numeriske Plasmaoppgaver }
 \author{Gullik Vetvik Killie
 		}
 
@@ -114,19 +108,37 @@
 \section{}
 
 \subsection{Theory}
+  In a warm, magnetized plasma there are a type of wave called electrostatic ion waves which have the following dispersion relation.
+
+  \begin{align}
+    \begin{split}
+      \epsilon(\omega,k) = &1- \frac{k^2c_s^2}{\omega^2} 
+      \\
+      & + \frac{\Omega_{ci}}{\omega}\tan^2\theta \left[  \frac{1}{ \frac{\omega}{\Omega_{ce}}\tan^2 \theta - \frac{\Omega_{ce}}{\omega} \left( 1 - \frac{\omega^2}{\Omega_{ce}} \right) }  
+                                                        -\frac{1}{ \frac{\omega}{\Omega_{ci}}\tan^2 \theta - \frac{\Omega_{ci}}{\omega} \left( 1 - \frac{\omega^2}{\Omega_{ci}} \right) } \right]
+    \end{split}
+  \end{align}
+
+\subsection{Results}
+  To make sure that the root finding algorithm works correctly 
+
 
 \appendix
 \section{Comments to Exercise}
   
   \begin{itemize}
-    \item Noone yet
+    \item Typo in dispersion relation, second term: \(\frac{k^2c_s^s}{\omega^2}\) should be \(\frac{k^2c_s^2}{\omega^2}\). (The \(c_s\) is raised to the power s instead of 2)
+    \item Would it be an idea to start with a simple dispersion relation, implement the root finding algorithm on that, and then put in the complicated dispersion relation. An easy dispersion relation would be the one for electron oscillations in an unmagnetized plasma.
+    \begin{align}
+      \epsilon(\omega, k) &= 1 + \frac{5}{3} - \frac{\omega}{\omega_{pe}}
+    \end{align}
   \end{itemize}
 
 
 
 \section{Code}
   \label{sec:code}
-  \lstinputlisting{../source/facs.py}
+  \lstinputlisting{../source/dispersion.py}
 
 
 \end{document}
