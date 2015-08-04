@@ -1,23 +1,22 @@
 import numpy as np
 import scipy as sp
-import pylab as pl
+import pylab as plt
 import scipy.stats as stats
 import os
 import sys
 
 sys.path.append('../../Exercise_5/source')
+sys.path.append('../../Exercise_7/source')
 
-from potential_grid import electrostatic_potential
+from potential_grid import *
+from draw_map import draw_map
 
-def convection():
+def convection(potential):
 	#Needed variables
 	Re = 6.371E6		#m
 	B  = 45000.E-9		#tesla  #radially directed
 
-	coeffPath = '../../Exercise_5/source/heppner_coeffs.txt'
 
-	#Making some needed arrays
-	potential = electrostatic_potential(coeffPath)
 
 	#Need 2 grids for the gradient, since it has a 2D direction at each point
 	gradient_theta 	= np.zeros(potential.shape)
@@ -49,7 +48,7 @@ def convection():
 	E_theta[1:-1,:] = - ( potential[2: , :] - potential[:-2 , :] )/(rho*2.*dTheta)
 	E_phi  [:, 1:-1]  = - (potential[:,2:] - potential[ :, :-2]    )/(rho * sinTheta[:,np.newaxis] * 2. *dPhi)
 
-	# plot_potential_and_electric_field(potential, E_theta, E_phi)
+	# plt.t_potential_and_electric_field(potential, E_theta, E_phi)
 
 	#Since the electric field is -grad(potential), we use the negative gradient below
 	v_theta, v_phi = cross_with_B(E_theta, E_phi, theta, phi, B)
@@ -57,10 +56,10 @@ def convection():
 	v_phi /= (B*B)
 
 	#Stopping here for now
-	# plot_drift(v_theta,v_phi)
+	# plt.t_drift(v_theta,v_phi)
 
 
-	return v_theta, v_phi
+	return v_theta, v_phi, E_theta, E_phi
 
 def cross_with_B(E_theta, E_phi, theta, phi, B):
 	# This takes an latitude and longitude array, along with the latitude and longitude angles as input. 
@@ -78,29 +77,11 @@ def cross_with_B(E_theta, E_phi, theta, phi, B):
 
 
 
-def plot_potential_and_electric_field(potential, E_theta, E_phi):
-		#Plotting time...
-	#Electrostatic potential
+def plot_electric_field(E_theta, E_phi):
 	#Variables for plotting purposes
 	x = np.arange(0, 360)
 	y = np.arange(60, 90)
 	X , Y = np.meshgrid(x, y)
-		#Plotting a contour plot of the electrostatic potential
-	pl.figure()
-	contourPlot = pl.contourf(X,Y,potential)
-	pl.title('Electrostatic potential in the higher latitudes')
-
-	cbar = pl.colorbar(contourPlot)
-	pl.xlabel('Longitude $ [ ^\circ] $')
-	pl.ylabel('Latitude  $ [ ^\circ] $')
-
-	ticks = cbar.ax.get_yticks()
-	nTicks = ticks.shape[0]
-	cbar_labels = np.arange(-24 , 32 + 1, 24-16)
-
-	cbar.ax.set_yticklabels(cbar_labels)
-	cbar.set_label(' $\Phi$  [kV]')#, rotation = 0)
-	pl.savefig('Electrostatic_potential')
 
 	#Quiver plot of the electric field E = -grad(Phi), to show the direction in weak areas, all the arrows should have the same length and the magnitude should be given by the color below
 	#Getting the magnitude and normalizing
@@ -110,56 +91,74 @@ def plot_potential_and_electric_field(potential, E_theta, E_phi):
 	E_theta_norm = np.zeros(E_theta.shape)
 	E_theta_norm[1:-1,1:-1] = E_theta[1:-1,1:-1]/magnitude[1:-1,1:-1]
 
-	pl.figure()
+	plt.figure()
 	x = np.arange(0,potential.shape[1])
 	y = 60 + np.arange(0,potential.shape[0])
 	X, Y = np.meshgrid(x,y)
 
 	skipArrows = 10
-	eArrows = pl.contourf(X,Y, magnitude)
-	pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], E_phi_norm[:,::skipArrows], E_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
+	eArrows = plt.contourf(X,Y, magnitude)
+	plt.quiver(X[:,::skipArrows],Y[:,::skipArrows], E_phi_norm[:,::skipArrows], E_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
 
-	# print X[:,:]
-
-	cbar = pl.colorbar(eArrows)
+	cbar = plt.colorbar(eArrows)
 
 	#Labels
-	pl.title('Electric field in the higher latitudes')
+	plt.title('Electric field in the higher latitudes')
 	cbar.set_label('$|\\vec{E}|$')
-	pl.xlabel('Longitude [ $ ^\circ$]')
-	pl.ylabel('Latitude  [ $ ^\circ$]')
+	plt.xlabel('Longitude [ $ ^\circ$]')
+	plt.ylabel('Latitude  [ $ ^\circ$]')
 
-	pl.savefig('eArrows.eps')
+	plt.savefig('eArrows.eps')
+
+	#Let's plot the electric field on the map as well
+	fig = plt.figure()
+	my_map = draw_map()
+
+	longitude, latitude = my_map(X, Y)
+
+	my_map.contourf(longitude, latitude, magnitude)
+	my_map.quiver(longitude[:,::skipArrows],latitude[:,::skipArrows], E_phi_norm[:,::skipArrows], E_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
 
 	return 
 
 def plot_drift(v_theta, v_phi):
 
-	# pl.figure()
+	# plt.figure()
 	x = np.arange(0,v_theta.shape[1])
 	y = 60 + np.arange(0,v_theta.shape[0])
 	X, Y = np.meshgrid(x,y)
 
 	skipArrows = 10
 	
-	#Let's normalize the plot as well
-	pl.figure()
+	#Let's normalize the plt.t as well
+	plt.figure()
 
 	magnitude = np.sqrt((v_theta*v_theta) + (v_phi*v_phi))
 	v_phi_norm = v_phi[1:-1,1:-1]/magnitude[1:-1,1:-1]
 	v_theta_norm = v_theta[1:-1,1:-1]/magnitude[1:-1,1:-1]
 
-	eArrows = pl.contourf(X,Y, magnitude)
-	Q = pl.quiver(X[:,::skipArrows],Y[:,::skipArrows], v_phi_norm[:,::skipArrows], v_theta_norm[:,::skipArrows], angles= 'uv',  scale = 40)
-	cbar = pl.colorbar(eArrows)
+	eArrows = plt.contourf(X,Y, magnitude)
+	Q = plt.quiver(X[:,::skipArrows],Y[:,::skipArrows], v_phi_norm[:,::skipArrows], v_theta_norm[:,::skipArrows], angles= 'uv',  scale = 40)
+	cbar = plt.colorbar(eArrows)
 	cbar.set_label('$m/s$')
 
 	#Labels
-	pl.title('Drift the higher latitudes')
-	pl.xlabel('Longitude [ $ ^\circ$]')
-	pl.ylabel('Latitude  [ $ ^\circ$]')
+	plt.title('Drift the higher latitudes')
+	plt.xlabel('Longitude [ $ ^\circ$]')
+	plt.ylabel('Latitude  [ $ ^\circ$]')
 
-	pl.savefig('vArrows.eps')
+	plt.savefig('vArrows.eps')
+
+	#Let us also draw the currents on a map
+	fig = plt.figure()
+	my_map = draw_map()
+
+	longitude, latitude = my_map(X, Y)
+
+	contour = my_map.contourf(longitude, latitude, magnitude)
+	my_map.quiver(longitude[:,::skipArrows],latitude[:,::skipArrows], v_phi_norm[:,::skipArrows], v_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
+	cbar = plt.colorbar(contour)
+	cbar.set_label('m/s')
 
 
 
@@ -168,7 +167,14 @@ def plot_drift(v_theta, v_phi):
 
 if __name__ == '__main__':
 
-    v_theta, v_phi = convection()
-    plot_drift(v_theta,v_phi)
-    pl.show()
+	coeffPath = '../../Exercise_5/source/heppner_coeffs.txt'
+
+	#Making some needed arrays
+	potential = electrostatic_potential(coeffPath)
+
+	v_theta, v_phi, E_theta, E_phi  = convection(potential)
+	# plot_potential(potential, 'potential.eps')
+	plot_electric_field(E_theta, E_phi)
+	plot_drift(v_theta,v_phi)
+	plt.show()
 

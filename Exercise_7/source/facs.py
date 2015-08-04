@@ -8,6 +8,7 @@ import sys
 sys.path.append( '../../Exercise_6/source' )
 
 from convection import *
+from draw_map import *
 
 def field_aligned_currents(v_theta, v_phi):
 	#This function takes a input matrices with the latitudal and longitudal velocities,
@@ -83,8 +84,6 @@ if __name__ == '__main__':
 	FACs = field_aligned_currents(v_theta, v_phi)
 
 	plot_FACs(FACs)
-
-
 
 	plt.show()
 

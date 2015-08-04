@@ -3,12 +3,19 @@ import scipy as sp
 import pylab as pl
 import scipy.stats as stats
 
+import sys
+
+sys.path.append( '../../Exercise_7/source' )
+
+from draw_map import *
+
+
 def electrostatic_potential(coeffPath):
 	#First we need to set up a grid over the high latitudes
 	lamb_start = 60
 	lamb_end = 90
 	phi_start = 0
-	phi_end = 360
+	phi_end = 361
 	N = 8
 
 	grid = np.zeros([lamb_end - lamb_start, phi_end - phi_start])	#Spatial grid
@@ -93,13 +100,11 @@ def electrostatic_potential(coeffPath):
 
 	return grid
 		
-def plot_grid(grid, name):
+def plot_potential(grid, name):
 	#Variables for plotting purposes
-	x = np.arange(0, 360)
+	x = np.arange(0, 361)
 	y = np.arange(60, 90)
 	X , Y = np.meshgrid(x, y)
-
-
 
 	#Plotting a contour plot of the electrostatic potential
 	pl.figure()
@@ -117,10 +122,24 @@ def plot_grid(grid, name):
 	cbar.set_label(' $\Phi$  [kV]')#, rotation = 0)
 	pl.savefig(name)
 
+	#Drawing on a orthogonal projection of the north pole instead
+	fig = plt.figure()
+
+	my_map = draw_map()
+	longitude, latitude = my_map(X, Y)
+	contour = my_map.contourf(longitude, latitude , grid)
+	pl.title('Electrostatic Potential')
+	cbar = pl.colorbar(contour, orientation='vertical')
+	cbar.set_label(' $\Phi$  [V]')#, rotation = 0)
+	pl.savefig('map_' + name)
+
+
+
 	pl.show()
 
 if __name__ == "__main__":
 	figname = 'potential.eps'
 	coeffPath = 'heppner_coeffs.txt'
-	grid = electrostatic_potential(coeffPath)
-	plot_grid( grid ,figname )
+	potential = electrostatic_potential(coeffPath)
+	
+	plot_potential( potential ,figname)
