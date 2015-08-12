@@ -102,13 +102,13 @@ def electrostatic_potential(coeffPath):
 		
 def plot_potential(grid, name):
 	#Variables for plotting purposes
-	x = np.arange(0, 361)
-	y = np.arange(60, 90)
-	X , Y = np.meshgrid(x, y)
+	longitude = np.arange(0, 361)
+	latitude = np.arange(60, 90)
+	LONGITUDE , LATITUDE = np.meshgrid(longitude, latitude)
 
 	#Plotting a contour plot of the electrostatic potential
 	pl.figure()
-	contourPlot = pl.contourf(X,Y,grid)
+	contourPlot = pl.contourf(LONGITUDE,LATITUDE,grid)
 	pl.title('Electrostatic potential in the higher latitudes')
 
 	cbar = pl.colorbar(contourPlot)
@@ -126,13 +126,21 @@ def plot_potential(grid, name):
 	fig = plt.figure()
 
 	my_map = draw_map()
-	longitude, latitude = my_map(X, Y)
-	contour = my_map.contourf(longitude, latitude , grid)
+	plt.savefig('empty_map')
+	X, Y = my_map(LONGITUDE, LATITUDE)
+	contour = my_map.contourf(X, Y , grid)
 	pl.title('Electrostatic Potential')
 	cbar = pl.colorbar(contour, orientation='vertical')
 	cbar.set_label(' $\Phi$  [V]')#, rotation = 0)
 	pl.savefig('map_' + name)
 
+	#Plotting it on as a stereographic projection
+
+	fig = plt.figure()
+	X = (90 - LATITUDE)*np.sin(np.deg2rad(LONGITUDE))
+	Y = (90 - LATITUDE)*np.cos(np.deg2rad(LONGITUDE))
+	contourPlot = pl.contourf(X,Y,grid)
+	plt.savefig('other_proj.eps')
 
 
 	pl.show()

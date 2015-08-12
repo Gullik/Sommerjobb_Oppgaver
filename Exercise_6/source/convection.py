@@ -118,6 +118,7 @@ def plot_electric_field(E_theta, E_phi):
 
 	my_map.contourf(longitude, latitude, magnitude)
 	my_map.quiver(longitude[:,::skipArrows],latitude[:,::skipArrows], E_phi_norm[:,::skipArrows], E_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
+	plt.savefig('map_efield')
 
 	return 
 
@@ -159,6 +160,8 @@ def plot_drift(v_theta, v_phi):
 	my_map.quiver(longitude[:,::skipArrows],latitude[:,::skipArrows], v_phi_norm[:,::skipArrows], v_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
 	cbar = plt.colorbar(contour)
 	cbar.set_label('m/s')
+
+	plt.savefig('map_drift.eps')
 
 
 

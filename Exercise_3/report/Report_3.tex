@@ -33,11 +33,12 @@
 
 %Defines calculator way to write powers of ten
 \sisetup{output-exponent-marker=\textsc{e}}
+\renewcommand{\va}{\vec}
 
 
 % Change numbering and some commands
-\renewcommand\thesection{Exercise \Roman{section}}
-\renewcommand\thesubsection{\Roman{section}.\alph{subsection}}
+% \renewcommand\thesection{Exercise \Roman{section}}
+% \renewcommand\thesubsection{\Roman{section}.\alph{subsection}}
 
 %% references
 \usepackage[style=authoryear,
@@ -105,7 +106,7 @@
 
 \maketitle
 
-\section{Exercise}
+\section{}
 
 \subsection{Theory}
 
@@ -117,12 +118,12 @@ An approximation of Earth's dipole magnetic field is
 \end{align}
 where \( \va{r} \), \(\mu_0\) and \(\va{m}\) is the position, vacuum permeability and magnetic moment respectively.
 
-The equation of motion for a charged particle is
+The equation of motion for a charged particle is then
 
 \begin{align}
       \pdv{\va{v}}{t} &= \frac{q}{m}\left( \va{v} \cross \va{B}(\va{r}) \right)
-      \intertext{with}
-      \pdv{\va{r}}{t} &= \va{v}
+      \qquad{\text{and}} \qquad
+      \pdv{\va{r}}{t} = \va{v}  \label{eq:EoM}
 \end{align}
 
 Using Euler's method to dicretize it we arrive at the following two equations
@@ -144,6 +145,46 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
                   \end{itemize}
             \item Plot and analyze results
 \end{enumerate}
+
+  \subsubsection{Runge Kutta 4}
+    Let the phase-space vector \(\va{y}(t)\) represent the position and velocity of the particle, then let us use the following definitions.
+
+    \begin{align}
+      \pdv{\va{y}(t)}{t} &= \va{f}(t,\va{y})
+      \\
+      \va{y}(t) &= \int \va{f}(t,\va{y})\differential{t}
+      \\
+      \va{y}_{i+1} &= \va{y}_i + \int^{t_{i+1}}_{t_i} \va{f}(t,\va{y})\differential{t} \label{eq:next_y}
+      \intertext{Using Simpson's approximation for the integral we arrive at}
+      \int^{t_{i+1}}_{t_i} \va{f}(t,\va{y})\differential{t} &\approx \frac{h}{6}\left[ \va{f}(t_i, \va{y}_i) + 4 \va{f}(t_{i + 1/2} , \va{y}_{i + 1/2}) + \va{f}(t_{i + 1} , \va{y}_{i + 1}) \right]
+      \intertext{To get the fourth order Runge Kutta, we divide the middle step in two.}
+      \int^{t_{i+1}}_{t_i} \va{f}(t,\va{y})\differential{t} &\approx \frac{h}{6}\left[ \va{f}(t_i, \va{y}_i) + 2 \va{f}(t_{i + 1/2} , \va{y}_{i + 1/2})  + 2 \va{f}(t_{i + 1/2} , \va{y}_{i + 1/2}) + \va{f}(t_{i + 1} , \va{y}_{i + 1}) \right] \label{eq:RK4} 
+    \end{align}
+    \noindent Since we don't know the values of \( \va{y}_{i + 1/2}\) and \( \va{y}_{i + 1} \) so we approximate them by Euler's method
+
+    \begin{enumerate}
+      \item We know everything to compute the first step 
+              \[ k_1 = h\va{f}(t_i, \va{y}_i) \]
+      \item Now we use the Euler method to get \( y_{i + 1/2} \approx y_i + \frac{h}{2} \va{f}( t_i, y_i ) = y_i + \frac{k_1}{2} \) 
+      \[ k_2 = h\va{f}\left(t_i + \frac{h}{2}, y_i + \frac{k_1}{2}\right) \]
+      \item Then we use this to get a new estimate of the midpoint value
+        \[ k_3 = h\va{f}\left(t_i + \frac{h}{2}, y_i + \frac{k_2}{2}\right) \]
+      \item Then we use the approximation \(\va{y}_{i + 1} \approx \va{y}_i + k_3\)
+        \[ k_4 = h\va{f}\left(t_i + h, y_i + k_3\right) \]
+      \item Then we combine this with \cref{eq:next_y} and \cref{eq:RK4} to get
+      \begin{align}
+        \va{y}_{i+1} &\approx  \frac{h}{6}\left[ k_1 + 2k_2 + 2k_3 + k_4 \right]
+      \end{align}
+    \end{enumerate}
+
+    Then we have an algorithm we can use to solve the equation of motion, to compute the derivatives in \(\va{f} = \pdv{y}{t}\) we use \cref{eq:EoM} 
+
+    \begin{align}
+      y = ( \va{r}, \va{v} )
+      \qquad
+      f = ( \va{v}, \frac{q}{m} \va{ v }\cross \va{B}(\va{r})  )
+    \end{align}
+
 
 \subsection{Results}
     

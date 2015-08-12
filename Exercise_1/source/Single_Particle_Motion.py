@@ -12,16 +12,16 @@ m_i = 16*1.674E-27 	#kg
 B0 =  50000E-9		#Tesla
 
 
-# #Choose if for ion or electron
-# #electron settings
-# h = 1.E-12
-# m = m_e
-# q = -e
+#Choose if for ion or electron
+#electron settings
+h = 1.E-12
+m = m_e
+q = -e
 
-#Ion settings
-h = 1.*1.E-7
-m = m_i
-q = e
+# #Ion settings
+# h = 1.*1.E-7
+# m = m_i
+# q = e
 
 steps = int(1E7)
 
@@ -48,18 +48,18 @@ C1 = h*B0*q/m
 # print C1
 
 for i in range(0,steps -1):
-	# x[i + 1] = x[i] + h*vx[i]
-	# y[i + 1] = y[i] + h*vy[i]
-	# vx[i + 1] = vx[i] + C1*vy[i]
-	# vy[i + 1] = vy[i] - C1*vx[i]
+	x[i + 1] = x[i] + h*vx[i]
+	y[i + 1] = y[i] + h*vy[i]
+	vx[i + 1] = vx[i] + C1*vy[i]
+	vy[i + 1] = vy[i] - C1*vx[i]
 
-	vx_half[i +1] = vx[i] + C1/2*vy[i]
-	vy_half[i + 1] = vy[i] - C1/2*vx[i]
+	# vx_half[i +1] = vx[i] + C1/2*vy[i]
+	# vy_half[i + 1] = vy[i] - C1/2*vx[i]
 
-	x[i + 1] = x[i] + h*vx_half[i]
-	y[i + 1] = y[i] + h*vy_half[i]
-	vx[i + 1] = vx_half[i] + C1/2*vy_half[i]
-	vy[i + 1] = vy_half[i] - C1/2*vx_half[i]
+	# x[i + 1] = x[i] + h*vx_half[i]
+	# y[i + 1] = y[i] + h*vy_half[i]
+	# vx[i + 1] = vx_half[i] + C1/2*vy_half[i]
+	# vy[i + 1] = vy_half[i] - C1/2*vx_half[i]
 
 
 	if i % int(0.25*steps) == 0:
@@ -73,18 +73,18 @@ print "std(E_K) = " + str(stats.tstd(kineticEnergy))
 
 pl.figure()
 pl.plot(x,y)
-# pl.title('Gyration of an electron')
-pl.title('Gyration of an oxygen ion')
+pl.title('Gyration of an electron')
+# pl.title('Gyration of an oxygen ion')
 pl.xlabel("x [m]")
 pl.ylabel("y [m]")
 pl.axes().set_aspect('equal', 'datalim')
 
-pl.figure()
-time = np.arange(kineticEnergy.shape[0])
-pl.plot(time,kineticEnergy)
+# pl.figure()
+# time = np.arange(kineticEnergy.shape[0])
+# pl.plot(time,kineticEnergy)
 
-# pl.savefig("electronGyration.eps")
-pl.savefig("ionGyration.eps")
+pl.savefig("electronGyration.eps")
+# pl.savefig("ionGyration.eps")
 
 
 

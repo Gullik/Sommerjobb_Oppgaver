@@ -33,8 +33,8 @@
 
 %Defines calculator way to write powers of ten
 \sisetup{output-exponent-marker=\textsc{e}}
-
-
+%Physics package had ugly vectors
+\renewcommand{\va}{\vec}
 % Change numbering and some commands
 \renewcommand\thesection{Exercise \Roman{section}}
 \renewcommand\thesubsection{\Roman{section}.\alph{subsection}}
@@ -109,10 +109,10 @@
 
 \subsection{Theory}
       \subsubsection{Equation of motion and Euler's algorithm}
-      This exercise is about the trajectory of charged particles in static Electric and Magnetic external fields and as usual we start with the equation of motion for a particle and use Euler's method to to integrate calculate the trajectories. We also show that there is a constant drift velocity in the particles center of motion and compare the theoretical drift velocity with the drift velocity detected in the simulation. The equation of motion is the following
+      This exercise is about the trajectory of charged particles in static electric and magnetic external fields and as usual we start with the equation of motion for a particle and use Euler's method to calculate the trajectories. We also show that there is a constant drift velocity in the particle's guiding center and compare the theoretical drift velocity with the drift velocity detected in the simulation. The equation of motion is the following
 
       \begin{align}
-            m\pdv{\va{v}(t)}{t} &= q \left( \va{E} +   \va{v}\cross \va{B_0} \right); \qquad{} \va{E} = (E_x,E_y,0) \qquad{} \text{and} \qquad{} \va{B_0} = (0,0,B_0)
+            m\pdv{\va{v}(t)}{t} &= q \left( \va{E} +   \va{v}\cross \va{B}_0 \right); \qquad{} \va{E} = (E_x,E_y,0) \qquad{} \text{and} \qquad{} \va{B}_0 = (0,0,B_0)
             \intertext{Using Euler's method to approximate the derivative, \( \pdv{f(t)}{t} \approx \frac{f(t+h) - f(t) }{h}\), we arrive at }
             \va{v}(t + h) &= \va{v}(t) + h\frac{q}{m}\left( \va{E} +   \va{v}\cross \va{B_0} \right)
             \intertext{Decomposing into \(x\), $y$ and $z$ coordinates}
@@ -120,7 +120,7 @@
             \\
             v_y(t + h) &= v_y(t) + h\frac{q}{m}\left( E_y -   v_x B_0 \right)
             \\
-            v_z(t + h) & = v_z(t) + h\frac{q}{m}\left( E_y \right)
+            v_z(t + h) & = v_z(t) + h\frac{q}{m}\left( E_z \right)
       \end{align}
       We only need to concern ourselves with the \(x\)- and \(y\)- coordinates since the \(z\) velocity is constant with our electric field. We will use the same algorithm as in the previous exercise and it is listed below
 
@@ -132,14 +132,14 @@
       \end{enumerate}
 
       \subsubsection{E cross B drift}
-      To find the theoretical drift we first decompose the velocity into a velocity along the magnetic field ,$\va{v}_\parallel $,, a perpendicular gyration velocity ,$\va{\omega}_\perp $, and a constant drift , $\va{v}_D $, and then we can solve those seperately.
+      To find the theoretical drift we first decompose the velocity into a parallel and perpendicular velocity, $\va{v}_\parallel $ and $\va{v}_\perp $. In addition we assume there exists a constant drift, \(\va{v}_D\), so we can seperate the perpendicular velocity into the drift and the gyration velocity, \(\va{\omega}_\perp\). In total the velocity is seperated into the following
 
       \[ \va{v} \rightarrow \va{v}_\parallel + \va{\omega}_\perp + \va{v}_D \]
       
-      The equation of motion is then
+      which gives the following equation of motion
 
       \begin{align}
-           \pdv{\va{v}_\parallel}{t} + \pdv{\va{\omega}_\perp}{t} + \pdv{\va{v}_D}{t} &= \frac{q}{m} \left( \va{E}_\perp +   \left( \va{v}_\parallel + \va{\omega}_\perp + \va{v}_D \right)  \cross \va{B}_0 \right)
+           \pdv{}{t}\left( \va{v}_\parallel + \va{\omega}_\perp + \va{v}_D\right) &= \frac{q}{m} \left( \va{E} +   \left( \va{v}_\parallel + \va{\omega}_\perp + \va{v}_D \right)  \cross \va{B}_0 \right)
       \end{align}
 
       The parallel velocity is unaffected by the magnetic field
@@ -152,15 +152,15 @@
 
       Then we handle the gyration velocity
       \begin{align}
-            \pdv{\va{\omega}_\perp}{t} &= \frac{q}{m}\va{\omega}_\perp \cross \va{B_0}        \label{eq:gyro_vel_1}
+            \pdv{\va{\omega}_\perp}{t} &= \frac{q}{m}\va{\omega}_\perp \cross \va{B}_0        \label{eq:gyro_vel_1}
             \intertext{Let us do a temporal derivative}
             \pdv[2]{\omega_\perp}{t} &= \frac{q}{m} \left(\pdv{\omega_\perp}{t} \cross \va{B}_0\right)
             \intertext{Let us then substitute \cref{eq:gyro_vel_1} into the equation to obtain }
-            \pdv[2]{\omega_\perp}{t} &= \frac{q}{m} \left(\frac{q}{m} \va{\omega}_\perp \cross \va{B_0} \right)  \cross \va{B}_0
+            \pdv[2]{\omega_\perp}{t} &= \frac{q}{m} \left(\frac{q}{m} \va{\omega}_\perp \cross \va{B}_0 \right)  \cross \va{B}_0
             \intertext{Then we use the vector relation \(a\cross b \cross c = b(a\cdot c) - c(a\cdot b)\) to get}
             \pdv[2]{\va{\omega}_\perp}{t} + \omega_c ^2 \va{\omega}_\perp&= 0
-            \intertext{where \( \omega_c = \frac{q B_0}{m} \). Using that the gyration velocity magnitude is \(v_x^2 + v_y^2 = \omega_\perp\) a solution for this differential equation is}
-            \va{\omega_\perp}(t) &= 
+            \intertext{where \( \omega_c = \frac{q B_0}{m} \). Using that the gyration velocity magnitude is \(v_x^2 + v_y^2 = |\va{\omega}_\perp| = \omega_\perp\) a solution for this differential equation is}
+            \va{\omega}_\perp(t) &= 
                   \begin{pmatrix}
                         \omega_\perp \cos(\frac{qB_0}{m}t + \theta)
                         \\
@@ -174,13 +174,13 @@
       \noindent Since we assumed that the drift was constant we set the time derivative to 0 when solving for the drift.
 
       \begin{align}
-            0 &= \frac{q}{m} \left(\va{E}_\perp +  \va{v}_D \cross \va{B_0}\right)
-            \intertext{Then we cross the equation with \(\va{B_0}\) and use the same vector identity as earlier to obtain}
-            \va{B_0} \cross  \left(\va{v}_D \cross \va{B_0} \right) &= \va{B_0} \cross (- \va{E}_\perp)
+            0 &= \frac{q}{m} \left(\va{E}_\perp +  \va{v}_D \cross \va{B}_0\right)
+            \intertext{Then we cross the equation with \(\va{B}_0\) and use the same vector identity as earlier to obtain}
+            \va{B}_0 \cross  \left(\va{v}_D \cross \va{B}_0 \right) &= \va{B}_0 \cross (- \va{E}_\perp)
             \\
-            \va{v}_D &= \frac{\va{E}_\perp \cross \va{B_0}}{B_0^2} = \frac{1}{B_0} 
+            \va{v}_D &= \frac{\va{E}_\perp \cross \va{B}_0}{B_0^2} = \frac{1}{B_0} 
             \begin{pmatrix}
-            E_x \\ E_y \\ 0
+            E_y \\ -E_x \\ 0
             \end{pmatrix}
       \end{align}
 
@@ -197,7 +197,7 @@
       \begin{align}
             x(t) &= x_c + \rho_c \sin(\frac{qB_0}{m}t + \theta) + \frac{E_y}{B_0}t
             \\
-            x(t) &= y_c + \rho_c \cos(\frac{qB_0}{m}t + \theta) - \frac{E_x}{B_0}t
+            y(t) &= y_c + \rho_c \cos(\frac{qB_0}{m}t + \theta) - \frac{E_x}{B_0}t
       \end{align}
 
       \noindent where \(x_c\) and $y_c$ is initial position of the guiding center.

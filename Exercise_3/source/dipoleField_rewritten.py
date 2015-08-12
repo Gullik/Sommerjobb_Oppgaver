@@ -1,3 +1,8 @@
+# This code is ran with several input parameters from the commandline
+#
+#	python filename.py particle nSteps stepsize method compute/read
+#
+
 import sys
 import numpy as np
 import pylab as plt
@@ -143,6 +148,31 @@ def dipoleField_rewritten(particle, nSteps, stepsize, method):
 
 			i+=1
 
+	elif method == 'RK4':
+
+		i = 0
+
+		while i < steps:
+			
+
+			
+
+
+			if i%update == 0:
+				#Calculating the parallel velocity by using dot(v,B)/|B| = v_parallel and the perpendicular velocity by using the cross(v,B)/|B| = v_perp
+				b_magnitude = r_length(Bx, By, Bz)
+				v_para = (vx*Bx + vy*By + vz*Bz)/b_magnitude
+				v_perp = (vCrossB_x*vCrossB_x + vCrossB_y*vCrossB_y + vCrossB_z*vCrossB_z)
+				v_perp = np.sqrt(v_perp)/b_magnitude
+				kinetic_para = v_para*v_para
+				kinetic_perp = v_perp*v_perp
+				#Write to file
+				results.write(str(x) + '\t' + str(y)  + ' \t'+ str(z) + '\t' + str(kinetic_para) + '\t' + str(kinetic_perp)  + '\t' + str(i*timestep) + '\n')
+				if i % int(0.1*steps) == 0:
+					print str( float(i) / float(steps) * 100)  + '%'
+
+			i+=1
+
 	endTime = time()
 	print('Spent '+str(endTime - startTime) + ' s')
 
@@ -179,6 +209,10 @@ def crossy(vx,vy,vz, Bx,By,Bz):
 
 def crossz(vx,vy,vz, Bx,By,Bz):
 	return vx*By - vy*Bx
+
+def f(x,y,z,vx,vy,vz):
+	
+	return vx, vy, vz, 
 
 def analyze_data(name, method):
 	print 'Analyzing data in ' + name

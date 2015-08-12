@@ -1,11 +1,11 @@
 # Fdb version 3
-["biber Report_2"] 1435909887 "Report_2.bcf" "Report_2.bbl" "Report_2" 1436370192
-  "Report_2.bcf" 1436370192 90338 95ec96ce82361a63ad30e2392addc113 ""
+["biber Report_2"] 1435909887 "Report_2.bcf" "Report_2.bbl" "Report_2" 1439199573
+  "Report_2.bcf" 1439198598 90338 95ec96ce82361a63ad30e2392addc113 ""
   (generated)
   "Report_2.blg"
   "Report_2.bbl"
-["pdflatex"] 1436370191 "Report_2.tex" "Report_2.pdf" "Report_2" 1436370192
-  "../source/EcrossBDrift.py" 1436369860 7638 d3421a9184a3e25e8971fb1847e822d7 ""
+["pdflatex"] 1439198597 "Report_2.tex" "Report_2.pdf" "Report_2" 1439199573
+  "../source/EcrossBDrift.py" 1439194503 7750 e14828e804e08c3c07afaabf8cefa8fb ""
   "../source/ExBVaryingVelectron-eps-converted-to.pdf" 1436355490 26832 6a98a6555286d9a3136acd86ea79c3c0 ""
   "../source/ExBVaryingVelectron.eps" 1436355360 69120 3c55d707f09d3414db1419199b14c3f7 ""
   "../source/ExBVaryingVion-eps-converted-to.pdf" 1436355509 26435 bbdb07d0e8eb11b8a5ece8b2e90e5bfe ""
@@ -14,8 +14,8 @@
   "../source/ExBelectron.eps" 1436369861 32834 ccd315e41375d5a35b4d221d239d0381 ""
   "../source/ExBion-eps-converted-to.pdf" 1436369667 16719 fbad828ad228d12e782550910ecea61c ""
   "../source/ExBion.eps" 1436369659 33666 72bdeb90ce2a34b687c5bcdebc34c020 ""
-  "../source/kineticEnergy-eps-converted-to.pdf" 1436369869 14722 1f0b74ee3adf910e87fadb067d40d09b ""
-  "../source/kineticEnergy.eps" 1436369861 23360 0a9e38b81ebc5a6647c95f0311de3f79 ""
+  "../source/kineticEnergy-eps-converted-to.pdf" 1439194512 14925 396f46767ead824f4679d12b9546964b ""
+  "../source/kineticEnergy.eps" 1437557898 22125 40b394ab931745f1a6d17ada21619cc3 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -187,17 +187,17 @@
   "/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty" 1304191498 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/share/texmf/tex/latex/xcolor/x11nam.def" 1339578534 9040 c0c860499be99a076792194b1d6525a1 ""
   "/usr/share/texmf/tex/latex/xcolor/xcolor.sty" 1339578534 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
-  "Report_2.aux" 1436370192 9093 b278751a5d3413fed68e7003cede1bcb ""
+  "Report_2.aux" 1439198598 9127 f2bfddc7507c295a463e42f78f95196c ""
   "Report_2.bbl" 1435909888 466 9b63bd41c34afae085b93d05707d5cc3 "biber Report_2"
-  "Report_2.out" 1436370192 261 233fae7cf043b87007c51b96ee169793 ""
-  "Report_2.tex" 1436370191 14512 766ee99ebe595e17a62e95eb634d9648 ""
+  "Report_2.out" 1439198598 261 233fae7cf043b87007c51b96ee169793 ""
+  "Report_2.tex" 1439198597 14702 5b5e86dac76a3059ca112edf00bf207f ""
   (generated)
   "../source/ExBion-eps-converted-to.pdf"
   "Report_2.log"
+  "../source/ExBVaryingVion-eps-converted-to.pdf"
   "../source/ExBelectron-eps-converted-to.pdf"
   "Report_2.pdf"
-  "Report_2.aux"
+  "../source/ExBVaryingVelectron-eps-converted-to.pdf"
   "../source/kineticEnergy-eps-converted-to.pdf"
   "Report_2.out"
-  "../source/ExBVaryingVion-eps-converted-to.pdf"
-  "../source/ExBVaryingVelectron-eps-converted-to.pdf"
+  "Report_2.aux"
