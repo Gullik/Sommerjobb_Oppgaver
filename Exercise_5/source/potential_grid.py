@@ -114,11 +114,12 @@ def plot_potential(grid, name):
 	cbar = pl.colorbar(contourPlot)
 	pl.xlabel('Longitude $ [ ^\circ] $')
 	pl.ylabel('Latitude  $ [ ^\circ] $')
-
+	# print np.max(grid)
+	# print np.min(grid)
 	#Hardcoded the labels
-	cbar_labels = np.arange(-24 , 32 + 1, 24-16)
+	# cbar_labels = np.arange(-24 , 32 + 1, 24-16)
 
-	cbar.ax.set_yticklabels(cbar_labels)
+	# cbar.ax.set_yticklabels(cbar_labels)
 	cbar.set_label(' $\Phi$  [kV]')#, rotation = 0)
 	pl.savefig(name)
 
@@ -139,7 +140,8 @@ def plot_potential(grid, name):
 	fig = plt.figure()
 	X = (90 - LATITUDE)*np.sin(np.deg2rad(LONGITUDE))
 	Y = (90 - LATITUDE)*np.cos(np.deg2rad(LONGITUDE))
-	contourPlot = pl.contourf(X,Y,grid)
+	contour = pl.contourf(X,Y,grid)
+	
 	plt.savefig('other_proj.eps')
 
 

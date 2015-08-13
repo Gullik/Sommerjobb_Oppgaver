@@ -1,10 +1,10 @@
 # Fdb version 3
-["biber comments"] 1439198992 "comments.bcf" "comments.bbl" "comments" 1439368945
-  "comments.bcf" 1439368945 90338 95ec96ce82361a63ad30e2392addc113 ""
+["biber comments"] 1439198992 "comments.bcf" "comments.bbl" "comments" 1439369281
+  "comments.bcf" 1439369281 90338 95ec96ce82361a63ad30e2392addc113 ""
   (generated)
   "comments.bbl"
   "comments.blg"
-["pdflatex"] 1439368944 "comments.tex" "comments.pdf" "comments" 1439368945
+["pdflatex"] 1439369281 "comments.tex" "comments.pdf" "comments" 1439369281
   "../Exercise_7/source/draw_map.py" 1438344179 1280 b6d6c6f7406ab8a31ff9afd686c86e35 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
@@ -177,10 +177,10 @@
   "/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty" 1304191498 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/share/texmf/tex/latex/xcolor/x11nam.def" 1339578534 9040 c0c860499be99a076792194b1d6525a1 ""
   "/usr/share/texmf/tex/latex/xcolor/xcolor.sty" 1339578534 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
-  "comments.aux" 1439368945 2915 da1fadad5c4d5d2104c60179dab2de42 ""
+  "comments.aux" 1439369281 2915 da1fadad5c4d5d2104c60179dab2de42 ""
   "comments.bbl" 1439198992 466 9b63bd41c34afae085b93d05707d5cc3 "biber comments"
-  "comments.out" 1439368945 246 b001c2a1b3463e933113acd80249ad2c ""
-  "comments.tex" 1439368943 4552 bced009a897b82bc0ca1e0d255e09ea8 ""
+  "comments.out" 1439369281 246 b001c2a1b3463e933113acd80249ad2c ""
+  "comments.tex" 1439369280 4552 bced009a897b82bc0ca1e0d255e09ea8 ""
   "map_drift-eps-converted-to.pdf" 1439367782 253009 c86fe9c0c36bd2d195b603409b6b62c2 ""
   "map_drift.eps" 1439367715 1014262 9f6636e2b57279d981c975b76fac859b ""
   "map_potential-eps-converted-to.pdf" 1439293864 180881 2829b3eeaa43e8b97b26e491a9db3f26 ""
@@ -192,12 +192,12 @@
   "vArrows-eps-converted-to.pdf" 1439367781 107595 afb4c7f1a01bbae73bdfee732f70a521 ""
   "vArrows.eps" 1439367460 447282 287d6241c28b0514d83009d704564d76 ""
   (generated)
-  "map_potential-eps-converted-to.pdf"
-  "other_proj-eps-converted-to.pdf"
-  "comments.aux"
   "comments.pdf"
+  "potential-eps-converted-to.pdf"
   "vArrows-eps-converted-to.pdf"
   "map_drift-eps-converted-to.pdf"
-  "comments.out"
-  "potential-eps-converted-to.pdf"
   "comments.log"
+  "map_potential-eps-converted-to.pdf"
+  "comments.out"
+  "other_proj-eps-converted-to.pdf"
+  "comments.aux"

@@ -17,7 +17,6 @@ def convection(potential):
 	B  = 45000.E-9		#tesla  #radially directed
 
 
-
 	#Need 2 grids for the gradient, since it has a 2D direction at each point
 	gradient_theta 	= np.zeros(potential.shape)
 	gradient_phi	= np.zeros(potential.shape)
@@ -46,14 +45,24 @@ def convection(potential):
 	E_phi = np.zeros(potential.shape)
 
 	E_theta[1:-1,:] = - ( potential[2: , :] - potential[:-2 , :] )/(rho*2.*dTheta)
-	E_phi  [:, 1:-1]  = - (potential[:,2:] - potential[ :, :-2]    )/(rho * sinTheta[:,np.newaxis] * 2. *dPhi)
+	E_phi  [:, 1:-1]  = - (potential[:,2:] - potential[ :, :-2]  )/(rho * sinTheta[:,np.newaxis] * 2. *dPhi)
 
-	# plt.t_potential_and_electric_field(potential, E_theta, E_phi)
+	print np.mean(potential)
+
+	print np.mean(E_theta)
+	print np.mean(E_phi)
+	print np.mean(E_theta/(B*B))
+	print np.mean(E_phi/(B*B))
+
+	# plot_potential_and_electric_field(potential, E_theta, E_phi)
 
 	#Since the electric field is -grad(potential), we use the negative gradient below
 	v_theta, v_phi = cross_with_B(E_theta, E_phi, theta, phi, B)
 	v_theta /=(B*B)
 	v_phi /= (B*B)
+
+	print np.mean(v_theta)
+	print np.mean(v_phi)
 
 	#Stopping here for now
 	# plt.t_drift(v_theta,v_phi)
@@ -176,8 +185,8 @@ if __name__ == '__main__':
 	potential = electrostatic_potential(coeffPath)
 
 	v_theta, v_phi, E_theta, E_phi  = convection(potential)
-	# plot_potential(potential, 'potential.eps')
-	plot_electric_field(E_theta, E_phi)
-	plot_drift(v_theta,v_phi)
-	plt.show()
+	plot_potential(potential, 'potential.eps')
+	# plot_electric_field(E_theta, E_phi)
+	# plot_drift(v_theta,v_phi)
+	# plt.show()
 

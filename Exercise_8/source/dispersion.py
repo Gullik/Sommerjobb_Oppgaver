@@ -1,5 +1,6 @@
 import numpy as np
 import pylab as plt
+import sys as sys
 
 def epsilon(omega, k):
 	cs	= 1000 				#m/s 		Speed of sound
@@ -65,21 +66,18 @@ def bisection(function, k, xmin, xmax, iterations):
 	# plt.legend()
 	# plt.xlabel('$\omega$')
 	# plt.ylabel('$\epsilon$')
-	# plt.savefig('bisection_' + str(k) + '_' + str(iterations) + '.eps')
+	# plt.savefig('../figures/bisection_' + str(k) + '_' + str(iterations) + '.eps')
 	# plt.show()
 
 	plt.close('all')
 	
 	return (xmax + xmin)*0.5, np.abs(dx)
 
-def test(x, y0):
-	return x + y0
-
-def test2(x, y0):
-	return -x -y0
-
 
 if __name__ == '__main__':
+
+	xmin =  np.power(10,int(sys.argv[1]))
+	xmax =  np.power(10,int(sys.argv[2]))
 
 	# kk = [0.001, 0.01, 0.1, 1, 10]#, 200, 300, 400, 500, 600, 700, 800, 900, 999]
 
@@ -107,8 +105,8 @@ if __name__ == '__main__':
 
 		# xmin = float( pow(10, int(raw_input("xmin: "))) )
 		# xmax = float( pow(10, int(raw_input("xmax: "))) )
-		xmin = 1.E-5
-		xmax = 1.E6
+		# xmin = 1.E-5
+		# xmax = 1.E6
 
 		print 'Root is estimated to be in the interval: (' + str(xmin) + ',' + str(xmax) + ')'
 
@@ -123,8 +121,9 @@ if __name__ == '__main__':
 	plt.figure()
 	plt.plot(kk, roots)
 	plt.xlim([0, kk[-1]])
+	plt.xlabel('$k$')
+	plt.ylabel('$ \omega $')
 	plt.ylim([0, roots[-1]])
+	plt.savefig('../figures/test.eps')
 	plt.show()
-
-
 
