@@ -119,21 +119,104 @@
     \end{split}
   \end{align}
 
-  where \(k\), \(\omega\), \(c_s\), \(\theta\), \(\Omega_{ce}\) and \(\Omega_{ci}\) is the wave-vector, frequency, angle relative to magnetic field, electron gyro frequency and ion frequency respectively. \(\epsilon\) describes how the energy is dispersing from the wave, so the wave 
+  where \(k\), \(\omega\), \(c_s\), \(\theta\), \(\Omega_{ce}\) and \(\Omega_{ci}\) is the wave-vector, frequency, angle relative to magnetic field, electron gyro frequency and ion frequency respectively. \(\epsilon\) describes how the energy is dispersing from the wave, so the wave will stabilize at a frequency where it is not gaining, or losing, energy. So we will search for use the bisection method, to find the points, where \(\epsilon(\omega,k) = 0\), and the wave will propagate.
 
+  The bisection method is an easy method that always works, but it has a slow convergence ratio compared to other methods. For this case the computational cost is not a problem. For the bisection method to work we first need an interval, in which the function is crossing \(0\). 
+  \begin{enumerate}
+    \item Divide interval in two
+    \item Let interval which is containing the intersection be the new interval
+    \item Divide interval in two again, and so on.
+  \end{enumerate}
+
+  \begin{figure}
+  \centering
+    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_0}
+    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_1}
+    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_2}
+    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_3}
+    \caption{Figures showing how the bisection method is searching for where the root is for a given function \(\epsilon\). It starts with a guess that the root is in \([0,1000]\), then it divides that interval into the two intervals \([0,500)\) and \([500,1000]\), depicted in the uppermost left figure, and then it decides which interval the root lies on (colored green in the figure). Then it divides that interval in two again, (uppermost right figure) and repeats.}
+  \end{figure}
 
 \subsection{Results}
-  
+  To test the root finding algorithm we also used the dispersion relation, given in \cref{sec:elec_plasma}, and the dispersion diagram of it is depicted in \cref{fig:simple_diagram}.
+
+  \begin{figure}
+  \centering
+    \includegraphics[width = 0.60 \textwidth]{../figures/simple_dispersion}
+    \caption{We see at large wavelengths the dispersion relation corresponds to a linear relation between the frequency and wave-vector.}
+    \label{fig:simple_diagram}
+  \end{figure}
 
 
 \appendix
+\section{Electron plasma oscillations in unmagnetized plasma}
+  \label{sec:elec_plasma}
+    Here we will consider an electron fluid under local thermal equilibrium, LTE, experiencing small perturbations from an equilibrium state of an homogeneous electron density, \(n_0\), and pressure, \(p_0\), and vanishing flow, \(\va{u}_0 = 0\), and electric field, \(\va{E}_0 = 0 \).
+    The fluid is governed by the following equations:
+
+    \begin{subequations}
+      \begin{equation}
+        \pdv{n_e}{t} + \nabla \cdot (n_e \va{u}_e) = 0 
+      \end{equation}
+      \begin{equation}
+        m_en_e\left( \pdv{}{t} + \va{u}_e \cdot \nabla \right)\va{u}_e = e n_e \nabla \phi - \nabla p_e
+      \end{equation}
+      \begin{equation}
+        \left( \pdv{}{t} + \va{u}_e \cdot \nabla \right) p_e + \frac{5}{3} p_e\nabla \cdot \va{u}_e = 0
+      \end{equation}
+      \begin{equation}
+        \epsilon_0 \nabla^2 \phi = e\left( n_e - n_0 \right)
+      \end{equation}
+    \end{subequations}
+
+  Assuming a small perturbation to the equilibrium.
+  \begin{equation*}
+  \text{Perturbation} \rightarrow
+    \begin{cases}
+      n_e = n_0 + \tilde{n}_e\\
+      p_e = p_0 + \tilde{p}_e\\
+      \va{u}_e = \tilde{\va{u}}_e\\
+      \phi = \tilde {\phi}
+    \end{cases}
+  \end{equation*}
+
+  Linearizing the equations after inserting the perturbation we get
+
+  \begin{subequations}
+      \begin{equation}
+        \pdv{\tilde{n}_e}{t} + \nabla \cdot (n_0 \tilde{\va{u}}_e) = 0 \label{eq:continuity}
+      \end{equation}
+      \begin{equation}
+        m_e \pdv{\tilde{\va{u}}_e}{t}  = e  \nabla \tilde{ \phi} - \frac{\nabla \tilde{p}_e}{n_0}
+      \end{equation}
+      \begin{equation}
+         \pdv{\tilde{p}}{t} +\frac{5}{3}p_0 \nabla \cdot \tilde{\va{u}}_e = 0 \label{eq:energy}
+      \end{equation}
+      \begin{equation}
+        \epsilon_0 \nabla^2 \tilde{\phi} = e\tilde{n}_e
+      \end{equation}
+  \end{subequations}
+
+  Combining the continuity and energy equations, \cref{eq:continuity} and \cref{eq:energy}, we get
+
+  \begin{align}
+    \pdv{}{t}\left( \frac{\tilde{p}_e}{p_0} + \frac{5}{3} \frac{\tilde{n_e}}{n_0} \right) &= 0
+  \end{align}
+
+  \noindent Assuming plane wave solutions and some algebra, we arrive at the compressional dispersal relation 
+
+  \begin{align}
+    \epsilon(\omega, k) = 1 + \frac{5}{3} \lambda_{se}^2k ^2 -  \frac{\omega^2}{\omega_{pe}^2} 
+  \end{align}
+
+
 \section{Comments to Exercise}
   
   \begin{itemize}
     \item Typo in dispersion relation, second term: \(\frac{k^2c_s^s}{\omega^2}\) should be \(\frac{k^2c_s^2}{\omega^2}\). (The \(c_s\) is raised to the power s instead of 2)
     \item Would it be an idea to start with a simple dispersion relation, implement the root finding algorithm on that, and then put in the complicated dispersion relation. An easy dispersion relation would be the one for electron oscillations in an unmagnetized plasma.
     \begin{align}
-      \epsilon(\omega, k) &= 1 + \frac{5}{3} - \frac{\omega}{\omega_{pe}}
+      \epsilon(\omega, k) &= 1 + \frac{5}{3}k^2 - \frac{\omega}{\omega_{pe}}
     \end{align}
   \end{itemize}
 

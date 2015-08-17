@@ -1,0 +1,163 @@
+% arara: pdflatex
+% !arara: biber
+% !arara: pdflatex
+% How to run: 
+% 1) pdflatex "filename".tex
+% 2) biber "filename"
+% 3) pdflatex "filename".tex
+% 4) pdflatex "filename".tex
+
+
+\documentclass[x11names]{article}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{shadow}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage{url}
+%For use in pictures
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{wrapfig}
+
+\usepackage[l2tabu]{nag} %NAgs when using bad practices
+
+
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage[font={small,it}]{caption}
+\usepackage[margin=0.7in]{geometry} %Sets the margins in the document
+\usepackage{siunitx}    %Allows use of SI units macros
+
+%Defines calculator way to write powers of ten
+\sisetup{output-exponent-marker=\textsc{e}}
+
+
+% Change numbering and some commands
+\renewcommand\thesection{Exercise \Roman{section}}
+\renewcommand\thesubsection{\Roman{section}.\alph{subsection}}
+
+%% references
+\usepackage[style=authoryear,
+            bibstyle=authoryear,
+            backend=biber,
+            % refsection=chapter,
+            maxbibnames=99,
+            maxnames=2,
+            firstinits=true,
+            uniquename=init,
+            natbib=true,
+            dashed=false]{biblatex}
+
+\addbibresource{bibliography.bib}
+
+\usepackage[capitalize]{cleveref}
+
+\setcounter{tocdepth}{2}
+
+\lstset{language=c++}
+\lstset{alsolanguage=[90]Fortran}
+\lstset{basicstyle=\small}
+\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+
+
+\definecolor{keywords}{RGB}{255,0,90}
+      \definecolor{comments}{RGB}{0,0,113}
+      \definecolor{red}{RGB}{160,0,0}
+      \definecolor{green}{RGB}{0,150,0}
+       
+      \lstset{language=Python, 
+              basicstyle=\ttfamily\small, 
+              keywordstyle=\color{keywords},
+              commentstyle=\color{comments},
+              stringstyle=\color{red},
+              showstringspaces=false,
+              identifierstyle=\color{green}
+              }
+
+
+
+\title{ Exercise 8 \\ Sommerjobb Numeriske Plasmaoppgaver }
+\author{Gullik Vetvik Killie
+		}
+
+\renewcommand{\va}{\vec}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Actual text starts here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+\maketitle
+
+\section{}
+
+\subsection{Theory}
+  In this exercise we will investigate how electrically charged particles behave in the converging magnetic field above the north pole and the balance between the forces.
+\\ \\
+  A particle gyrating in will have a magnetic moment, dependant on it's perpendicular velocity, given by
+
+  \begin{align}
+    \va{\mu} &= \frac{mv_\perp^2}{2B} \va{e}_B
+  \end{align}
+
+  The gradient force felt by the particle is then given by
+
+  \begin{align}
+    \va{F}_B &= -\left( \va{\mu}\cdot\nabla \right)\va{B}
+  \end{align}
+
+  The particle will also feel a gravitational force and the force balance is given when these 2 forces are equal.
+
+  \begin{align}
+    -\va{F}_G + \va{F}_B &= 0  
+    \\
+    mg(z) &= \frac{mv_\perp^2}{B(z)} \pdv{B_z(z)}{z}
+  \end{align}
+  \noindent If we let the magnetic field be approximated as in the earlier exercises as
+
+  \begin{align}
+    \va{B}(\va{r}) &= \frac{\mu_0}{4\pi}\left( \frac{3\va{r}(\va{r}\cdot\va{m}  )}{r^5} - \frac{\va{m}}{r^3} \right)
+  \end{align}
+
+  then the vertical part of the gradient is
+
+  \begin{align}
+   \pdv{B_z(z)}{z} &= \pdv{}{z}\left( \frac{3z^2m_z}{r^5} - \frac{m_z}{r^3} \right)
+    \\
+    &= m_z \left(   \right)
+    \\
+    \pdv{B_z(z)}{z} &= \frac{\mu mz}{4 \pi} \left(\frac{3 z}{r^{5}} + \frac{3}{r^{5}} - \frac{15 z^{2}}{r^{7}}\right)
+  \end{align}
+  
+  \begin{align}
+      mg(z) &= \frac{mv_\perp^2}{B(z)} \pdv{}{z}\left( \frac{3z^2m_z}{r^5} - \frac{m_z}{r^3} \right)
+  \end{align}
+
+\subsection{Results}
+
+
+\appendix
+
+
+\section{Code}
+  \label{sec:code}
+  \lstinputlisting{../source/stability.py}
+
+
+\end{document}
