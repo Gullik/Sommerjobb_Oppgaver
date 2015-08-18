@@ -1,11 +1,11 @@
 # Fdb version 3
-["biber Report_9"] 1439454639 "Report_9.bcf" "Report_9.bbl" "Report_9" 1439811646
-  "Report_9.bcf" 1439811645 90338 95ec96ce82361a63ad30e2392addc113 ""
+["biber Report_9"] 1439822214 "Report_9.bcf" "Report_9.bbl" "Report_9" 1439903246
+  "Report_9.bcf" 1439903246 90338 95ec96ce82361a63ad30e2392addc113 ""
   (generated)
   "Report_9.bbl"
   "Report_9.blg"
-["pdflatex"] 1439811645 "Report_9.tex" "Report_9.pdf" "Report_9" 1439811646
-  "../source/stability.py" 1439808096 436 25c34707596b0b48aeadbbda16830700 ""
+["pdflatex"] 1439903245 "Report_9.tex" "Report_9.pdf" "Report_9" 1439903246
+  "../source/stability.py" 1439903245 2370 fcd36c8dc2a40aef124eb16850cccd3b ""
   "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -181,12 +181,12 @@
   "/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty" 1304191498 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/share/texmf/tex/latex/xcolor/x11nam.def" 1339578534 9040 c0c860499be99a076792194b1d6525a1 ""
   "/usr/share/texmf/tex/latex/xcolor/xcolor.sty" 1339578534 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
-  "Report_9.aux" 1439811645 1585 6b6adbaaea23d3e2a1b2e99922ae59e4 ""
-  "Report_9.bbl" 1439454639 466 9b63bd41c34afae085b93d05707d5cc3 "biber Report_9"
-  "Report_9.out" 1439811645 186 ebdd60d26182e901b46d3868f91821b4 ""
-  "Report_9.tex" 1439811645 4325 e82da433d1f93e7c9409de300e5ffa68 ""
+  "Report_9.aux" 1439903246 1585 6b6adbaaea23d3e2a1b2e99922ae59e4 ""
+  "Report_9.bbl" 1439820206 466 9b63bd41c34afae085b93d05707d5cc3 "biber Report_9"
+  "Report_9.out" 1439903246 186 ebdd60d26182e901b46d3868f91821b4 ""
+  "Report_9.tex" 1439898254 5222 0cc6ac5f2aafb5f258f4feba023a6afa ""
   (generated)
+  "Report_9.aux"
   "Report_9.pdf"
   "Report_9.out"
   "Report_9.log"
-  "Report_9.aux"

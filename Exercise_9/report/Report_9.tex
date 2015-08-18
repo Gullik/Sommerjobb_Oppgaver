@@ -95,7 +95,7 @@
 \author{Gullik Vetvik Killie
 		}
 
-\renewcommand{\va}{\vec}
+% \renewcommand{\va}{\vec}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Actual text starts here
@@ -104,6 +104,7 @@
 
 
 \maketitle
+Test
 
 \section{}
 
@@ -127,7 +128,7 @@
   \begin{align}
     -\va{F}_G + \va{F}_B &= 0  
     \\
-    mg(z) &= \frac{mv_\perp^2}{B(z)} \pdv{B_z(z)}{z}
+    mg(z) &= \frac{mv_\perp^2}{2B(z)} \pdv{B_z(z)}{z}
   \end{align}
   \noindent If we let the magnetic field be approximated as in the earlier exercises as
 
@@ -135,19 +136,34 @@
     \va{B}(\va{r}) &= \frac{\mu_0}{4\pi}\left( \frac{3\va{r}(\va{r}\cdot\va{m}  )}{r^5} - \frac{\va{m}}{r^3} \right)
   \end{align}
 
-  then the vertical part of the gradient is
+  \noindent if we then consider the case where the guiding center of the particle is \(200 \si{\kilo\meter}\) straight above the magnetic north, so the guiding center coordinates is
+  \( \va{r}_0 = (0,0,200\si{\kilo\meter} + R_e)\). Then it becomes simpler to find the z directed part of the gradient.
 
   \begin{align}
-   \pdv{B_z(z)}{z} &= \pdv{}{z}\left( \frac{3z^2m_z}{r^5} - \frac{m_z}{r^3} \right)
+    \pdv{B_z(z)}{z} &= \pdv{}{z}\left( \frac{\mu_0}{4\pi} \left(\frac{3z^2m_z}{z^5} - \frac{m_z}{z^3} \right)\right)
     \\
-    &= m_z \left(   \right)
+    &= \frac{\mu_0m_z}{4\pi} \left( - \frac{9}{z^4} + \frac{3}{z^4} \right)
     \\
-    \pdv{B_z(z)}{z} &= \frac{\mu mz}{4 \pi} \left(\frac{3 z}{r^{5}} + \frac{3}{r^{5}} - \frac{15 z^{2}}{r^{7}}\right)
+    &= - \frac{3\mu_0m_z}{2\pi z^4}
   \end{align}
-  
+
+  Then the gyration velocity giving a balance in the force given by: 
+
   \begin{align}
-      mg(z) &= \frac{mv_\perp^2}{B(z)} \pdv{}{z}\left( \frac{3z^2m_z}{r^5} - \frac{m_z}{r^3} \right)
+    v^2_\perp &=  2B(z)g(z) \left(\pdv{B_z(z)}{z} \right)^{-1}
+    \intertext{So for our case the balancing velocity becomes}
+    v^2_\perp &\approx 3.99 \times 10^7 \si{\meter \per \second}
   \end{align}
+
+  % \begin{align}
+  %  \pdv{B_z(z)}{z} &= \pdv{}{z}\left( \frac{3z^2m_z}{r^5} - \frac{m_z}{r^3} \right)
+  %   \\
+  %   \pdv{B_z(z)}{z} &= \frac{3 m_{z} \mu_{0} }{4 \pi } \left(\frac{3 z }{r^5} - \frac{5 z^{3}}{r^7}\right)
+  % \end{align}
+  % The gyration velocity where the force is balanced is then given by
+  % \begin{align}
+  %     mg(z) &= \frac{m_zv_\perp^2}{2B(z)}  \frac{3 m_{z} \mu_{0} }{4 \pi } \left(\frac{3 z }{r^5} - \frac{5 z^{3}}{r^7}\right)
+  % \end{align}
 
 \subsection{Results}
 
