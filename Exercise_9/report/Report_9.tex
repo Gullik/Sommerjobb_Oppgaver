@@ -95,7 +95,7 @@
 \author{Gullik Vetvik Killie
 		}
 
-% \renewcommand{\va}{\vec}
+\renewcommand{\va}{\vec}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Actual text starts here
@@ -168,8 +168,20 @@ Test
 \subsection{Results}
 
 
-\appendix
 
+
+\appendix
+\section{Comments}
+  \begin{itemize}
+    \item In the text it's written that the particle should be placed \(\frac{1}{2}\) a gyro radius to the side of magnetic pole. I assume we want to place the guiding center of the particle at the magnetic pole, which would need the particle to be placed \(1\) gyro radius to the side.
+    \item On the exercise 1: It should probably have some part describing what they should do with the solved equations of motions, e.g. plot it and comment on the trajectory of the particle.
+    \item Parenthesis around the magnetic field, equation \(5\).
+    \item In equation \(6\) the equation of motion is listed as 
+    \[m\pdv{\va{v}}{t} = q\va{v} \cross \va{B} - m \va{g}\]
+    , and in equation \(7\) the gravity vector is listed as negative with respect to the direction.
+    One of these should be positive so the gravitational force works the right direction (give a negative \(v_z\)).
+    \item In the hint section the Earths mass has the wrong number, it should be to the power \(24\) instead of \(23\)
+  \end{itemize}
 
 \section{Code}
   \label{sec:code}
