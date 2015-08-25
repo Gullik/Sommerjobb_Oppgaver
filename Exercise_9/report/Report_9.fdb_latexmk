@@ -1,11 +1,11 @@
 # Fdb version 3
-["biber Report_9"] 1439822214 "Report_9.bcf" "Report_9.bbl" "Report_9" 1439979703
-  "Report_9.bcf" 1439979703 90338 95ec96ce82361a63ad30e2392addc113 ""
+["biber Report_9"] 1439822214 "Report_9.bcf" "Report_9.bbl" "Report_9" 1440508417
+  "Report_9.bcf" 1440508417 90338 95ec96ce82361a63ad30e2392addc113 ""
   (generated)
   "Report_9.bbl"
   "Report_9.blg"
-["pdflatex"] 1439979702 "Report_9.tex" "Report_9.pdf" "Report_9" 1439979703
-  "../source/stability.py" 1439979647 3548 629d3e2ef1d26d3acd0eeee6542eb64d ""
+["pdflatex"] 1440508417 "Report_9.tex" "Report_9.pdf" "Report_9" 1440508417
+  "../source/stability.py" 1440508303 3697 13f29855e618f4c58bfa0379280e6585 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -182,12 +182,12 @@
   "/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty" 1304191498 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/share/texmf/tex/latex/xcolor/x11nam.def" 1339578534 9040 c0c860499be99a076792194b1d6525a1 ""
   "/usr/share/texmf/tex/latex/xcolor/xcolor.sty" 1339578534 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
-  "Report_9.aux" 1439979703 1667 16e1a9b62b4a5680f98bdb43fbd72e1e ""
+  "Report_9.aux" 1440508417 1667 16e1a9b62b4a5680f98bdb43fbd72e1e ""
   "Report_9.bbl" 1439820206 466 9b63bd41c34afae085b93d05707d5cc3 "biber Report_9"
-  "Report_9.out" 1439979703 230 00a772b14164ef032ec9a88851b6a3ec ""
-  "Report_9.tex" 1439979702 6278 74a3c1ed0331bcc87ac4636766836aae ""
+  "Report_9.out" 1440508417 230 00a772b14164ef032ec9a88851b6a3ec ""
+  "Report_9.tex" 1440508416 6431 5200efcd6829d91ed6cc1945acd638d0 ""
   (generated)
+  "Report_9.aux"
   "Report_9.out"
   "Report_9.log"
   "Report_9.pdf"
-  "Report_9.aux"

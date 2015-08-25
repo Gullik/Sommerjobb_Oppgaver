@@ -24,13 +24,15 @@ def by(x,y,z,C2):
 def bz(x,y,z,C2):
 	mz = dipMomentz()
 	length = r_length(x,y,z)
-	return C2*((3.*z*(mz*z))*length**-5 - mz*length**-3)
+	return C2*((3.*z*z*mz)*length**-5 - mz*length**-3)
 
 def b_magnitude(x,y,z, C):
 
 	Bx = bx(x,y,z, C)
 	By = by(x,y,z, C)
 	Bz = bz(x,y,z, C)
+
+	print Bz
 
 	return r_length(Bx,By,Bz)
 
@@ -71,9 +73,9 @@ def force(x,y,z, vx,vy,vz, C1, C2, C3, C4):
 	
 	# print r_length(vx,vy,vz)
 	# print r_length(Bx,By,Bz)
-	# print 'Magnetic force:', force_z
+	print 'Magnetic force:', force_z
 	# print 'Graviational force: ', gz( x,y,z , C1)
-	print 'ratio of the forces', force_z/gz( x,y,z , C1)
+	# print 'ratio of the forces', force_z/gz( x,y,z , C1)
 
 	force_x -= gx( x,y,z , C1)
 	force_y -= gy( x,y,z , C1)
@@ -153,17 +155,22 @@ if __name__ == '__main__':
 	#Calculating a velocity that will balance the forces
 	v_perp = np.abs(2*b_magnitude(0,0,z, C2)*gz(0,0,z,C1)/dB_zdz(z,C3))
 
-	print m_e*v_perp*dB_zdz(z,C3)/(2*b_magnitude(0,0,z, C2))
-	print m_e*gz(0,0,z,C1)
+	print 'g Field: ' + str(gz(0,0,z,C1))
+	print 'B Field: ' + str(b_magnitude(0,0,z, C2))
+	print dB_zdz(z,C3)
 
-	x = gyration_radius(v_perp, b_magnitude(0,0,z, C2), m_e, q )
-	y = 0
 
-	vx = v_perp*np.cos(pitch)
-	vy = v_perp*np.sin(pitch)
-	vz = 0
+	# print m_e*v_perp*dB_zdz(z,C3)/(2*b_magnitude(0,0,z, C2))
+	# print m_e*gz(0,0,z,C1)
 
-	euler(force, x, y, z, vx, vy, vz, C1, C2, C3, C4, nSteps, timestep )
+	# x = gyration_radius(v_perp, b_magnitude(0,0,z, C2), m_e, q )
+	# y = 0
 
-	plt.show()
+	# vx = v_perp*np.cos(pitch)
+	# vy = v_perp*np.sin(pitch)
+	# vz = 0
+
+	# euler(force, x, y, z, vx, vy, vz, C1, C2, C3, C4, nSteps, timestep )
+
+	# plt.show()
 
