@@ -130,10 +130,15 @@ Test
     \\
     mg(z) &= \frac{mv_\perp^2}{2B(z)} \pdv{B_z(z)}{z}
   \end{align}
-  \noindent If we let the magnetic field be approximated as in the earlier exercises as
+  \noindent If we let the magnetic field be approximated as in the previous exercises,
 
   \begin{align}
     \va{B}(\va{r}) &= \frac{\mu_0}{4\pi}\left( \frac{3\va{r}(\va{r}\cdot\va{m}  )}{r^5} - \frac{\va{m}}{r^3} \right)
+    \\
+    \va{g}(\va{r}) &= - \gamma \frac{M_e}{r^3}
+      \begin{pmatrix}
+        x \\ y \\ z
+      \end{pmatrix}
   \end{align}
 
   \noindent if we then consider the case where the guiding center of the particle is \(200 \si{\kilo\meter}\) straight above the magnetic north, so the guiding center coordinates is
@@ -147,14 +152,16 @@ Test
     &= - \frac{3\mu_0m_z}{2\pi z^4}
   \end{align}
 
-  Then the gyration velocity giving a balance in the force given by: 
+  Then the gyration velocity giving a balance in the force given by:
 
   \begin{align}
     v^2_\perp &=  2B(z)g(z) \left(\pdv{B_z(z)}{z} \right)^{-1}
-    \intertext{So for our case the inital balancing velocity becomes, with a altitude of \(200 \si{km}\)}
-    v^2_\perp &= 2 \left[\frac{\mu_0}{4\pi}\left( \frac{3z^2m_z}{z^5} - \frac{m_z}{z^3} \right)\right]
-    \\
-    v^2_\perp &\approx 3.99 \times 10^7 \si{\meter \per \second}
+  \end{align}
+  Assuming that the particle is directly above the magnetic north pole, so the radius is given by the \(z\)-coordinate.
+  \begin{align}
+    \begin{cases}
+      B(z) &= \frac{\mu_0}{4\pi}\left( \frac{3z^2m_z}{z^5} - \frac{m_z}{z^3} \right) =  \frac{\mu_0 m_z}{2\pi z^3} \approx \frac{4\pi \times 10^{-7} \times 7.94 \times 10^{22}}{2\pi\times (6.571\times 10^6 \si{m})^3} \approx 5.597\times 10 ^{-5} \si{\tesla}
+    \end{cases}
   \end{align}
 
   % \begin{align}
