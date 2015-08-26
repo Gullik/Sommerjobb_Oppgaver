@@ -32,7 +32,7 @@ def b_magnitude(x,y,z, C):
 	By = by(x,y,z, C)
 	Bz = bz(x,y,z, C)
 
-	print Bz
+	# print Bz
 
 	return r_length(Bx,By,Bz)
 
@@ -67,19 +67,26 @@ def force(x,y,z, vx,vy,vz, C1, C2, C3, C4):
 	# print Bx
 	# print By
 
+	# force_z = 0
+
+
 	force_x = crossx(vx,vy,vz, Bx, By,Bz)*C4
 	force_y = crossy(vx,vy,vz, Bx, By,Bz)*C4
 	force_z = crossz(vx,vy,vz, Bx, By,Bz)*C4
 	
+	# print force_z
+
 	# print r_length(vx,vy,vz)
 	# print r_length(Bx,By,Bz)
-	print 'Magnetic force:', force_z
+	# print 'Magnetic force:', force_z
 	# print 'Graviational force: ', gz( x,y,z , C1)
 	# print 'ratio of the forces', force_z/gz( x,y,z , C1)
 
 	force_x -= gx( x,y,z , C1)
 	force_y -= gy( x,y,z , C1)
 	force_z -= gz( x,y,z , C1)
+
+	# print force_z
 
 	return force_x, force_y, force_z
 
@@ -90,11 +97,13 @@ def gyration_radius(v_perp, B, m, q):
 def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, C4, nSteps, timestep ):
 	
 	positions = np.zeros((nSteps,3))
+	vert_force = np.ones(nSteps)
+
 
 	i = 0
 	while i < nSteps:
 
-		positions[i,:] = [x,y,z]
+
 		force_x, force_y, force_z = force( x,y,z, vx,vy,vz, C1, C2, C3, C4)
 
 		#Update positions
@@ -107,13 +116,16 @@ def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, C4, nSteps, timestep ):
 		vy += timestep*force_y 
 		vz += timestep*force_z
 
+		positions[i,:] = [x,y,z]
+		vert_force[i] = force_z
+
 		i += 1
 
 	#Plots
 	time = np.linspace(0, nSteps*timestep, nSteps)
 
-	print positions[0,2]
-	print positions[-1,2]
+	# print positions[0,2]
+	# print positions[-1,2]
 	
 	#3D plot of the trajectory
 	fig = plt.figure()
@@ -129,6 +141,11 @@ def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, C4, nSteps, timestep ):
 	fig.savefig('../figures/3Dplot.eps')
 
 
+	fig = plt.figure()
+	ax = fig.add_subplot(111)
+	plt.plot(time,vert_force)
+
+
 	return 0 #positions
 
 if __name__ == '__main__':
@@ -141,7 +158,7 @@ if __name__ == '__main__':
 	gamma 	= 6.674E-11			#Nm^2/kg^2 
 	pitch	= np.deg2rad(90)	#radian
 
-	timestep 	= 1.E-11
+	timestep 	= 1.E-12
 	nSteps 		= np.power(10,int(sys.argv[1]))
 
 	C1 = gamma*Me
@@ -155,22 +172,27 @@ if __name__ == '__main__':
 	#Calculating a velocity that will balance the forces
 	v_perp = np.abs(2*b_magnitude(0,0,z, C2)*gz(0,0,z,C1)/dB_zdz(z,C3))
 
-	print 'g Field: ' + str(gz(0,0,z,C1))
-	print 'B Field: ' + str(b_magnitude(0,0,z, C2))
-	print dB_zdz(z,C3)
+	v_perp = np.sqrt(v_perp)
+
+	# print 'g Field: ' + str(gz(0,0,z,C1))
+	# print 'B Field: ' + str(b_magnitude(0,0,z, C2))
+	# print dB_zdz(z,C3)
+	# print C3
 
 
 	# print m_e*v_perp*dB_zdz(z,C3)/(2*b_magnitude(0,0,z, C2))
 	# print m_e*gz(0,0,z,C1)
 
-	# x = gyration_radius(v_perp, b_magnitude(0,0,z, C2), m_e, q )
-	# y = 0
+	x = gyration_radius(v_perp, b_magnitude(0,0,z, C2), m_e, q )
+	y = 0
 
-	# vx = v_perp*np.cos(pitch)
-	# vy = v_perp*np.sin(pitch)
-	# vz = 0
+	print v_perp
 
-	# euler(force, x, y, z, vx, vy, vz, C1, C2, C3, C4, nSteps, timestep )
+	vx = v_perp*np.cos(pitch)
+	vy = v_perp*np.sin(pitch)
+	vz = int(sys.argv[2])
 
-	# plt.show()
+	euler(force, x, y, z, vx, vy, vz, C1, C2, C3, C4, nSteps, timestep )
+
+	plt.show()
 

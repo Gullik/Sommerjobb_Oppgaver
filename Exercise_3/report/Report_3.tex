@@ -188,16 +188,16 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
 
 \subsection{Results}
     
-    \begin{figure} 
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/energyEuler_simple8-3}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/energyVerlet_simple8-3}
-      \end{subfigure}
-      \caption{The parallel, perpendicular and total energy (not multiplied with \(m/2\)) for oxygen ions in a simplified magnetic field, \(\va{B} = (0,0,0.25) nT \) z-axis running for \(10^7\) steps with \(10^{-6}\) s timesteps. Figure a) is done with Euler's method and Figure b) is done with Velocity Verlet}
-      \label{fig:energy_simpleB}
-    \end{figure}
+    % \begin{figure} 
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/energyEuler_simple8-3}
+    %   \end{subfigure}
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/energyVerlet_simple8-3}
+    %   \end{subfigure}
+    %   \caption{The parallel, perpendicular and total energy (not multiplied with \(m/2\)) for oxygen ions in a simplified magnetic field, \(\va{B} = (0,0,0.25) nT \) z-axis running for \(10^7\) steps with \(10^{-6}\) s timesteps. Figure a) is done with Euler's method and Figure b) is done with Velocity Verlet}
+    %   \label{fig:energy_simpleB}
+    % \end{figure}
     The energy results didn't really pan out well, in the \cref{fig:energy_simpleB} the perpendicular, parallel and total energy is shown for \(10^8\) steps with a timestep of \(10^{-3}\)s which should cover \(1000\) seconds, for both Euler's method and Velocity Verlet. The magnetic field is a simplified magnetic field with similar to the initial field given in the earths dipole problem \(\va{B} = (0,0,0.25) \si{\nano\tesla}\). Unfortunately there is a significant energy drift with both the methods and decreasing the timestep further makes it hard to get a long enough timeseries to look at the interesting characteristiscs happening as the particle moves in the dipole.  The Velocity Verlet has a significantly lower energy drift, but we thought it would be a symplectic integrator and conserve the energy. (Is it not symplectic when the acceleration is dependent on the velocity as well?) The energy drift is increasing with time, which would cause it to be even bigger with a longer time series.
     \\ \\
 
@@ -205,42 +205,44 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
 
 
     We ran a simulation with a timestep of \(10^{-3}\) s for \(10^9\) steps, (\(100000 s\)), and the energy and trajectory is shown in \cref{fig:v_0_prop} for the Verlet method. As can be seen in the total energy increasing exponentially, and the trajectory deforming, the timestep is to big to accurate capture the gyrating motion. Using the Euler method it blew up completely.
-    \begin{figure}[ht]
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_9_3_Verletenergy}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_9_3_Verlet3Dplot}
-      \end{subfigure}
-      \caption{The energy and trajectory for an oxygen ion for with a \(\Delta t = 10^-3\), starting at \(\va{v}_0 = (300, 0, 300) \si{ms^{-1} }\).}
-      \label{fig:v_0_prop}
-    \end{figure}
+    % \begin{figure}[ht]
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/ion_9_3_Verletenergy}
+    %   \end{subfigure}
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/ion_9_3_Verlet3Dplot}
+    %   \end{subfigure}
+    %   \caption{The energy and trajectory for an oxygen ion for with a \(\Delta t = 10^-3\), starting at \(\va{v}_0 = (300, 0, 300) \si{ms^{-1} }\).}
+    %   \label{fig:v_0_prop}
+    % \end{figure}
 
     By increasing the initial velocities to \(\va{v}_0 = (300000, 0, 300000) \si{\meter \per \second}\) instead of \(\va{v}_0 = (300, 0, 300) \si{\meter \per \second}\) the time needed for the effects of the dipole to show itself were shorter so we could decrease the timestep to \(10^{-5} \si{s}\) and the energy drift of the system were small enough to mostly ignore. The \cref{fig:high_vel} show an oxygen ions position, trajectory and energy during \(10^8\times 10^{-5} = 10000 \) seconds. In both the trajectory and the plot of the z-position we can clearly see that the particle is bouncing back and forth between then poles. There is also a drift in the eastward direction that can be seen most easily in the plot of the trajectory, but can also be seen as the x-coordinate is gradually decreasing and the y-coordinate is increasing.     When the parallel energy is increasing, the perpendicular energy is decreasing keeping the total energy roughly constant.
 
 
     \begin{figure}
       \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Eulerxyz}
+        % \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Eulerxyz}
+        \includegraphics[width = \textwidth]{../source/Figures/xyzVerlet}
       \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verletxyz}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Eulerenergy}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verletenergy}
-      \end{subfigure} 
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Euler3Dplot}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verlet3Dplot}
-      \end{subfigure}
-    \caption{This shows the positions, the energy and the trajectory of an oxygen ion trapped in earths magnetic dipole. Th figures on the left uses the Verlet Euler method, and the right figures uses the Velocity Verlet method. \(\Delta t = 10^{-5}\) and \(\va{v}_0 = (300000, 0 , 300000) m/s \).}
-    \label{fig:high_vel}
     \end{figure}
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verletxyz}
+    %   \end{subfigure}
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Eulerenergy}
+    %   \end{subfigure}
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verletenergy}
+    %   \end{subfigure} 
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Euler3Dplot}
+    %   \end{subfigure}
+    %   \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{../source/figures/ion_8_5_Verlet3Dplot}
+    %   \end{subfigure}
+    % \caption{This shows the positions, the energy and the trajectory of an oxygen ion trapped in earths magnetic dipole. Th figures on the left uses the Verlet Euler method, and the right figures uses the Velocity Verlet method. \(\Delta t = 10^{-5}\) and \(\va{v}_0 = (300000, 0 , 300000) m/s \).}
+    % \label{fig:high_vel}
+    % \end{figure}
 
 
     \subsubsection{Gyro period}
