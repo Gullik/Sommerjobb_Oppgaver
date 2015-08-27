@@ -1,0 +1,140 @@
+% arara: pdflatex
+% !arara: biber
+% !arara: pdflatex
+% How to run: 
+% 1) pdflatex "filename".tex
+% 2) biber "filename"
+% 3) pdflatex "filename".tex
+% 4) pdflatex "filename".tex
+
+
+\documentclass[x11names]{article}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{shadow}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage{url}
+%For use in pictures
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{wrapfig}
+
+\usepackage[l2tabu]{nag} %NAgs when using bad practices
+
+
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage[font={small,it}]{caption}
+\usepackage[margin=0.7in]{geometry} %Sets the margins in the document
+\usepackage{siunitx}    %Allows use of SI units macros
+
+%Defines calculator way to write powers of ten
+\sisetup{output-exponent-marker=\textsc{e}}
+
+
+% Change numbering and some commands
+\renewcommand\thesection{Exercise \arabic{section}}
+\renewcommand\thesubsection{\Roman{section}.\alph{subsection}}
+
+%% references
+\usepackage[style=authoryear,
+            bibstyle=authoryear,
+            backend=biber,
+            % refsection=chapter,
+            maxbibnames=99,
+            maxnames=2,
+            firstinits=true,
+            uniquename=init,
+            natbib=true,
+            dashed=false]{biblatex}
+
+\addbibresource{bibliography.bib}
+
+\usepackage[capitalize]{cleveref}
+
+\setcounter{tocdepth}{2}
+
+\lstset{language=c++}
+\lstset{alsolanguage=[90]Fortran}
+\lstset{basicstyle=\small}
+\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+
+
+\definecolor{keywords}{RGB}{255,0,90}
+      \definecolor{comments}{RGB}{0,0,113}
+      \definecolor{red}{RGB}{160,0,0}
+      \definecolor{green}{RGB}{0,150,0}
+       
+      \lstset{language=Python, 
+              basicstyle=\ttfamily\small, 
+              keywordstyle=\color{keywords},
+              commentstyle=\color{comments},
+              stringstyle=\color{red},
+              showstringspaces=false,
+              identifierstyle=\color{green}
+              }
+
+
+
+\title{ Status update \\ Sommerjobb Numeriske Plasmaoppgaver \\ \today}
+\author{Gullik Vetvik Killie
+		}
+
+\renewcommand{\va}{\vec}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Actual text starts here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle
+\section{Single particle motion}
+Done
+
+\section{Single particle motion II}
+Done
+
+\section{Single particle motion- dipole field}
+Still need to implement a working RK4 solver
+
+\section{Wave equation}
+Still not good numbers
+
+\section{ Ionospheric convection - potential}
+Done (mostly)
+
+\section{ Ionospheric convection - ExB drift }
+  Still too low drift speeds
+  \\ Note: Represent data better
+
+\section{ Field aligned currents}
+  Note make new version, represent data better
+  \\ Note: Represent data better
+
+\section{Dispersion Relation}
+  Done ish, works with easy dispersion relation.
+  Not correct with a electrostatic ion waves dispersion relation
+
+\section{Stability analysis}
+  Need to write up report properly
+  
+
+
+
+
+\end{document}

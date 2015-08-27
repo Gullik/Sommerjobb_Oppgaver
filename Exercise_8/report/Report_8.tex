@@ -117,11 +117,12 @@
       & + \frac{\Omega_{ci}}{\omega}\tan^2\theta \left[  \frac{1}{ \frac{\omega}{\Omega_{ce}}\tan^2 \theta - \frac{\Omega_{ce}}{\omega} \left( 1 - \frac{\omega^2}{\Omega_{ce}} \right) }  
                                                         -\frac{1}{ \frac{\omega}{\Omega_{ci}}\tan^2 \theta - \frac{\Omega_{ci}}{\omega} \left( 1 - \frac{\omega^2}{\Omega_{ci}} \right) } \right]
     \end{split}
+    \label{eq:dispersion_relation}
   \end{align}
 
   where \(k\), \(\omega\), \(c_s\), \(\theta\), \(\Omega_{ce}\) and \(\Omega_{ci}\) is the wave-vector, frequency, angle relative to magnetic field, electron gyro frequency and ion frequency respectively. \(\epsilon\) describes how the energy is dispersing from the wave, so the wave will stabilize at a frequency where it is not gaining, or losing, energy. So we will search for use the bisection method, to find the points, where \(\epsilon(\omega,k) = 0\), and the wave will propagate.
 
-  The bisection method is an easy method that always works, but it has a slow convergence ratio compared to other methods. For this case the computational cost is not a problem. For the bisection method to work we first need an interval, in which the function is crossing \(0\). 
+  The bisection method is an easy method that always works, but it has a slow convergence ratio compared to other methods. For this case the computational cost is not a problem. For the bisection method to work we first need an interval, in which the function is crossing \(0\). \cref{fig:bisection} shows the iterative division of the interval the root is guessed to be inside employed by the bisection method.
   \begin{enumerate}
     \item Divide interval in two
     \item Let interval which is containing the intersection be the new interval
@@ -130,24 +131,34 @@
 
   \begin{figure}
   \centering
-    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_0}
-    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_1}
-    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_2}
-    \includegraphics[width = 0.45\textwidth]{../figures/bisection_100_3}
-    \caption{Figures showing how the bisection method is searching for where the root is for a given function \(\epsilon\). It starts with a guess that the root is in \([0,1000]\), then it divides that interval into the two intervals \([0,500)\) and \([500,1000]\), depicted in the uppermost left figure, and then it decides which interval the root lies on (colored green in the figure). Then it divides that interval in two again, (uppermost right figure) and repeats.}
+    \includegraphics[width = 0.45\textwidth]{figures/bisection_100_0}
+    \includegraphics[width = 0.45\textwidth]{figures/bisection_100_1}
+    \includegraphics[width = 0.45\textwidth]{figures/bisection_100_2}
+    \includegraphics[width = 0.45\textwidth]{figures/bisection_100_3}
+    \caption{Figures showing how the bisection method is searching for where the root is for a given function \(\epsilon\). It starts with a guess that the root is in \([0,5\times 10^5]\), then it divides that interval into the two intervals \([0,2.5\times 10^5)\) and \([2.5\times 10^5, 5\times 10^5]\), depicted in the uppermost left figure, and then it decides which interval the root lies on (colored green in the figure). Then it divides that interval in two again, (uppermost right figure) and repeats.}
+    \label{fig:bisection}
   \end{figure}
 
 \subsection{Results}
-  To test the root finding algorithm we also used the dispersion relation, given in \cref{sec:elec_plasma}, and the dispersion diagram of it is depicted in \cref{fig:simple_diagram}.
+  To test the root finding algorithm we also used the dispersion relation, given in \cref{sec:elec_plasma}, and the dispersion diagram of it is depicted in \cref{fig:simple_diagram}. 
 
   \begin{figure}
   \centering
-    \includegraphics[width = 0.60 \textwidth]{../figures/simple_dispersion}
+    \includegraphics[width = 0.60 \textwidth]{figures/simple_dispersion}
     \caption{We see at large wavelengths the dispersion relation corresponds to a linear relation between the frequency and wave-vector.}
     \label{fig:simple_diagram}
   \end{figure}
 
 
+  The dispersion relation for the ion acoustic waves, described in \cref{eq:dispersion_relation}, is shown in \cref{fig:ionAcousticDispers}. The second term, \(\frac{k^2c^2}{\omega^2}\), is dominating the equation, so the dispersion relation is almost linear for the wavenumber domain.
+  \begin{figure}
+  \centering
+    \includegraphics[width = 0.60 \textwidth]{figures/ionAcousticWaves}
+    \caption{This figure shows the dispersion relation for the ion acoustic waves.}
+    \label{fig:ionAcousticDispers}
+  \end{figure}
+
+\newpage
 \appendix
 \section{Electron plasma oscillations in unmagnetized plasma}
   \label{sec:elec_plasma}
@@ -203,7 +214,7 @@
     \pdv{}{t}\left( \frac{\tilde{p}_e}{p_0} + \frac{5}{3} \frac{\tilde{n_e}}{n_0} \right) &= 0
   \end{align}
 
-  \noindent Assuming plane wave solutions and some algebra, we arrive at the compressional dispersal relation 
+  \noindent Assuming plane wave solutions and some algebra, we arrive at a compressional dispersal relation 
 
   \begin{align}
     \epsilon(\omega, k) = 1 + \frac{5}{3} \lambda_{se}^2k ^2 -  \frac{\omega^2}{\omega_{pe}^2} 
@@ -218,8 +229,25 @@
     \begin{align}
       \epsilon(\omega, k) &= 1 + \frac{5}{3}k^2 - \frac{\omega}{\omega_{pe}}
     \end{align}
-  \end{itemize}
+    \item Is it necessary to look at the graph and guess an approximate interval? It's very fast to just do 50 iterations of the root finding algorithm which should give plenty of accuracy in the answer. I can see a point to confirm that it passes the x-axis.
+    \item I can't get the third term of the dispersion relation to actually influence it, the ratio between them is typically of the \(10^15\) order. The relevant code follows:
+      \begin{lstlisting}
+      def epsilon(omega, k):
+      cs  = 1000              #m/s    Speed of sound
+      O_i = 300               #1/s    Ion gyrating frequency
+      O_e = 8.E6              #1/s    Electron gyrating frequency
+      theta = np.deg2rad(10)  #rad    angle between propagation and B
+      tan2theta = np.tan(theta)**2
 
+
+      return 1 - (k*k*cs*cs)/(omega*omega) + O_i*tan2theta/omega*(
+              1/( omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) -
+              1/( omega*tan2theta/O_i  -  O_i/omega *(1 - omega*omega/O_i) )  )
+      \end{lstlisting}
+
+
+
+  \end{itemize}
 
 
 \section{Code}

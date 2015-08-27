@@ -1,12 +1,11 @@
 # Fdb version 3
-["biber Report_3"] 1440593237 "Report_3.bcf" "Report_3.bbl" "Report_3" 1440593237
-  "Report_3.bcf" 1440593121 90338 95ec96ce82361a63ad30e2392addc113 ""
+["biber Report_3"] 1440663275 "Report_3.bcf" "Report_3.bbl" "Report_3" 1440663276
+  "Report_3.bcf" 1440663276 90338 95ec96ce82361a63ad30e2392addc113 ""
   (generated)
   "Report_3.blg"
   "Report_3.bbl"
-["pdflatex"] 1440593120 "Report_3.tex" "Report_3.pdf" "Report_3" 1440593237
-  "../source/Figures/xyzVerlet" 0 -1 0 ""
-  "../source/dipoleField_rewritten.py" 1440582171 8003 bcd3a789d8649283dd3b3e6ae51dd915 ""
+["pdflatex"] 1440663275 "Report_3.tex" "Report_3.pdf" "Report_3" 1440663276
+  "../source/dipoleField_rewritten.py" 1440658579 8003 bcd3a789d8649283dd3b3e6ae51dd915 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -178,17 +177,18 @@
   "/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty" 1304191498 325 2bcd023400636339210573e2b3ee298b ""
   "/usr/share/texmf/tex/latex/xcolor/x11nam.def" 1339578534 9040 c0c860499be99a076792194b1d6525a1 ""
   "/usr/share/texmf/tex/latex/xcolor/xcolor.sty" 1339578534 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
-  "Report_3.aux" 1440593121 2437 0f7290990152c93a3fab562b5f84a6d9 ""
+  "Report_3.aux" 1440663276 2437 0f7290990152c93a3fab562b5f84a6d9 ""
   "Report_3.bbl" 0 -1 0 "biber Report_3"
-  "Report_3.out" 1440593121 253 690ddc7f82f72c26d2a1bf5039cc0602 ""
-  "Report_3.tex" 1440593222 16027 42dddce21b2d1fbd1d8a1cb530cdfb1a ""
+  "Report_3.out" 1440663276 253 690ddc7f82f72c26d2a1bf5039cc0602 ""
+  "Report_3.tex" 1440663275 16021 287fb912cc412cab1a982035e8833db0 ""
   (generated)
-  "figures/xyzVerlet-eps-converted-to.pdf"
-  "ion_8_5_Euler3Dplot-eps-converted-to.pdf"
   "Report_3.log"
+  "figures/xyzVerlet-eps-converted-to.pdf"
   "Report_3.out"
+  "../figures/xyzVerlet-eps-converted-to.pdf"
   "Report_3.aux"
+  "energyEuler-eps-converted-to.pdf"
+  "../source/test/xyzVerlet-eps-converted-to.pdf"
+  "ion_8_5_Euler3Dplot-eps-converted-to.pdf"
   "Report_3.pdf"
   "xyzVerlet-eps-converted-to.pdf"
-  "../source/test/xyzVerlet-eps-converted-to.pdf"
-  "../figures/xyzVerlet-eps-converted-to.pdf"

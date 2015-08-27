@@ -32,7 +32,6 @@ def b_magnitude(x,y,z, C):
 	By = by(x,y,z, C)
 	Bz = bz(x,y,z, C)
 
-	# print Bz
 
 	return r_length(Bx,By,Bz)
 
@@ -64,29 +63,14 @@ def force(x,y,z, vx,vy,vz, C1, C2, C3, C4):
 	By = by( x,y,z , C2)
 	Bz = bz( x,y,z , C2)
 
-	# print Bx
-	# print By
-
-	# force_z = 0
-
-
 	force_x = crossx(vx,vy,vz, Bx, By,Bz)*C4
 	force_y = crossy(vx,vy,vz, Bx, By,Bz)*C4
 	force_z = crossz(vx,vy,vz, Bx, By,Bz)*C4
 	
-	# print force_z
-
-	# print r_length(vx,vy,vz)
-	# print r_length(Bx,By,Bz)
-	# print 'Magnetic force:', force_z
-	# print 'Graviational force: ', gz( x,y,z , C1)
-	# print 'ratio of the forces', force_z/gz( x,y,z , C1)
 
 	force_x -= gx( x,y,z , C1)
 	force_y -= gy( x,y,z , C1)
 	force_z -= gz( x,y,z , C1)
-
-	# print force_z
 
 	return force_x, force_y, force_z
 
@@ -99,10 +83,8 @@ def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, C4, nSteps, timestep ):
 	positions = np.zeros((nSteps,3))
 	vert_force = np.ones(nSteps)
 
-
 	i = 0
 	while i < nSteps:
-
 
 		force_x, force_y, force_z = force( x,y,z, vx,vy,vz, C1, C2, C3, C4)
 
@@ -124,9 +106,6 @@ def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, C4, nSteps, timestep ):
 	#Plots
 	time = np.linspace(0, nSteps*timestep, nSteps)
 
-	# print positions[0,2]
-	# print positions[-1,2]
-	
 	#3D plot of the trajectory
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection='3d')
@@ -136,7 +115,7 @@ def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, C4, nSteps, timestep ):
 	ax.set_ylabel('y [m]')
 	ax.set_zlabel('z [m]')
 
-	# ax.set_aspect('equal', 'datalim')
+	ax.set_aspect('equal', 'datalim')
 
 	fig.savefig('../figures/3Dplot.eps')
 
@@ -176,7 +155,7 @@ if __name__ == '__main__':
 
 	# print 'g Field: ' + str(gz(0,0,z,C1))
 	# print 'B Field: ' + str(b_magnitude(0,0,z, C2))
-	# print dB_zdz(z,C3)
+	print dB_zdz(z,C3)
 	# print C3
 
 
@@ -186,7 +165,7 @@ if __name__ == '__main__':
 	x = gyration_radius(v_perp, b_magnitude(0,0,z, C2), m_e, q )
 	y = 0
 
-	print v_perp
+	# print v_perp
 
 	vx = v_perp*np.cos(pitch)
 	vy = v_perp*np.sin(pitch)

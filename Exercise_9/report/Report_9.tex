@@ -104,7 +104,6 @@
 
 
 \maketitle
-Test
 
 \section{}
 
@@ -157,16 +156,19 @@ Test
   \begin{align}
     v^2_\perp &=  2B(z)g(z) \left(\pdv{B_z(z)}{z} \right)^{-1}
   \end{align}
-  Assuming that the particle is directly above the magnetic north pole, so the radius is given by the \(z\)-coordinate.
-  \begin{align}
-    \begin{cases}
+  Assuming that the particle is directly above the magnetic north pole, so the radius is given by the \(z\)-coordinate, the 3 factors become:
+   \begin{align}
+    \begin{split}
       B(z) &= \frac{\mu_0}{4\pi}\left( \frac{3z^2m_z}{z^5} - \frac{m_z}{z^3} \right) =  \frac{\mu_0 m_z}{2\pi z^3} \approx \frac{4\pi \times 10^{-7} \times 7.94 \times 10^{22}}{2\pi\times (6.571\times 10^6 \si{m})^3} \approx 5.597\times 10 ^{-5} \si{\tesla}
       \\
-      g(z) &= - \gamma \frac{M_e}{z^3} z = -\frac{\gamma M_e}{z^2} \approx - \frac{6.7 \times 10^{-11} \times 5.9 \times 10^{24}}{(6.571\times 10^6 )^2} \approx -9.1
+      g(z) &= - \gamma \frac{M_e}{z^3} z = -\frac{\gamma M_e}{z^2} \approx - \frac{6.7 \times 10^{-11} \times 5.9 \times 10^{24}}{(6.571\times 10^6 )^2} \si{\meter \per \second^2} \approx -9.1
       \\
-      \pdv{B_z(z)}{z} &= - \frac{3\mu_0m_z}{2\pi z^4} \approx \frac{6 \times 10^{-7}\times 7.94\times 10^{22}}{(6.571\times 10^6 )^4 } 
-    \end{cases}
+      \pdv{B_z(z)}{z} &= - \frac{3\mu_0m_z}{2\pi z^4} \approx -\frac{6 \times 10^{-7}\times 7.94\times 10^{22}}{(6.571\times 10^6 )^4 } \approx 2.55\times 10^{-11}
+    \end{split}
+    \intertext{and the total initial perpendicular velocity will be}
+    v^2_\perp &= 
   \end{align}
+  
 
   % \begin{align}
   %  \pdv{B_z(z)}{z} &= \pdv{}{z}\left( \frac{3z^2m_z}{r^5} - \frac{m_z}{r^3} \right)
@@ -184,6 +186,9 @@ Test
 
 
 \appendix
+\section{Rough estimate of the balancing velocity}
+ 
+
 \section{Comments}
   \begin{itemize}
     \item In the text it's written that the particle should be placed \(\frac{1}{2}\) a gyro radius to the side of magnetic pole. I assume we want to place the guiding center of the particle at the magnetic pole, which would need the particle to be placed \(1\) gyro radius to the side.
