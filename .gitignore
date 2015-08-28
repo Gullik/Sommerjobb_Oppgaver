@@ -28,3 +28,4 @@ outfiles/
 *.xml
 *.latexmk
 *.txt
+*fdb_latexmk

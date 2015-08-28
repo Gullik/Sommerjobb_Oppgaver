@@ -9,21 +9,6 @@ def epsilon(omega, k):
 	theta = np.deg2rad(10)	#rad 		angle between propagation and B
 	tan2theta = np.tan(theta)**2
 
-	# print 'Second term: ' + str(np.min((k*k*cs*cs)/(omega*omega)))
-
-	# print 'Third term: ' + str (O_i*tan2theta/omega*(
-	# 				1/(	omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) -
-	# 				1/( omega*tan2theta/O_i  -  O_i/omega *(1 - omega*omega/O_i) )  ) )
-
-	# print str(O_i*tan2theta/omega*(
-	# 				1/(	omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) -
-	# 				1/( omega*tan2theta/O_i  -  O_i/omega *(1 - omega*omega/O_i) )  ) /
-	# 				np.min((k*k*cs*cs)/(omega*omega)))
-
-	# print 'Second term: ' + str( 1/(	omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) )
-
-	# print 'Third term: ' + str( 1/( omega*tan2theta/O_i  -  O_i/omega *(1 - omega*omega/O_i) ) )
-
 
 	return 1 - (k*k*cs*cs)/(omega*omega) + O_i*tan2theta/omega*(
 					1/(	omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) -
@@ -66,19 +51,20 @@ def bisection(function, k, xmin, xmax, iterations):
 			xmax = xmid
 		dx *= 0.5
 
+		# # print function(xx, k)
+
 		# plt.figure()
 		# plt.plot(xx, function(xx, k), label = '$\epsilon(\omega,k)$')
 		# plt.grid()
 		# plt.axvspan(xmin, xmax, facecolor='g', alpha=0.2, label = 'root interval')
 		# plt.axhline( y = 0, color = 'black')
-		# plt.axvline( x = (xmax + xmin)*0.5, color = 'black' )
+		# plt.axvline( x = (xmax + xmin)*0.5, color = 'red', lw = 2, label = 'root guess')
+		# plt.ylim([-20, 5])
 		# plt.legend()
 		# plt.xlabel('$\omega$')
 		# plt.ylabel('$\epsilon$')
-		# plt.savefig('../figures/bisection_' + str(k) + '_' + str(i) + '.eps')
+		# plt.savefig('../report/figures/bisection_' + str(k) + '_' + str(i) + '.eps')
 		# plt.show()
-
-
 
 	plt.close('all')
 	
@@ -91,11 +77,12 @@ if __name__ == '__main__':
 	# xmax =  np.power(10,int(sys.argv[2]))
 	# xmin = -1.E3
 	xmin =  0.00001
-	xmax =  np.power(10,6)
+	# xmin = float( pow(10,4))
+	xmax = float( pow(10,6))
 
 	kk = [1, 10, 200, 300, 400, 500, 600, 700, 800, 900, 999]
 
-	# kk = np.arange(0,3, 0.1)
+	# kk = np.arange(0.1,3, 0.1)
 	# kk = [100]
 	# kk = [1, 2, 3 , 4, 5, 10, 20, 30 ,50]#, 10000, 1000000]
 	# kk[0] = 1
@@ -106,7 +93,7 @@ if __name__ == '__main__':
 		iterations = 50
 		print 'Finding root with k = ' + str(k)
 
-		omega = np.arange(0.0001,1.E6, 10)
+		omega = np.arange(1,1.E6, 10)
 
 		fig = plt.figure()
 		ax = fig.add_subplot(111)
@@ -116,29 +103,47 @@ if __name__ == '__main__':
 		plt.axhline( y = 0, color = 'black')
 		plt.grid()
 
-		plt.show()
+		# plt.show()
 
-		xmin = float( pow(10, int(raw_input("xmin: "))) )
-		xmax = float( pow(10, int(raw_input("xmax: "))) )
+		# xmin = float( pow(10, int(raw_input("xmin: "))) )
+		# xmax = float( pow(10, int(raw_input("xmax: "))) )
+		# xmin =  float( pow(10,4))
+		# xmax =  float( pow(10,6) )
 
 		print 'Root is estimated to be in the interval: (' + str(xmin) + ',' + str(xmax) + ')'
 
-		# roots[i], domega = bisection(epsilon, k, xmin, xmax, iterations)
+		roots[i], domega = bisection(epsilon, k, xmin, xmax, iterations)
 
 		print roots[i]
 		i += 1
 
 		# plt.show()
 
-	plt.close('all')
-	plt.figure()
-	plt.plot(kk, roots)
-	plt.xlim([0, kk[-1]])
-	plt.xlabel('$k/\lambda_{se}$')
-	plt.ylabel('$ \omega/\omega_{pe} $')
-	plt.title('Dispersion diagram for electron plasma waves')
-	plt.ylim([0, roots[-1]])
-	# plt.savefig('../figures/simple_dispersion.eps')
-	plt.savefig('../figures/ionAcousticWaves')
-	plt.show()
+	# plt.close('all')
+	# plt.figure()
+	# plt.plot(kk, roots)
+	# plt.xlim([0, kk[-1]])
+	# plt.xlabel('$k$')
+	# plt.ylabel('$\omega $')
+	# plt.title('Dispersion diagram for electrostatic ion waves')
+	# plt.ylim([0, roots[-1]])
+	# # plt.savefig('../report/figures/simple_dispersion.eps')
+	# plt.savefig('../report/figures/ionAcousticWaves')
+	# plt.show()
 
+	# print 'Second term: ' + str(np.min((k*k*cs*cs)/(omega*omega)))
+
+	# print 'Third term: ' + str(O_i*tan2theta/omega)
+
+	# print 'Third term: ' + str (O_i*tan2theta/omega*(
+	# 				1/(	omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) -
+	# 				1/( omega*tan2theta/O_i  -  O_i/omega *(1 - omega*omega/O_i) )  ) )
+
+	# print str(O_i*tan2theta/omega*(
+	# 				1/(	omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) -
+	# 				1/( omega*tan2theta/O_i  -  O_i/omega *(1 - omega*omega/O_i) )  ) /
+	# 				np.min((k*k*cs*cs)/(omega*omega)))
+
+	# print 'Second term: ' + str( 1/(	omega*tan2theta/O_e  -  O_e/omega *(1 - omega*omega/O_e) ) )
+
+	# print 'Third term: ' + str( 1/( omega*tan2theta/O_i  -  O_i/omega *(1 - omega*omega/O_i) ) )

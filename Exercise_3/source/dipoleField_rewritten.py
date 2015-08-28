@@ -178,6 +178,9 @@ def dipoleField_rewritten(particle, nSteps, stepsize, method):
 
 	return
 
+def RK4():
+	return
+
 def r_length(x,y,z):
 	return (x*x + y*y +z*z)**.5
 

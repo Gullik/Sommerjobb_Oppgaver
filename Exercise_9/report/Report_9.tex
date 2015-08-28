@@ -104,7 +104,6 @@
 
 
 \maketitle
-Test
 
 \section{}
 
@@ -157,32 +156,58 @@ Test
   \begin{align}
     v^2_\perp &=  2B(z)g(z) \left(\pdv{B_z(z)}{z} \right)^{-1}
   \end{align}
-  Assuming that the particle is directly above the magnetic north pole, so the radius is given by the \(z\)-coordinate.
-  \begin{align}
-    \begin{cases}
-      B(z) &= \frac{\mu_0}{4\pi}\left( \frac{3z^2m_z}{z^5} - \frac{m_z}{z^3} \right) =  \frac{\mu_0 m_z}{2\pi z^3} \approx \frac{4\pi \times 10^{-7} \times 7.94 \times 10^{22}}{2\pi\times (6.571\times 10^6 \si{m})^3} \approx 5.597\times 10 ^{-5} \si{\tesla}
+  Assuming that the particle is directly above the magnetic north pole, so the radius is given by the \(z\)-coordinate, the 3 factors become:
+   \begin{align}
+    \begin{split}
+      B(z) &= \frac{\mu_0}{4\pi}\left( \frac{3z^2m_z}{z^5} - \frac{m_z}{z^3} \right) =  \frac{\mu_0 m_z}{2\pi z^3} \approx \frac{4\pi \times 10^{-7} \times 7.94 \times 10^{22}}{2\pi\times (6.571\times 10^6 \si{m})^3} \si{\tesla}\approx 5.597\times 10 ^{-5} \si{\tesla}
       \\
-      g(z) &= -\frac{}{}
-    \end{cases}
-
+      g(z) &= - \gamma \frac{M_e}{z^3} z = -\frac{\gamma M_e}{z^2} \approx - \frac{6.7 \times 10^{-11} \times 5.9 \times 10^{24}}{(6.571\times 10^6 )^2} \si{\meter \per \second^2} \approx -9.1 \si{\meter\per\second^2}
+      \\
+      \pdv{B_z(z)}{z} &= - \frac{3\mu_0m_z}{2\pi z^4} \approx -\frac{6 \times 10^{-7}\times 7.94\times 10^{22}}{(6.571\times 10^6 )^4 } \si{\tesla \per\meter } \approx -2.55\times 10^{-11} \si{\tesla \per\meter }
+    \end{split}
+    \intertext{and the total initial perpendicular velocity will be}
+    v_\perp &\approx \sqrt{ (5.597\times 10 ^{-5} \si{\tesla}) \times (-9.1 \si{\meter\per\second^2}) / (2.55\times 10^{-11} \si{\tesla \per\meter } )} \approx 6300 \si{\meter\per\second}
   \end{align}
-
-  % \begin{align}
-  %  \pdv{B_z(z)}{z} &= \pdv{}{z}\left( \frac{3z^2m_z}{r^5} - \frac{m_z}{r^3} \right)
-  %   \\
-  %   \pdv{B_z(z)}{z} &= \frac{3 m_{z} \mu_{0} }{4 \pi } \left(\frac{3 z }{r^5} - \frac{5 z^{3}}{r^7}\right)
-  % \end{align}
-  % The gyration velocity where the force is balanced is then given by
-  % \begin{align}
-  %     mg(z) &= \frac{m_zv_\perp^2}{2B(z)}  \frac{3 m_{z} \mu_{0} }{4 \pi } \left(\frac{3 z }{r^5} - \frac{5 z^{3}}{r^7}\right)
-  % \end{align}
+  
 
 \subsection{Results}
 
+  \begin{figure}
+      \centering
+      \includegraphics[width = 0.30\textwidth]{figures/7_0_12_3Dplot}
+      \includegraphics[width = 0.30\textwidth]{figures/7_0_12_xyz}
+      \includegraphics[width = 0.30\textwidth]{figures/7_0_12_vertical_vel}
+      \caption{ The figures show a particle in the gyrating above the north pole, with a perpendicular velocity causing the gravitational and magnetic gradient force to balance. The figure to the shows the position, the center figure shows the positions as xyz coordinates and the figure to the right shows the vertical velocity.}
+      \label{fig:no_perturbation}
+    \end{figure}
+
+  We first started the particle with a perpendicular velocity which had a balance between the magnetic gradient force and the gravitational force, so the vertical force the particle feels will be \(0\) and the particle will gyrate at the astarting point. This can be seen in \cref{fig:no_perturbation} although there is a very small increase in the vertical velocity which can be due to numerical errors.
+
+  \begin{figure}
+      \centering
+      \includegraphics[width = 0.30\textwidth]{figures/7_-5_12_3Dplot}
+      \includegraphics[width = 0.30\textwidth]{figures/7_-5_12_xyz}
+      \includegraphics[width = 0.30\textwidth]{figures/7_-5_12_vertical_vel}
+      \caption{ This particle started with a slight velocity toward the towards the earth of \(5 \si{\meter\per\second}\), this will cause the particle to move out of the height. The figure to the shows the position, the center figure shows the positions as xyz coordinates and the figure to the right shows the vertical velocity.}
+      \label{fig:down_perturbation}
+    \end{figure}
+
+  \begin{figure}
+      \centering
+      \includegraphics[width = 0.30\textwidth]{figures/7_5_12_3Dplot}
+      \includegraphics[width = 0.30\textwidth]{figures/7_5_12_xyz}
+      \includegraphics[width = 0.30\textwidth]{figures/7_5_12_vertical_vel}
+      \caption{ This particle started with a slight velocity toward the towards the earth of \(5 \si{\meter\per\second}\), this will cause the particle to move out of the height. The figure to the shows the position, the center figure shows the positions as xyz coordinates and the figure to the right shows the vertical velocity.}
+      \label{fig:up_perturbation}
+   \end{figure}
 
 
+
+
+  \cref{fig:down_perturbation,fig:up_perturbation} shows a particle with a slight downward velocity of \(5 \si{\meter\per\second}\), and the same upward velocity, which will cause the particle to move out the height at which the magnetic gradient force and the gravitational force will balance. As the particle begins to move downward gravitational force pulling it down will increase. In addition the gradient of the magnetic force will also increase. If the magnetic gradient force increases fastest when the particle moves down and the gravitational force increases fastest when it moves the particle will oscillate around the starting position. In any other relationship between the forces it will be in an unstable position at the start. Unfortunately the change in velocity is also registered in the first simulation when the particle had no initial perturbation so it is hard to conclude anything. (Will get back to this after I have implemented RK4)
 
 \appendix
+
 \section{Comments}
   \begin{itemize}
     \item In the text it's written that the particle should be placed \(\frac{1}{2}\) a gyro radius to the side of magnetic pole. I assume we want to place the guiding center of the particle at the magnetic pole, which would need the particle to be placed \(1\) gyro radius to the side.
