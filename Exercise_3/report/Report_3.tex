@@ -236,19 +236,18 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
       \end{itemize}
 
 \section{Error propagation RK4 vs Euler}
+  \cref{fig:totE} shows the energy using both the Euler method and the RK4 method. While the RK4 method is a little bit slower, it can be run with a lower timestep and still produce much better results and the error propagation in the total energy looks linear at a first glance and it is of the order \(10^-8\) of \(10^3\). Using the Euler method the basic dynamics of the trajectory is ok, but the error increases exponentially, and overrides the total energy if the simulation runs to long, so even with a smaller timestep doing any analysis of the energy doesn't work.
   \label{sec:error}
     \begin{figure}[ht]
-      \begin{subfigure}{0.33\textwidth}
-        \includegraphics[width = \textwidth]{figures/rk4_3D_6_2}
+    \centering
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{figures/EulerEnergy}
       \end{subfigure}
-      \begin{subfigure}{0.33\textwidth}
-        \includegraphics[width = \textwidth]{figures/rk4_xyz_6_2}
+      \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{figures/rk4Energy}
       \end{subfigure}
-      \begin{subfigure}{0.33\textwidth}
-        \includegraphics[width = \textwidth]{figures/rk4_E_6_2}
-      \end{subfigure}
-      \caption{The trajectory, positions and energy for an oxygen ion for with a \(\Delta t = 10^-2\), starting at \(v_0 = 10^5 \si{ms^{-1} }\).}
-      \label{fig:results}
+      \caption{Here the total energy is shown for two different simulations, the left figure using Euler's method and the right figure using RK4. Both simulations ran for \(10^5 \si{\second}\), the Euler method used \(\Delta t = 10^{-3} \si{\second}\) and the RK4 method used a \(\Delta t = 10^{-2} \si{\second}\)}
+      \label{fig:totE}
     \end{figure}
 
     

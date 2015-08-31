@@ -53,7 +53,6 @@ def function(y, mag_field, C1, C2):
 	temp[:3] = y[3:]														#Calculation of positions dr/dt = v
 	temp[3:] = C1*np.cross( y[3:], mag_field(y[:3], C2) )					#Calculation of force 	  dv/dt	= q/m*(v x B)
 	
-
 	return temp
 
 
@@ -72,10 +71,10 @@ def rk4(y, dydt, C1, C2, steps, timestep):
 
 	for i in range(steps):
 
-		k1 = timestep*dydt( y       , b, C1, C2)
-		k2 = timestep*dydt( y + k1/2, b, C1, C2)
-		k3 = timestep*dydt( y + k2/2, b, C1, C2)
-		k4 = timestep*dydt( y + k3  , b, C1, C2)
+		k1 = timestep*dydt( y       , b, C1, C2 )
+		k2 = timestep*dydt( y + k1/2, b, C1, C2 )
+		k3 = timestep*dydt( y + k2/2, b, C1, C2 )
+		k4 = timestep*dydt( y + k3  , b, C1, C2 )
 
 		y += ( k1 + 2*k2 + 2*k3 + k4 )/6.
 
@@ -91,8 +90,6 @@ def rk4(y, dydt, C1, C2, steps, timestep):
 			v_para = (y[3]*b_field[0] +y[4]*b_field[1] + y[5]*b_field[2])/b_length
 			v_perp = np.cross(y[3:],b_field)/b_length
 			
-			
-
 			data[6,int(i/update)] = v_para*v_para
 			data[7,int(i/update)] = np.dot(v_perp,v_perp)
 
