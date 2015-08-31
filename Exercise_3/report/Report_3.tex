@@ -175,7 +175,7 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
         \[ k_4 = h\va{f}\left(t_i + h, y_i + k_3\right) \]
       \item Then we combine this with \cref{eq:next_y} and \cref{eq:RK4} to get
       \begin{align}
-        \va{y}_{i+1} &\approx  \frac{h}{6}\left[ k_1 + 2k_2 + 2k_3 + k_4 \right]
+        \va{y}_{i+1} &\approx  \frac{1}{6}\left[ k_1 + 2k_2 + 2k_3 + k_4 \right]
       \end{align}
     \end{enumerate}
   \end{algo}  
@@ -192,76 +192,37 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
 
 \subsection{Results}
     
-    \begin{figure} 
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/energyEuler_simple8-3}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/energyVerlet_simple8-3}
-      \end{subfigure}
-      \caption{The parallel, perpendicular and total energy (not multiplied with \(m/2\)) for oxygen ions in a simplified magnetic field, \(\va{B} = (0,0,0.25) nT \) z-axis running for \(10^7\) steps with \(10^{-6}\) s timesteps. Figure a) is done with Euler's method and Figure b) is done with Velocity Verlet}
-      \label{fig:energy_simpleB}
-    \end{figure}
-    The energy results didn't really pan out well, in the \cref{fig:energy_simpleB} the perpendicular, parallel and total energy is shown for \(10^8\) steps with a timestep of \(10^{-3}\)s which should cover \(1000\) seconds, for both Euler's method and Velocity Verlet. The magnetic field is a simplified magnetic field with similar to the initial field given in the earths dipole problem \(\va{B} = (0,0,0.25) \si{\nano\tesla}\). Unfortunately there is a significant energy drift with both the methods and decreasing the timestep further makes it hard to get a long enough timeseries to look at the interesting characteristiscs happening as the particle moves in the dipole.  The Velocity Verlet has a significantly lower energy drift, but we thought it would be a symplectic integrator and conserve the energy. (Is it not symplectic when the acceleration is dependent on the velocity as well?) The energy drift is increasing with time, which would cause it to be even bigger with a longer time series.
-    \\ \\
+    We ran a simulation, with a timestep of \(10^{-2}\) s for \(10^6\) steps, (\(10000 \si{\second}\)), and the energy and trajectory is shown in \cref{fig:results} with the Runge Kutta 4 method. The particle used was an oxygen ion with an inital velocity of \(10^5 \si{\meter\per\second}\), with a pitch angle of \(25\si{\degree}\). 
 
-    
-
-
-    We ran a simulation with a timestep of \(10^{-3}\) s for \(10^9\) steps, (\(100000 s\)), and the energy and trajectory is shown in \cref{fig:v_0_prop} for the Verlet method. As can be seen in the total energy increasing exponentially, and the trajectory deforming, the timestep is to big to accurate capture the gyrating motion. Using the Euler method it blew up completely.
     \begin{figure}[ht]
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_9_3_Verletenergy}
+      \begin{subfigure}{0.33\textwidth}
+        \includegraphics[width = \textwidth]{figures/rk4_3D_6_2}
       \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_9_3_Verlet3Dplot}
+      \begin{subfigure}{0.33\textwidth}
+        \includegraphics[width = \textwidth]{figures/rk4_xyz_6_2}
       \end{subfigure}
-      \caption{The energy and trajectory for an oxygen ion for with a \(\Delta t = 10^-3\), starting at \(\va{v}_0 = (300, 0, 300) \si{ms^{-1} }\).}
-      \label{fig:v_0_prop}
+      \begin{subfigure}{0.33\textwidth}
+        \includegraphics[width = \textwidth]{figures/rk4_E_6_2}
+      \end{subfigure}
+      \caption{The trajectory, positions and energy for an oxygen ion for with a \(\Delta t = 10^-2\), starting at \(v_0 = 10^5 \si{ms^{-1} }\).}
+      \label{fig:results}
     \end{figure}
 
-    By increasing the initial velocities to \(\va{v}_0 = (300000, 0, 300000) \si{\meter \per \second}\) instead of \(\va{v}_0 = (300, 0, 300) \si{\meter \per \second}\) the time needed for the effects of the dipole to show itself were shorter so we could decrease the timestep to \(10^{-5} \si{s}\) and the energy drift of the system were small enough to mostly ignore. The \cref{fig:high_vel} show an oxygen ions position, trajectory and energy during \(10^8\times 10^{-5} = 10000 \) seconds. In both the trajectory and the plot of the z-position we can clearly see that the particle is bouncing back and forth between then poles. There is also a drift in the eastward direction that can be seen most easily in the plot of the trajectory, but can also be seen as the x-coordinate is gradually decreasing and the y-coordinate is increasing.     When the parallel energy is increasing, the perpendicular energy is decreasing keeping the total energy roughly constant.
-
-
-    \begin{figure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_8_5_Eulerxyz}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_8_5_Verletxyz}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_8_5_Eulerenergy}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_8_5_Verletenergy}
-      \end{subfigure} 
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_8_5_Euler3Dplot}
-      \end{subfigure}
-      \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{figures/ion_8_5_Verlet3Dplot}
-      \end{subfigure}
-    \caption{This shows the positions, the energy and the trajectory of an oxygen ion trapped in earths magnetic dipole. Th figures on the left uses the Verlet Euler method, and the right figures uses the Velocity Verlet method. \(\Delta t = 10^{-5}\) and \(\va{v}_0 = (300000, 0 , 300000) m/s \).}
-    \label{fig:high_vel}
-    \end{figure}
+    In both the trajectory and the plot of the z-position we can clearly see that the particle is bouncing back and forth between then poles. There is also a drift in the eastward direction that can be seen most easily in the plot of the trajectory, but can also be seen as the x-coordinate is gradually decreasing and the y-coordinate is increasing. Since a magnetic field cannot do any work on a moving particle the total energy is conserved. When the particle due to the magnetic mirroring is losing the parallel velocity the perpendicular velocity is increasing so the total energy is conserved. 
 
 
     \subsubsection{Gyro period}
-    Since the magnetic field is cylindrical symmetric, so let us use that and measure that as fast movements of the angle between the \(x-\) and \(y-\) coordinates. The gyration period will also change as it is dependent on \(|\va{B}|\), so the average is measured. For the run in \cref{fig:high_vel} with a high velocity an average gyration period of \( 33 \si{\second}\) was measured.
-
-    (I didn't see any easy, robust methods to measure the gyration period)
-
+    Since the magnetic field is cylindrical symmetric, so let us use that and measure that as fast movements of the angle between the \(x-\) and \(y-\) coordinates. The gyration period will also change as it is dependent on \(|\va{B}|\), so the average is measured. For the run in \cref{fig:high_vel} with a high velocity an average gyration period of \( 0.155 \si{\second}\)was measured.
 
     \subsubsection{Bounce period}
     The particle will start by moving north compared with earth following the magnetic field lines, then as the magnetic field line density increases the parallel velocity will decrease. A static magnetic field does no work on a particle so the perpendicular velocity must increase. Since it will bounce between the north and south pole, the easiest method to measure it is to note how long time it takes between each time the particle crosses equator, \(z = 0\).
 
-    The measurements in \cref{fig:high_vel} give a rough estimate of the bounce period of \( 250 \si{\second}\)
+    The measurements in \cref{fig:high_vel} give a rough estimate of the bounce period of \( 4.0 \si{\second}\)
 
     \subsubsection{Drift period}
     The drift period is the time a particle trapped in earths magnetic dipole field takes to drift around earth. Since we know the \(x-\) and \(y-\)coordinates we can calculate the longitude of the particles position as \( \phi = \arctan{x/y} \). Then we can roughly say that \(\Delta \phi = \arctan(\Delta x / \Delta y) \).
 
-    The measured drift period was measured in \cref{fig:high_vel} to be \(3500 \si{\second}\).
+    The measured drift period was measured in \cref{fig:high_vel} to be \(250 \si{\second}\).
 
 
 \appendix
@@ -269,27 +230,46 @@ Then we use the same algorithm as in the earlier exercises to move forward in ti
       \begin{itemize}
             \item Parenthesis in Eq. 1 on the sheet is missing.
             \item I assume you mean the perpendicular and parallel \textit{kinetic} energy in part 2.
-            \item Could it be better to plot it first, and afterwards find the energy. I think it is quite natural to plot it while working on it.
-            \item I suppose we are supposed to find that the total kinetic energy is conserved (in a static magnetic field, \(\pdv{\va{B}}{t} = 0\)). Since we have to calculate so many gyrations the error caused by the Euler's method stacks up. Would it an idea to ask them to implement some almost as simple algorithm, such as as Velocity Verlet which should conserve energy better? 
-            \begin{align*}
-              v_i(t+\frac{h}{2}) &\approx v_i(t)  + \frac{h}{2}\frac{F_i(t)}{m} + \order{h^2} 
-              \\
-              x_i(t+h) &\approx x_i(t) + hv_i(t+ \frac{h} {2} ) + \order{h ^ 3}
-              \\
-              v_i(t+h) &\approx v_i(t+\frac{h}{2})  +  \frac{h}{2}\frac{F_i(t+ \frac{h}{2})}{m} + \order{h^2} 
-            \end{align*}
-            \item The stepsize per gyration needed for the Euler method was very high, to keep it somewhat well behaved after the many gyrations. With enough gyrations to mirror back and forth it needed to many steps to be contained in numpy arrays due to memory. Not recording every position fixes it though.
-            \item I also implemented Velocity Verlet, and the improvement in the energy conservation is shown in the results. There was still some energy drift. Not as much an improvement as I thought there would be.
-            \item I increased the velocity the particles moved in up from \(300\) to \(300 000 \si{\meter\per\second}\). Then it was much easier to get a reasonable timestep.
-            \item The electron has a much faster gyration period, initial period \( \tau = \frac{m}{q|\va{B}( 5R_e, 0, 0 )|} 2\pi \sim 10^{-4}\) so then it is hard to get the particle to move enough for the magnetic field to change significantly while still keeping a small enough timestep to capture enough details on the fast gyrations.
-            \item I have trouble getting much more than \(10^9 \Delta t\) in python in a reasonable time frame, on a decent laptop.
-            \item Had some trouble due to some wrong numbers giving a very small \(dv\) and \(dr\) causing it to get machine-rounded away, with the right set up that problem disappeared. (my fault)
+            \item Implemented RK4 instead, which worked much better, with a managable error, see \cref{sec:error}. So if you want them to analyze the energy, which has the plus that energy conservation be used as a test to see that the code is working correctly, RK4 is safer. It also has the perk that it runs decently with a much higher stepsize so the coding can be much more inefficient.
+            \item The other option is to just use Eulers method and drop the part about the conserved energy. With the velocity, \(10^5\), the basic part of the trajectory is clearly visible and it shouldn't be to bothered by the increasing total energy before a whole drift period.
+            \item I tried with the proposed velocity of \(10^6 \si{\meter\per\second}\) and the trajectory moved too fast between the bounces so the gyration was much harder to see. There is a figure of a trajactory in \cref{sec:high_vel}, showing it.
       \end{itemize}
+
+\section{Error propagation RK4 vs Euler}
+  \label{sec:error}
+    \begin{figure}[ht]
+      \begin{subfigure}{0.33\textwidth}
+        \includegraphics[width = \textwidth]{figures/rk4_3D_6_2}
+      \end{subfigure}
+      \begin{subfigure}{0.33\textwidth}
+        \includegraphics[width = \textwidth]{figures/rk4_xyz_6_2}
+      \end{subfigure}
+      \begin{subfigure}{0.33\textwidth}
+        \includegraphics[width = \textwidth]{figures/rk4_E_6_2}
+      \end{subfigure}
+      \caption{The trajectory, positions and energy for an oxygen ion for with a \(\Delta t = 10^-2\), starting at \(v_0 = 10^5 \si{ms^{-1} }\).}
+      \label{fig:results}
+    \end{figure}
+
+    
+
+\section{ Trajectory high speed }
+  \label{sec:high_vel}
+    In \cref{fig:high_vel} is the trajectory with the high velocity of \(10^6 \si{\meter\per\second}\), with a pitch angle of \(25\si{\degree}\). The trajectory is gets very messy and I think a lower velocity is better so the gyration is clearly visible.
+
+    \begin{figure}
+      \centering 
+      \includegraphics[width = 0.5\textwidth]{figures/rk4_3D_v6}
+      \caption{The trajectory of an oxygen ion with an initial velocity of \(10^6 \si{\meter\per\second}\), with a pitch angle of \(25\si{\degree}\).}
+      \label{fig:high_vel}
+    \end{figure}
+
+
 
 
 \section{Code}
   \label{sec:code}
-  \lstinputlisting{../source/dipoleField_rewritten.py}
+  \lstinputlisting{../source/dipfield_rk4.py}
 
       
 

@@ -18,7 +18,9 @@ def dipoleField_rewritten(particle, nSteps, stepsize, method):
 	steps = np.power(10, int(nSteps))
 	timestep = np.power(10, int(stepsize))
 	timestep = 1./timestep
-	# update = int(steps/10000)
+	update = int(steps/10000)
+
+	# steps = 1
 
 	if particle == 'electron':
 		q = - e
@@ -35,14 +37,18 @@ def dipoleField_rewritten(particle, nSteps, stepsize, method):
 	y = 0.
 	z = 0.
 
-	vx = 300000.		#m/s
+	pitch 	= np.deg2rad(25)
+	v_0 	= 10**5
+
+	vx = v_0*np.cos(pitch)		#m/s
 	vy = 0.
-	vz = 300000.
+	vz = v_0*np.sin(pitch)
 
 	#Calculate suiting timesteps, let's assume the gyration frequency will stay at the same order as it is in the inital conditions
 	Bx = bx(x,y,z,C2)
 	By = by(x,y,z,C2)
 	Bz = bz(x,y,z,C2)
+
 
 	b_magnitude = r_length(Bx,By,Bz)
 	# print b_magnitude
@@ -72,6 +78,10 @@ def dipoleField_rewritten(particle, nSteps, stepsize, method):
 			x += timestep*vx
 			y += timestep*vy
 			z += timestep*vz
+
+			# print timestep*C1*vCrossB_x  
+			# print timestep*C1*vCrossB_y 
+			# print timestep*C1*vCrossB_z
 
 			#Update v
 			vx += timestep*C1*vCrossB_x 
@@ -197,6 +207,12 @@ def analyze_data(name, method):
 	E_perp = data[:,4]
 	time= data[:,5]
 
+	m = 16*1.674E-26  #kg
+	eV = 6.24E18
+
+	E_para *= m*eV/2.
+	E_perp *= m*eV/2.
+
 	#Plotting positions
 	f, ax = plt.subplots(3, sharex = True)
 	plt.suptitle('Positions')
@@ -212,15 +228,15 @@ def analyze_data(name, method):
 	ax[2].set_xlabel('Time [s]')
 	f.savefig('figures/' + name + 'xyz.eps')
 
-	# print E_para
+	# # print E_para
 	f, ax = plt.subplots(3, sharex = True)
 	plt.suptitle('Kinetic Energies, parallel and perpendicular to  $\\vec{B}$')
-	ax[0].plot(time,E_para)
-	ax[1].plot(time,E_perp)
-	ax[2].plot(time, E_para + E_perp)
-	ax[0].set_ylabel('$E_\parallel$')
-	ax[1].set_ylabel('$E_\perp$')
-	ax[2].set_ylabel('$E_{tot}$')
+	ax[0].plot(time,E_para + E_perp)
+	ax[1].plot(time,E_para)
+	ax[2].plot(time, E_perp)
+	ax[0].set_ylabel('$E [eV]$')
+	ax[1].set_ylabel('$E_{\parallel} [eV]$')
+	ax[2].set_ylabel('$E_{\perp} [eV]$')
 	ax[2].set_xlabel('Time [s]')
 
 	f.savefig('figures/' + name + 'energy.eps')
@@ -239,35 +255,44 @@ def analyze_data(name, method):
 
 	fig.savefig('figures/' + name + '3Dplot.eps')
 
-	# #Calculating the gyro period, bounce and drift period
-	phi = np.arctan2(x,y)
+	fig = plt.figure()
+	ax = fig.add_subplot(111)
+	plt.suptitle('Total Energy  $[eV]$')
+	ax.plot(time,E_para + E_perp)
+	ax.set_xlabel('Time [s]')
+	ax.set_ylabel('$E$')
 
-	#Calculating gyrations as fast periodic changes in the xy angle, only works if the changes in angle is very stable
-	nGyro = 0
-	up = False
-	for i in range(phi.shape[0] - 1):
-		if up:
-			if phi[i] > phi[i + 1]:
-				nGyro += 1
-				up = False
-		else:
-			if phi[i] < phi[i + 1]:
-				up = True
+	fig.savefig('figures/EulerEnergy.eps')
 
-	print 'The average gyration period is: ' + str(time[-1]/nGyro)
+	# # #Calculating the gyro period, bounce and drift period
+	# phi = np.arctan2(x,y)
+
+	# #Calculating gyrations as fast periodic changes in the xy angle, only works if the changes in angle is very stable
+	# nGyro = 0
+	# up = False
+	# for i in range(phi.shape[0] - 1):
+	# 	if up:
+	# 		if phi[i] > phi[i + 1]:
+	# 			nGyro += 1
+	# 			up = False
+	# 	else:
+	# 		if phi[i] < phi[i + 1]:
+	# 			up = True
+
+	# print 'The average gyration period is: ' + str(time[-1]/nGyro)
 		
 
-	plt.figure()
-	plt.plot(time, phi*180/np.pi)
+	# plt.figure()
+	# plt.plot(time, phi*180/np.pi)
 
-	print 'The drift period is: ' + str(  (2*np.pi) / (phi[-1] - phi[0]) * time[-1] )
+	# print 'The drift period is: ' + str(  (2*np.pi) / (phi[-1] - phi[0]) * time[-1] )
 
-	nBounce = 0
-	for i in range(z.shape[0] - 1):
-		if z[i] > 0 and z[i + 1] < 0:
-			nBounce += 1
+	# nBounce = 0
+	# for i in range(z.shape[0] - 1):
+	# 	if z[i] > 0 and z[i + 1] < 0:
+	# 		nBounce += 1
 
-	print 'A rough estimate of the bounce period is: '	+ str( time[-1]/nBounce )
+	# print 'A rough estimate of the bounce period is: '	+ str( time[-1]/nBounce )
 
 
 	plt.show()

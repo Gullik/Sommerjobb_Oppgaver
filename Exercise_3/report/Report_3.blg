@@ -1,0 +1,9 @@
+[0] Config.pm:318> INFO - This is Biber 1.8
+[0] Config.pm:321> INFO - Logfile is 'Report_3.blg'
+[41] biber:275> INFO - === lÃ¸. aug. 29, 2015, 15:34:27
+[42] Biber.pm:333> INFO - Reading 'Report_3.bcf'
+[77] Biber.pm:630> INFO - Found 0 citekeys in bib section 0
+[77] Utils.pm:169> WARN - The file 'Report_3.bcf' does not contain any citations!
+[87] bbl.pm:482> INFO - Writing 'Report_3.bbl' with encoding 'UTF-8'
+[87] bbl.pm:555> INFO - Output to Report_3.bbl
+[87] Biber.pm:105> INFO - WARNINGS: 1
