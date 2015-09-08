@@ -5,7 +5,10 @@ import sys as sys
 from time import time
 
 
-#Ths function calculates the trajectory of a particle, being affected by the earths and gravity
+# This function calculates the trajectory of a particle, being affected by the earths and gravity
+# It is initialized by for example
+# python stability.py 5 3 Euler
+
 
 
 def r_length(x,y,z):
@@ -88,7 +91,7 @@ def force(x,y,z, vx,vy,vz, C1, C2, C3):
 	force_y -= gy( x,y,z , C3)
 	force_z -= gz( x,y,z , C3)
 
-	print  force_z
+	# print  force_z
 
 	return force_x, force_y, force_z
 
@@ -120,17 +123,24 @@ def rk4(y, dydt, C1, C2, C3, steps, timestep):
 	k3 = np.zeros(6)
 	k4 = np.zeros(6)
 
-	# update = 250
-	update = int(steps/10000)
+	update = 1
+	# update = int(steps/1000)
 	data = np.zeros((6,int( steps/update)))
-	# data = np.zeros((6,steps))
 
 	for i in range(steps):
+
+		print "Run " + str(i)
+
+		print forceRK4(y, b, C1,C2,C3)[5]
+
 
 		k1 = timestep*dydt( y       , b, C1, C2, C3)
 		k2 = timestep*dydt( y + k1/2, b, C1, C2, C3)
 		k3 = timestep*dydt( y + k2/2, b, C1, C2, C3)
 		k4 = timestep*dydt( y + k3  , b, C1, C2, C3)
+
+		print 'dz =' + str( (k1 + 2*k2 + 2*k3 + k4 )[2]/6.) +  \
+				'\t dv_z =' + str( (k1 + 2*k2 + 2*k3 + k4 )[5]/6.)
 
 		y += ( k1 + 2*k2 + 2*k3 + k4 )/6.
 		# y += k1
@@ -226,6 +236,30 @@ def plot_routine( time, positions, velocities ):
 
 	return 0 #positions
 
+def initial_velocity(z, pitch, C1, C2, C3, C4):
+
+	# #Calculating a velocity that will balance the forces, along with initialplacement
+	# tol = 1.E-10
+	x = 0
+	y = 0
+
+	#Calculating a velocity that will balance the forces
+	v_perp = np.abs(2*b_magnitude(0,0,z, C2)*gz(0,0,z,C3)/dB_zdz(z,C4))
+
+	v_perp = np.sqrt(v_perp)
+
+	x = gyration_radius(v_perp, b_magnitude(x,y,z, C2), m_e, q )
+	y = 0
+	
+	vx = v_perp*np.cos(pitch)
+	vy = v_perp*np.sin(pitch)
+	vz = int(sys.argv[2])
+
+	# force_x, force_y, force_z = force( x,y,z, vx + 10000,vy,vz, C1, C2, C3)
+	print forceRK4([x,y,z,vx,vy,vz], b, C1,C2,C3)[5]
+	
+	return x, y, z, vx, vy, vz
+
 if __name__ == '__main__':
 
 	mu0 	= 4.*np.pi*1.E-7	#N/A^2
@@ -252,24 +286,14 @@ if __name__ == '__main__':
 	#Initial position
 	z = 200.E3 + Re				#m
 
-	#Calculating a velocity that will balance the forces
-	v_perp = np.abs(2*b_magnitude(0,0,z, C2)*gz(0,0,z,C3)/dB_zdz(z,C4))
-
-	v_perp = np.sqrt(v_perp)
-
-	x = gyration_radius(v_perp, b_magnitude(0,0,z, C2), m_e, q )
-	y = 0
-
-	vx = v_perp*np.cos(pitch)
-	vy = v_perp*np.sin(pitch)
-	vz = int(sys.argv[2])
+	x, y, z, vx, vy, vz = initial_velocity(z, pitch, C1, C2, C3, C4)
 
 	timeStart = time()
 	if sys.argv[3] == "Euler":
 
 		timestep 	= 1.E-10
 		t, positions, velocity = euler(force, x, y, z, vx, vy, vz, C1, C2, C3, nSteps, timestep )
-	
+
 	elif sys.argv[3] == "rk4":
 
 		timestep 	= 1.E-8
@@ -292,7 +316,7 @@ if __name__ == '__main__':
 	timeEnd = time()
 
 	print "The simulation ran for "   + str(timestep*nSteps) +     \
-			" and used " + str( timeEnd - timeStart ) + 's'
+			"s, and used " + str( timeEnd - timeStart ) + 's'
 
 	plot_routine(t, positions, velocity)
 
