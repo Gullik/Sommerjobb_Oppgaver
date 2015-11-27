@@ -36,6 +36,8 @@
 \usepackage[margin=0.7in]{geometry} %Sets the margins in the document
 \usepackage{siunitx}    %Allows use of SI units macros
 
+\usepackage[outdir=./]{epstopdf}
+
 %Defines calculator way to write powers of ten
 \sisetup{output-exponent-marker=\textsc{e}}
 
@@ -251,12 +253,12 @@
     \begin{figure}
       \centering
         \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/potential}
+        \includegraphics[width = \textwidth]{../source/map_potential}
         \subcaption{The figure shows the electrostatic potential in the higher latitudes, and the color indicates the magnitude of the potential compared to a reference value, with red being a high potential and blue being a low potential. One negative pole is located at \(150 \si{\degree}\) longitude and one positive at \(300 \si{\degree}\).}
       \end{subfigure}
       \hfill
       \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{../source/eArrows}
+        \includegraphics[width = \textwidth]{../source/map_efield}
          \subcaption{The figure shows the direction of the electric field, given by \(\va{E} = -\nabla\Phi\), in the higher latitudes and the magnitude, with the arrows showing direction and  the color representing magnitude.}
       \end{subfigure}
       \label{fig:pot_Electric}
@@ -264,7 +266,7 @@
 
     \begin{figure}
       \centering
-      \includegraphics[width = 0.75\textwidth]{../source/vArrows}
+      \includegraphics[width = 0.75\textwidth]{../source/map_drift}
       \caption{This shows the velocities direction and magnitude of the plasma caused by the E-cross-B drift. }
       \label{fig:velocity}
     \end{figure}
@@ -280,7 +282,8 @@
       \item I set the magnetic field to be a radially constant field, could be a z-axis directed one as well.
       \item What should be done with the edges of \(\nabla \Phi\)? Now I am ignoring them, but something like \( \pdv{\Phi_{0,j}}{\theta} = \frac{ \Phi_{0+1, j} - \Phi_{i, j} }{\Delta \theta}\) or similar methods could be implemented. The easiest is just ignoring them.
       \item Should we use \(r = Re\), that would be on the surface?
-      \item Hint about how the cross product should be done? 
+      \item Hint about how the cross product should be done?
+      \item The drift ended up to low, of the magnitude \(<10 \si{\meter\per\second}\). I wasn't able to find out if there was a bug causing it or what the problem was.
     \end{itemize}
 
 

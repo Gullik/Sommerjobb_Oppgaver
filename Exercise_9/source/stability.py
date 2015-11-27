@@ -110,28 +110,27 @@ def gyration_radius(v_perp, B, m, q):
 	#Returns the gyration radius rho = m*v_perp/(qB)
 	return np.abs(m*v_perp/(q*B))
 
-def rk4(y, dydt, C1, C2, C3, steps, timestep):
+def rk4(y, dydt, q, m_e, mu0, gamma, Me, steps, timestep):
 	#This takes a function and it's derivative and
 	#uses the RK4 method, and returns a vector of positions
 
-	# C1 = q/m
-	# C2 = mu_0/(4pi)
-	# C3 = gamma*M_earth
+	C1 = q/m_e
+	C2 = mu0/(4*np.pi)	#Constant in the magnetic field calculation
+	C3 = gamma*Me
  
 	k1 = np.zeros(6)
 	k2 = np.zeros(6)
 	k3 = np.zeros(6)
 	k4 = np.zeros(6)
 
-	update = 1
+	update = 250
 	# update = int(steps/1000)
 	data = np.zeros((6,int( steps/update)))
+	energy = np.zeros((3,int(steps/update)))
+	vz = np.zeros(int( steps/update))
+	dvz = 0
 
 	for i in range(steps):
-
-		print "Run " + str(i)
-
-		print forceRK4(y, b, C1,C2,C3)[5]
 
 
 		k1 = timestep*dydt( y       , b, C1, C2, C3)
@@ -139,18 +138,28 @@ def rk4(y, dydt, C1, C2, C3, steps, timestep):
 		k3 = timestep*dydt( y + k2/2, b, C1, C2, C3)
 		k4 = timestep*dydt( y + k3  , b, C1, C2, C3)
 
-		print 'dz =' + str( (k1 + 2*k2 + 2*k3 + k4 )[2]/6.) +  \
-				'\t dv_z =' + str( (k1 + 2*k2 + 2*k3 + k4 )[5]/6.)
-
-		y += ( k1 + 2*k2 + 2*k3 + k4 )/6.
-		# y += k1
+		dy = ( k1 + 2*k2 + 2*k3 + k4 )/6.
+		dvz += dy[5]
+		y += dy
+		
 
 		#Store the present data
-		# # if i%update == 0:
-		# 	data[:,int(i/update)] = y
-		data[:,int(i/update)] = y
+		if i%update == 0:
+			data[:,int(i/update)] = y
 
-	return data
+			#Calculating the energy for verification purposes
+			E_P = m_e*gravity(y[:3], C3)*y[2]
+			E_P = -np.linalg.norm(E_P)
+			E_K = 0.5*m_e*(y[3]*y[3] + y[4]*y[4] + y[5]*y[5])
+
+			energy[0,int(i/update)] = E_K
+			energy[1,int(i/update)] = E_P
+			energy[2,int(i/update)] = E_K + E_P
+
+			vz[int(i/update)] = dvz
+
+
+	return data, energy, vz
 
 def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, nSteps, timestep ):
 
@@ -186,26 +195,27 @@ def euler(force, x, y, z, vx, vy, vz,C1, C2, C3, nSteps, timestep ):
 
 	return time, positions, velocities
 
-def plot_routine( time, positions, velocities ):
+def plot_routine( time, positions, velocities , energy, vz):
 
-	# #3D plot of the trajectory
-	# fig = plt.figure()
-	# ax = fig.add_subplot(111, projection='3d')
-	# plt.suptitle('Particle trajectory')
-	# ax.plot(positions[:,0],positions[:,1],positions[:,2])
-	# ax.set_xlabel('x [m]')
-	# ax.set_ylabel('y [m]')
-	# ax.set_zlabel('z [m]')
+	#3D plot of the trajectory
+	fig = plt.figure()
+	ax = fig.add_subplot(111, projection='3d')
+	plt.suptitle('Particle trajectory')
+	ax.plot(positions[:,0],positions[:,1],positions[:,2])
+	ax.set_xlabel('x [m]')
+	ax.set_ylabel('y [m]')
+	ax.set_zlabel('z [m]')
 
-	# ax.set_aspect('equal', 'datalim')
+	ax.set_aspect('equal', 'datalim')
 
-	# fig.savefig('figures/3Dplot.eps')
+	fig.savefig('figures/3Dplot.eps')
 
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
-	plt.plot(time,velocities[:,2])
+	fig.suptitle('Change in Vertical Velocity $[m/s]$')
+	plt.plot(time,vz)
 	plt.xlabel('Time $[s]$')
-	plt.ylabel('Vertical Velocity $[m/s]$')
+	plt.ylabel('$v_z$')
 
 	fig.savefig('figures/vertical_vel.eps')
 
@@ -234,12 +244,40 @@ def plot_routine( time, positions, velocities ):
 	ax[2].set_xlabel('Time [s]')
 	f.savefig('figures/xyz.eps')
 
+	#Plotting energy
+	f, ax = plt.subplots(3, sharex = True)#, sharey = True)
+	eV = 6.24E18
+	energy = eV*energy.transpose()
+
+	print "Mean energies: " + str( np.mean(energy[:,0])) + "\t" +  str(np.mean(energy[:,1])) +\
+		"\t" +  str(np.mean(energy[:,2]))
+
+	print "Max dev energies: " + str( np.max(energy[:,0]) - np.min(energy[:,0])) + "\t" \
+		+  str( np.max(energy[:,1]) - np.min(energy[:,1])) + "\t" \
+		+  str( np.max(energy[:,2]) - np.min(energy[:,2]))
+
+
+	plt.suptitle('Energy $[eV]$')
+
+	# energy[:,0] = energy[:,0] - np.mean(energy[:,0])
+	# energy[:,1] = energy[:,1] - np.mean(energy[:,1])
+	# energy[:,2] = energy[:,2] - np.mean(energy[:,2])
+
+	ax[0].plot(time,energy[:,0])
+	ax[1].plot(time,energy[:,1])
+	ax[2].plot(time,energy[:,2])
+	
+	ax[0].set_ylabel('$E_K$')
+	ax[1].set_ylabel('$E_P$')
+	ax[2].set_ylabel('$E_{tot}$')
+	ax[2].set_xlabel('Time [s]')
+	f.savefig('figures/energy.eps')
+
 	return 0 #positions
 
 def initial_velocity(z, pitch, C1, C2, C3, C4):
 
 	# #Calculating a velocity that will balance the forces, along with initialplacement
-	# tol = 1.E-10
 	x = 0
 	y = 0
 
@@ -253,10 +291,7 @@ def initial_velocity(z, pitch, C1, C2, C3, C4):
 	
 	vx = v_perp*np.cos(pitch)
 	vy = v_perp*np.sin(pitch)
-	vz = int(sys.argv[2])
-
-	# force_x, force_y, force_z = force( x,y,z, vx + 10000,vy,vz, C1, C2, C3)
-	print forceRK4([x,y,z,vx,vy,vz], b, C1,C2,C3)[5]
+	vz = float(sys.argv[2])
 	
 	return x, y, z, vx, vy, vz
 
@@ -296,12 +331,12 @@ if __name__ == '__main__':
 
 	elif sys.argv[3] == "rk4":
 
-		timestep 	= 1.E-8
+		timestep 	= 1.E-10
 
 		dydt = forceRK4
 		y = np.array( (x, y, z, vx, vy, vz) )
 
-		data = rk4(y, dydt, C1, C2, C3, nSteps, timestep)
+		data, energy, vz = rk4(y, dydt, q, m_e, mu0, gamma, Me, nSteps, timestep)
 
 		positions = data[:3,:]
 		velocity = data[3:,:]
@@ -318,7 +353,7 @@ if __name__ == '__main__':
 	print "The simulation ran for "   + str(timestep*nSteps) +     \
 			"s, and used " + str( timeEnd - timeStart ) + 's'
 
-	plot_routine(t, positions, velocity)
+	plot_routine(t, positions, velocity, energy, vz)
 
 	plt.show()
 

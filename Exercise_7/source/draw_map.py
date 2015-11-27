@@ -23,7 +23,7 @@ def draw_map():
 					lon_0=lon_0,lat_0=lat_0,resolution='l',\
     				llcrnrx= - my_temp_map.urcrnrx/4 ,llcrnry= - my_temp_map.urcrnry/4. ,urcrnrx=my_temp_map.urcrnrx/4.,urcrnry=my_temp_map.urcrnry/4.)
 
-	my_map.drawcoastlines()
+	# my_map.drawcoastlines()
 	my_map.drawmeridians(np.arange(0, 360, 30), labels=[1,1,0,1])
 	my_map.drawparallels(np.arange(-90, 90, 30))
 

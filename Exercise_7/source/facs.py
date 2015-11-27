@@ -53,8 +53,9 @@ def field_aligned_currents(v_theta, v_phi):
 	return FACs
 
 def plot_FACs(FACs):
-	x = np.arange(0, 360)
+	x = np.arange(0, 361)
 	y = np.arange(60, 90)
+	X, Y = np.meshgrid(x,y)
 
 	#Since we the derivatives at the edges hasn't been done properly
 	#we'll just shave them of the representation
@@ -62,27 +63,46 @@ def plot_FACs(FACs):
 	FACs[:, -2:] = 0
 	FACs[0:2, :] = 0
 	FACs[-2:,  :] = 0
+	print "Hello"
+	print x.shape
+	print FACs.shape
 
-	plt.figure()
-	contourPlot = pl.contourf(x,y,FACs)
-	plt.title('Field Aligned Currents')
+	# plt.figure()
+	# contourPlot = pl.contourf(x,y,FACs)
+	# # plt.title('Field Aligned Currents')
 
-	cbar = pl.colorbar(contourPlot)
-	plt.xlabel('Longitude $ [ ^\circ] $')
-	plt.ylabel('Latitude  $ [ ^\circ] $')
+	# cbar = pl.colorbar(contourPlot)
+	# plt.xlabel('Longitude $ [ ^\circ] $')
+	# plt.ylabel('Latitude  $ [ ^\circ] $')
 
-	cbar.set_label('$ms^{-1}$')
+	# cbar.set_label('$ms^{-1}$')
 
-	plt.savefig('facs.eps')
+	# plt.savefig('facs.eps')
+
+	#Let us also draw the currents on a map
+	fig = plt.figure()
+	my_map = draw_map()
+
+	longitude, latitude = my_map(X, Y)
+
+	contour = my_map.contourf(longitude, latitude, FACs)
+	# my_map.quiver(longitude[:,::skipArrows],latitude[:,::skipArrows], FACs[:,::skipArrows], FACs[:,::skipArrows], angles = 'uv', scale = 40)
+	cbar = plt.colorbar(contour)
+	cbar.set_label('m/s')
+
+	plt.savefig('field_aligned_currents.eps')
 
 	return
 
 if __name__ == '__main__':
-	
-	v_theta, v_phi = convection()
+
+	coeffPath = '../../Exercise_5/source/heppner_coeffs.txt'
+
+	#Making some needed arrays
+	potential = electrostatic_potential(coeffPath)
+	v_theta, v_phi, E_theta, E_phi   = convection(potential)
 	# plot_drift(v_theta,v_phi)
 	FACs = field_aligned_currents(v_theta, v_phi)
-
 	plot_FACs(FACs)
 
 	plt.show()

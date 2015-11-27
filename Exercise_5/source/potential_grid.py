@@ -136,12 +136,15 @@ def plot_potential(grid, name):
 	pl.savefig('map_' + name)
 
 	#Plotting it on as a stereographic projection
-
+	
 	fig = plt.figure()
 	X = (90 - LATITUDE)*np.sin(np.deg2rad(LONGITUDE))
 	Y = (90 - LATITUDE)*np.cos(np.deg2rad(LONGITUDE))
 	contour = pl.contourf(X,Y,grid)
-	
+	cbar = pl.colorbar(contour, orientation='vertical')
+	cbar.set_label(' $\Phi$  [V]')#, rotation = 0)
+	pl.title('Electrostatic Potential')
+
 	plt.savefig('other_proj.eps')
 
 

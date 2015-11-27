@@ -153,10 +153,6 @@ if case == "ExB":
 	axArray[0].set_xlabel("x [$10^3$ m]")
 	axArray[0].set_ylabel("y [$10^3$ m]")
 
-
-
-
-	
 	# axArray[0].set_aspect('equal')
 
 	yticks = axArray[0].get_yticks()

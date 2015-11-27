@@ -129,6 +129,18 @@ def plot_electric_field(E_theta, E_phi):
 	my_map.quiver(longitude[:,::skipArrows],latitude[:,::skipArrows], E_phi_norm[:,::skipArrows], E_theta_norm[:,::skipArrows], angles = 'uv', scale = 40)
 	plt.savefig('map_efield')
 
+	#Plotting it on as a stereographic projection
+
+
+	fig = plt.figure()
+	X2 = (90 - Y)*np.sin(np.deg2rad(X))
+	Y2 = (90 - Y)*np.cos(np.deg2rad(X))
+	quiver = pl.quiver(X2[2:-2,::skipArrows],Y2[2:-2,::skipArrows],E_phi[2:-2,::skipArrows], E_theta[2:-2,::skipArrows])
+	quiver.set_label(' $\Phi$  [V]')#, rotation = 0)
+	pl.title('Electric Field')
+
+	plt.savefig('other_proj.eps')
+
 	return 
 
 def plot_drift(v_theta, v_phi):
@@ -174,6 +186,8 @@ def plot_drift(v_theta, v_phi):
 
 
 
+
+
 	return
 
 
@@ -185,8 +199,8 @@ if __name__ == '__main__':
 	potential = electrostatic_potential(coeffPath)
 
 	v_theta, v_phi, E_theta, E_phi  = convection(potential)
-	plot_potential(potential, 'potential.eps')
-	# plot_electric_field(E_theta, E_phi)
+	# plot_potential(potential, 'potential.eps')
+	plot_electric_field(E_theta, E_phi)
 	# plot_drift(v_theta,v_phi)
-	# plt.show()
+	plt.show()
 
